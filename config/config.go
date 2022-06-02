@@ -17,8 +17,17 @@ func (s *Smtp) Address() string {
 	return fmt.Sprintf("%s:%d", s.Host, s.Port)
 }
 
+type Server struct {
+	Port int `env:"PORT" envDefault:"8080"`
+}
+
+func (s *Server) Address() string {
+	return fmt.Sprintf(":%d", s.Port)
+}
+
 type Config struct {
-	Smtp Smtp
+	Smtp   Smtp
+	Server Server
 }
 
 func FromEnv() (*Config, error) {

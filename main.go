@@ -2,9 +2,10 @@ package main
 
 import (
 	"log"
-	"net/smtp"
+	"net/http"
 
 	"github.com/Armatorix/smallpaf/config"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -13,23 +14,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	to := "sokolwojtek1@gmail.com"
-
-	message := []byte(
-		"From: " + cfg.Smtp.From + "\n" +
-			"To: " + to + "\n" +
-			"Subject: WHERE IS MY GOLD ? XD\n" +
-			"My super secret message. XDD\n\n",
-	)
-
-	log.Println(cfg)
-	// Send actual message
-	err = smtp.SendMail(cfg.Smtp.Address(),
-		smtp.PlainAuth("", cfg.Smtp.From, cfg.Smtp.Password, cfg.Smtp.Host),
-		cfg.Smtp.From,
-		[]string{to},
-		message)
-	if err != nil {
-		log.Fatal(err)
-	}
+	e := echo.New()
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello, World!")
+	})
+	e.Logger.Fatal(e.Start(cfg.Server.Address()))
 }
