@@ -1,6 +1,7 @@
 package smtp
 
 import (
+	"fmt"
 	"net/smtp"
 
 	"github.com/Armatorix/smallpaf/config"
@@ -20,13 +21,24 @@ func NewClient(cfg config.Smtp) *Client {
 	}
 }
 
+func (c *Client) SendAuthLink(to, link string) error {
+	return c.SendMessage(to, "SmallPAF auth link", link)
+}
+
 func (c *Client) SendMessage(to, subject, msg string) error {
 	msgByte := []byte(
-		"From: " + c.clientEmail + "\n" +
-			"To: " + to + "\n" +
-			"Subject: WHERE IS MY GOLD ? XD\n" +
-			"My super secret message. XDD\n\n",
+		fmt.Sprintf(`From: <SmallPaf %s>
+To: %s
+Subject: %s
+Cc:
+Content-Type: text/html
+
+<body>%s<body>
+
+
+`, c.clientEmail, to, subject, msg),
 	)
+	fmt.Println(string(msgByte))
 
 	// Send actual message
 	return smtp.SendMail(

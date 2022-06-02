@@ -7,15 +7,20 @@ import (
 	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/config"
 	"github.com/Armatorix/smallpaf/smtp"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
-type requestAuthCreate struct {
-	Email string
+type V struct {
+	Validator *validator.Validate
 }
 
-type respondAuthCreacte struct {
-	JWT string
+func (cv *V) Validate(i interface{}) error {
+	return cv.Validator.Struct(i)
+}
+
+type requestAuthCreate struct {
+	Email string `json:"email"`
 }
 
 func main() {
@@ -29,26 +34,40 @@ func main() {
 	authClient := auth.NewAuth(&cfg.Auth)
 	e := echo.New()
 
+	e.Validator = &V{validator.New()}
 	e.GET("/", func(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
 	auth := e.Group("/auth")
 	auth.POST("/token", func(c echo.Context) error {
-		token, err := authClient.GenerateJWT("XDDDDD")
-		if err != nil {
+		var req requestAuthCreate
+		if err := c.Bind(&req); err != nil {
+			log.Println(err)
 			return err
 		}
-		return c.JSON(http.StatusOK, respondAuthCreacte{
-			JWT: token,
-		})
+
+		if err := c.Validate(req); err != nil {
+			log.Println(err)
+			return err
+		}
+
+		token, err := authClient.GenerateJWT("XDDDDD")
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		err = smtpClient.SendAuthLink(req.Email, "http://localhost:8080/room/:roomId?token="+token)
+		if err != nil {
+			log.Println(err)
+		}
+		return err
 	})
 
 	room := e.Group("/room/:roomId", authClient.GetMiddleware())
 	room.GET("", func(c echo.Context) error {
 		return c.String(http.StatusOK, "XD")
 	})
-	// unused
-	log.Println(smtpClient)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }
