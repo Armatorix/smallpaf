@@ -25,9 +25,14 @@ func (s *Server) Address() string {
 	return fmt.Sprintf(":%d", s.Port)
 }
 
+type Auth struct {
+	SecretKey string `env:"AUTH_SECRET,required"`
+}
+
 type Config struct {
 	Smtp   Smtp
 	Server Server
+	Auth   Auth
 }
 
 func FromEnv() (*Config, error) {
