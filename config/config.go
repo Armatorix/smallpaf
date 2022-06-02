@@ -7,10 +7,10 @@ import (
 )
 
 type Smtp struct {
-	From     string `env:"SMTP_FROM"`
-	Password string `env:"SMTP_PASSWORD"`
-	Host     string `env:"SMTP_HOST"`
-	Port     int    `env:"SMTP_PORT"`
+	From     string `env:"SMTP_FROM,required"`
+	Password string `env:"SMTP_PASSWORD,required"`
+	Host     string `env:"SMTP_HOST,required"`
+	Port     int    `env:"SMTP_PORT" envDefault:"587"`
 }
 
 func (s *Smtp) Address() string {
