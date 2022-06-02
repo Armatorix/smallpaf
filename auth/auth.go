@@ -5,7 +5,6 @@ import (
 
 	"github.com/Armatorix/smallpaf/config"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,6 +17,7 @@ type Authenticator struct {
 
 func NewAuth(cfg *config.Auth) *Authenticator {
 	return &Authenticator{
+		audience:      "typical-user",
 		secretKey:     []byte(cfg.SecretKey),
 		signingMethod: jwt.SigningMethodHS256,
 	}
@@ -25,8 +25,8 @@ func NewAuth(cfg *config.Auth) *Authenticator {
 
 type Claims struct {
 	jwt.RegisteredClaims
-	Email string
-	UID   uuid.UUID
+	Email          string `json:"email"`
+	AdditionalInfo string `json:"additional_info"`
 }
 
 func (a *Authenticator) GenerateJWT(email string) (string, error) {
@@ -38,7 +38,8 @@ func (a *Authenticator) GenerateJWT(email string) (string, error) {
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
-		Email: email,
+		Email:          email,
+		AdditionalInfo: "what are you looking for?",
 	}
 
 	token := jwt.NewWithClaims(a.signingMethod, c)
