@@ -9,6 +9,7 @@ import (
 	"github.com/Armatorix/smallpaf/smtp"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type V struct {
@@ -33,6 +34,7 @@ func main() {
 	smtpClient := smtp.NewClient(cfg.Smtp)
 	authClient := auth.NewAuth(&cfg.Auth)
 	e := echo.New()
+	e.Use(middleware.CORS())
 
 	e.Validator = &V{validator.New()}
 	e.GET("/", func(c echo.Context) error {
@@ -57,7 +59,7 @@ func main() {
 			return err
 		}
 
-		err = smtpClient.SendAuthLink(req.Email, "http://localhost:8080/room/:roomId?token="+token)
+		err = smtpClient.SendAuthLink(req.Email, token)
 		if err != nil {
 			log.Println(err)
 		}

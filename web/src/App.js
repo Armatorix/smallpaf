@@ -1,4 +1,5 @@
 import './App.css';
+import { ENDPOINT } from "./config.js"
 import { FormControl, InputLabel, Input, FormHelperText, Button } from "@mui/material"
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <form onSubmit={(e) => {
         e.preventDefault();
 
-        fetch(window.location.origin, {
+        fetch(ENDPOINT + "/auth/token", {
           body: JSON.stringify({ email: e.target.email.value }),
           cache: 'no-cache',
           headers: {
