@@ -1,4 +1,3 @@
-import './App.css';
 import { ENDPOINT } from "./config.js"
 import { FormControl, InputLabel, Input, FormHelperText, Button } from "@mui/material"
 function App() {
