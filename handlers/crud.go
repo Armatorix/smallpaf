@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,12 +21,12 @@ var (
 )
 
 type CrudHandler struct {
-	dbClinet *db.DB
+	dbClient *db.DB
 }
 
 func NewCrudHandler(dbClient *db.DB) *CrudHandler {
 	return &CrudHandler{
-		dbClinet: dbClient,
+		dbClient: dbClient,
 	}
 }
 
@@ -36,7 +37,7 @@ func (ch *CrudHandler) GetAll(c echo.Context) error {
 	}
 
 	var user model.User
-	err = ch.dbClinet.
+	err = ch.dbClient.
 		Preload("Rooms").
 		Preload("Tickets").
 		Preload("Votes").
@@ -71,7 +72,7 @@ func (ch *CrudHandler) CreateRoom(c echo.Context) error {
 		Name:    req.Name,
 		JiraUrl: req.JiraURL,
 	}
-	err = ch.dbClinet.Transaction(func(tx *gorm.DB) error {
+	err = ch.dbClient.Transaction(func(tx *gorm.DB) error {
 		err = tx.Create(&room).Error
 		if err != nil {
 			return err
@@ -103,4 +104,65 @@ func getUID(c echo.Context) (uuid.UUID, error) {
 		return uuid.Nil, errUserUIDMissing
 	}
 	return uuid.Parse(uid)
+}
+
+type requestAddUserToRoom struct {
+	UserEmail string    `json:"Email" validate:"email,required"`
+	RoomID    uuid.UUID `json:"RoomID" validate:"required"`
+}
+
+func (ch *CrudHandler) AddUserToRoom(c echo.Context) error {
+	var req requestAddUserToRoom
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	newUser := model.User{Email: req.UserEmail}
+	err = ch.dbClient.WithContext(c.Request().Context()).
+		FirstOrCreate(&newUser).Error
+	if err != nil {
+		return err
+	}
+
+	err = ch.dbClient.WithContext(c.Request().Context()).
+		Create(&model.UserRoom{
+			UserID: newUser.ID,
+			RoomId: req.RoomID,
+		}).Error
+	if err != nil {
+		return err
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, error) {
+	ur := model.UserRoom{
+		UserID: uid,
+		RoomId: rid,
+	}
+	err := ch.dbClient.First(&ur).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }
