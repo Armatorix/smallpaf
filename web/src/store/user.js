@@ -41,7 +41,22 @@ export const useNewRoomSetter = () => {
     const [user, setUser] = useRecoilState(userState)
 
     const setNewRoom = (room) => {
-        setUser(user.Rooms.append(room))
+        user.Rooms.append(room)
+        setUser(user)
     }
     return setNewRoom
+}
+
+export const useAddUserToRoomSetter = () => {
+    const [user, setUser] = useRecoilState(userState)
+
+    const addUserToRoom = (roomId, email) => {
+        for (const [room, idx] of user.Rooms.entries()) {
+            if (room.ID === roomId) {
+                user.Rooms[idx].Users.append(email)
+                setUser(user)
+            }
+        }
+    }
+    return addUserToRoom
 }
