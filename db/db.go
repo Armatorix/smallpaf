@@ -20,5 +20,8 @@ func NewClient(cfg config.DB) (*DB, error) {
 }
 
 func (db *DB) Migrate() error {
-	return db.db.AutoMigrate(&model.Room{})
+	if err := db.db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
+		return err
+	}
+	return db.db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
 }

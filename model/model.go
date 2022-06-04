@@ -1,9 +1,39 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
+type User struct {
+	gorm.Model
+	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Email   string
+	Rooms   []Room `gorm:"many2many:user_rooms;"`
+	Tickets []Ticket
+	Votes   []Vote
+}
 type Room struct {
 	gorm.Model
+	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
 	Name    string
 	JiraUrl string
+	Tickets []Ticket
+}
+
+type Ticket struct {
+	gorm.Model
+	ID     uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	RoomId uuid.UUID
+	UserId uuid.UUID
+	JiraID string
+	Votes  []Vote
+}
+
+type Vote struct {
+	gorm.Model
+	ID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	UserID   uuid.UUID
+	TicketID uuid.UUID
+	Points   int
 }
