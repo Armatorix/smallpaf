@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, Paper } from "@mui/material"
+import { Box, List, ListItem, ListItemButton, Paper, Typography } from "@mui/material"
 import { useRoomUsers } from "../store"
 import AddUser from "./AddUser"
 
@@ -7,7 +7,7 @@ const ListRoomUsers = () => {
     return <Paper elevation={2}>
         <List>
             <ListItem key="title">
-                Room users
+                Room users ({users.length})
             </ListItem>
             {users.map((user) => <ListItemButton key={user}>
                 {user}
