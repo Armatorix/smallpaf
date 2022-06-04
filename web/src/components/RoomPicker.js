@@ -15,7 +15,6 @@ const RoomPicker = () => {
     }
 
     if (roomPicker !== undefined && roomPicker !== currentRoom?.ID) {
-        console.log(roomPicker, currentRoom)
         return <Navigate to={`/rooms/${roomPicker}`} />
     }
 
