@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
@@ -24,7 +24,7 @@ function App() {
   const theme = useRecoilValue(styleState);
   const [token, setToken] = useToken()
   const [searchParams, setSearchParams] = useSearchParams();
-  const setUser = useSetRecoilState(userState)
+  const [user, setUser] = useRecoilState(userState)
   useEffect(() => {
     const queryToken = searchParams.get("token")
     if (queryToken !== null && queryToken !== "") {
@@ -34,7 +34,7 @@ function App() {
   }, [searchParams, setSearchParams, setToken])
 
   useEffect(() => {
-    if (token !== "") {
+    if (token !== "" && user === undefined) {
       fetch(ENDPOINT + "/api/v1/all", {
         cache: 'no-cache',
         headers: {
@@ -54,7 +54,7 @@ function App() {
         console.log(err)
       });
     }
-  }, [token, setUser])
+  }, [token, setUser, user])
 
   return (
     <ThemeProvider theme={theme}>
