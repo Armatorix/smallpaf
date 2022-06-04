@@ -4,28 +4,34 @@ import {
   CssBaseline, Grid, Paper, Toolbar,
   Typography
 } from "@mui/material";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
-import { styleState, tokenState, useToken } from "./store";
+import Room from "./routes/Room";
+import { styleState, useToken } from "./store";
 
-const useTokenValue = () => {
-  const { search } = useLocation();
-  const query = new URLSearchParams(search);
-  return query.get("token")
+
+const redirectToMain = () => {
+  return <Navigate to={`/rooms/:TODO`} />
 }
 
 function App() {
   const theme = useRecoilValue(styleState);
   const [token, setToken] = useToken()
-  const queryToken = useTokenValue()
-  if (queryToken !== "") {
-    setToken(queryToken);
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const queryToken = searchParams.get("token")
+    if (queryToken !== null && queryToken !== "") {
+      setSearchParams(searchParams.delete("token"))
+      setToken(queryToken);
+    }
+  }, [searchParams, setSearchParams, setToken])
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -60,17 +66,17 @@ function App() {
           justifyContent="center"
         >
           <Routes>
-            <Route path="/" element={<NewUser />} />
-            <Route path="new-user-redirect" element={<NewUserOpenMail />} />
-            <Route path="rooms" element={<NewRoom />}>
-              <Route path=":room-id" />
-            </Route>
+            <Route path="/" element={(token === "") ? < NewUser /> : redirectToMain()} />
+            <Route path="new-user-redirect" element={(token === "") ? < NewUserOpenMail /> : redirectToMain()} />
+            <Route path="rooms" element={<NewRoom />} />
+            <Route path="/rooms/:roomId" element={<Room />} />
             <Route path="*" element={<Page404 />} />
           </Routes>
         </Grid>
       </Grid>
     </ThemeProvider >
   );
+  // TODO: split routes on logged an not logged and make if else in code
 }
 
 export default App; 

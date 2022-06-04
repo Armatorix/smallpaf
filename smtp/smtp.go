@@ -24,7 +24,7 @@ func NewClient(cfg config.Smtp) *Client {
 }
 
 func (c *Client) SendAuthLink(to, token string) error {
-	return c.SendMessage(to, fmt.Sprintf(`From: <SmallPaf %s>
+	return c.SendMessage(to, fmt.Sprintf(`From: <SmallPAF %s>
 To: %s
 Subject: %s
 Cc:
