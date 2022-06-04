@@ -39,7 +39,6 @@ func (ah *AuthHandler) SendAuthJWTToEmail(c echo.Context) error {
 	}
 
 	var user model.User
-
 	err := ah.dbClient.
 		WithContext(c.Request().Context()).
 		FirstOrCreate(&user, model.User{Email: req.Email}).

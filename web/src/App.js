@@ -17,7 +17,7 @@ import { styleState, useToken } from "./store";
 
 
 const redirectToMain = () => {
-  return <Navigate to={`/rooms/:TODO`} />
+  return <Navigate to={`/rooms`} />
 }
 
 function App() {
