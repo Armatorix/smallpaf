@@ -4,10 +4,9 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
 
-const NewRoom = ({ match, location }) => {
+const NewRoom = () => {
     const [submitted, setSubmitted] = useState(false);
     const [roomName, setRoomName] = useState('');
-    console.log(location)
 
     if (submitted) {
         return <Navigate to={`/room/:TODO`} />

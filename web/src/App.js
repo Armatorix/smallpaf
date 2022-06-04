@@ -4,17 +4,28 @@ import {
   CssBaseline, Grid, Paper, Toolbar,
   Typography
 } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { useRecoilValue, useRecoilState } from "recoil"
 import ThemeToggle from "./components/ThemeToggle";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
-import { styleState } from "./store";
+import { styleState, tokenState, useToken } from "./store";
+
+const useTokenValue = () => {
+  const { search } = useLocation();
+  const query = new URLSearchParams(search);
+  return query.get("token")
+}
 
 function App() {
   const theme = useRecoilValue(styleState);
+  const [token, setToken] = useToken()
+  const queryToken = useTokenValue()
+  if (queryToken !== "") {
+    setToken(queryToken);
+  }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -48,19 +59,17 @@ function App() {
           alignItems="center"
           justifyContent="center"
         >
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<NewUser />} />
-              <Route path="new-user-redirect" element={<NewUserOpenMail />} />
-              <Route path="rooms" element={<NewRoom />}>
-                <Route path=":room-id" />
-              </Route>
-              <Route path="*" element={<Page404 />} />
-            </Routes>
-          </BrowserRouter>
+          <Routes>
+            <Route path="/" element={<NewUser />} />
+            <Route path="new-user-redirect" element={<NewUserOpenMail />} />
+            <Route path="rooms" element={<NewRoom />}>
+              <Route path=":room-id" />
+            </Route>
+            <Route path="*" element={<Page404 />} />
+          </Routes>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
 
