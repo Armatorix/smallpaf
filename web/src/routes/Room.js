@@ -1,10 +1,9 @@
-import { CircularProgress, Grid, Typography } from "@mui/material"
-import { useParams } from "react-router-dom"
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import AddUser from "../components/AddUser";
+import ListRoomUsers from "../components/ListRoomUsers";
 import { useRoom } from "../store";
 const Room = () => {
-    let { roomId } = useParams();
-    const room = useRoom(roomId);
+    const room = useRoom();
     if (room === undefined) {
         return <CircularProgress />
     }
@@ -13,6 +12,7 @@ const Room = () => {
             <Typography>Room <b>{room.Name}</b></Typography>
         </Grid>
         <Grid container item xs={8}>
+            <ListRoomUsers />
             <AddUser />
         </Grid>
     </Grid>
