@@ -49,3 +49,8 @@ export const styleState = selector({
         return (theme === lightTheme) ? LightThemeStyle : DarkThemeStyle
     }
 })
+
+export const userState = atom({
+    key: "userState",
+    default: undefined,
+})
