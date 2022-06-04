@@ -1,6 +1,5 @@
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
-import { compose } from "@mui/system";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 
 export const userState = atom({
     key: "userState",

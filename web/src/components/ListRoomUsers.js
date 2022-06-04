@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, Paper, Typography } from "@mui/material"
+import { List, ListItem, ListItemButton, Paper } from "@mui/material"
 import { useRoomUsers } from "../store"
 import AddUser from "./AddUser"
 

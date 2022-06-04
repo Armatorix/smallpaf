@@ -1,5 +1,4 @@
 import { CircularProgress, Grid, Typography } from "@mui/material";
-import AddUser from "../components/AddUser";
 import ListRoomUsers from "../components/ListRoomUsers";
 import { useRoom } from "../store";
 const Room = () => {
