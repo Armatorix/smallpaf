@@ -45,12 +45,3 @@ type UserRoom struct {
 	UserID uuid.UUID
 	RoomId uuid.UUID
 }
-
-type BareUser struct {
-	ID    uuid.UUID
-	Email string
-}
-
-func (BareUser) TableName() string {
-	return "users"
-}
