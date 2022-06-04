@@ -6,15 +6,15 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
+import { ENDPOINT } from "./config";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
 import Room from "./routes/Room";
 import { styleState, userState, useToken } from "./store";
-import { ENDPOINT } from "./config"
 
 const redirectToMain = () => {
   return <Navigate to={`/rooms`} />
