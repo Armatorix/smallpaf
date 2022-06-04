@@ -13,7 +13,6 @@ const Room = () => {
         </Grid>
         <Grid container item xs={8}>
             <ListRoomUsers />
-            <AddUser />
         </Grid>
     </Grid>
 }

@@ -1,5 +1,6 @@
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
+import { compose } from "@mui/system";
 
 export const userState = atom({
     key: "userState",
@@ -51,27 +52,26 @@ export const useNewRoomSetter = () => {
     return setNewRoom
 }
 
-export const useAddUserToRoomSetter = () => {
+export const useAddUserToCurrentRoomSetter = () => {
     const [user, setUser] = useRecoilState(userState)
-
-    const addUserToRoom = (roomId, email) => {
-        for (const [room, idx] of user.Rooms.entries()) {
-            if (room.ID === roomId) {
-                user.Rooms[idx].Users.append(email)
+    const roomFilter = useRecoilValue(roomFilterState)
+    const addUserToCurrentRoom = (email) => {
+        for (const [idx, room] of user.Rooms.entries()) {
+            if (room.ID === roomFilter) {
                 setUser({
                     ...user,
                     Rooms: [
                         ...user.Rooms.slice(idx + 1, idx),
                         {
                             ...room,
-                            Users: [...room.Users, email]
+                            UserEmails: [...room.UserEmails, email]
                         }
                     ]
                 })
             }
         }
     }
-    return addUserToRoom
+    return addUserToCurrentRoom
 }
 
 export const useRoomUsers = () => {
