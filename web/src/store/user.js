@@ -20,7 +20,6 @@ export const currentRoomState = selector({
         }
         let rooms = user.Rooms
         for (const room of rooms) {
-            console.log(room, roomId)
             if (room.ID === roomId) {
                 return room;
             }
