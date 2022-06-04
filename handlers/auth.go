@@ -31,18 +31,17 @@ type requestAuthCreate struct {
 func (ah *AuthHandler) SendAuthJWTToEmail(c echo.Context) error {
 	var req requestAuthCreate
 	if err := c.Bind(&req); err != nil {
-		log.Println(err)
 		return err
 	}
 
 	if err := c.Validate(req); err != nil {
-		log.Println(err)
 		return err
 	}
 
 	var user model.User
 
 	err := ah.dbClient.
+		WithContext(c.Request().Context()).
 		FirstOrCreate(&user, model.User{Email: req.Email}).
 		Error
 	if err != nil {

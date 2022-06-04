@@ -25,7 +25,7 @@ export default function NewUser() {
         <form onSubmit={(e) => {
             e.preventDefault();
 
-            fetch(ENDPOINT + "/auth/token", {
+            fetch(ENDPOINT + "/api/v1//auth/token", {
                 body: JSON.stringify({ email: email }),
                 cache: 'no-cache',
                 headers: {

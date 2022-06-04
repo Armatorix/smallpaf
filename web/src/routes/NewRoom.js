@@ -3,10 +3,13 @@ import { Button, FormControl, Grid, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
+import { useToken } from "../store"
 
 const NewRoom = () => {
     const [submitted, setSubmitted] = useState(false);
     const [roomName, setRoomName] = useState('');
+    const [jiraURL, setJiraURL] = useState('https://');
+    const [token, _] = useToken()
 
     if (submitted) {
         return <Navigate to={`/room/:TODO`} />
@@ -18,43 +21,45 @@ const NewRoom = () => {
         justifyContent="center"
         direction="column"
     >
-        <Grid
-            item>
+        <Grid item>
             <Typography variant="h4">Create new room</Typography>
         </Grid>
-        <Grid item>
-            <form onSubmit={(e) => {
-                e.preventDefault();
+        <Grid item component="form" spacing={3} onSubmit={(e) => {
+            e.preventDefault();
 
-                fetch(ENDPOINT + "/room", {
-                    body: JSON.stringify({ name: roomName }),
-                    cache: 'no-cache',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    method: 'POST',
-                    mode: 'cors',
-                    redirect: 'follow',
-                }).then(resp => {
-                    if (resp.status !== 201) {
-                        throw Error("failed creation")
-                    }
-                }).then(() => {
-                    setSubmitted(true);
-                }).catch(err => {
-                    console.log(err)
-                });
-            }}>
-                <FormControl >
-                    <TextField id="room" label="Name" type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
-                    <Button type="submit" variant="outlined" startIcon={<AddIcon />}>
-                        Create
-                    </Button>
-                </FormControl>
-            </form >
+            fetch(ENDPOINT + "/api/v1/rooms", {
+                body: JSON.stringify({
+                    name: roomName,
+                    jira_url: jiraURL
+                }),
+                cache: 'no-cache',
+                headers: {
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                method: 'POST',
+                mode: 'cors',
+                redirect: 'follow',
+            }).then(resp => {
+                if (resp.status !== 201) {
+                    throw Error("failed creation")
+                }
+            }).then(() => {
+                setSubmitted(true);
+            }).catch(err => {
+                console.log(err)
+            });
+        }}>
+            <FormControl >
+                <TextField id="room" label="Name" type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
+                <TextField id="jira-url" label="Jira URL" type="url" value={jiraURL} onChange={(e) => setJiraURL(e.target.value)} />
+                <Button type="submit" variant="outlined" startIcon={<AddIcon />}>
+                    Create
+                </Button>
+            </FormControl>
 
         </Grid>
     </Grid >
 }
-
+// TODO: fix the catching on http errors
 export default NewRoom

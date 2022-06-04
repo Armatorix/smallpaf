@@ -42,22 +42,26 @@ func main() {
 		smtp.NewClient(cfg.Smtp),
 		dbClient,
 	)
+	crudHandler := handlers.NewCrudHandler(dbClient)
 
 	e := echo.New()
-	e.Use(middleware.CORS())
+	e.Use(
+		middleware.Recover(),
+		middleware.CORS(),
+		middleware.Logger(),
+	)
 
 	e.Validator = &V{validator.New()}
-	e.GET("/", func(c echo.Context) error {
+	api := e.Group("/api/v1")
+	api.GET("/healthcheck", func(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
 
-	auth := e.Group("/auth")
+	auth := api.Group("/auth")
 	auth.POST("/token", authHandler.SendAuthJWTToEmail)
 
-	room := e.Group("/room/:roomId", authClient.GetMiddleware())
-	room.GET("", func(c echo.Context) error {
-		return c.String(http.StatusOK, "XD")
-	})
+	room := api.Group("/rooms", authClient.GetMiddleware())
+	room.GET(":roomId", crudHandler.CreateRoom)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }
