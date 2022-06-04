@@ -17,10 +17,10 @@ const AddUser = () => {
     return <Grid item component="form" onSubmit={(e) => {
         e.preventDefault();
 
-        fetch(ENDPOINT + `/api/v1/rooms${roomId}/user`, {
+        fetch(ENDPOINT + `/api/v1/rooms/${roomId}/user`, {
             body: JSON.stringify({
                 Email: email,
-                RoomId: roomId,
+                RoomId: roomId
             }),
             cache: 'no-cache',
             headers: {
@@ -33,8 +33,7 @@ const AddUser = () => {
             if (resp.status >= 300) {
                 throw Error("failed creation")
             }
-            return resp.json()
-        }).then((resp) => {
+        }).then(() => {
             addUserToRoom(email)
             setEmail('')
             setClicked(false)

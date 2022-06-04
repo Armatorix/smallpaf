@@ -40,7 +40,6 @@ const NewRoom = () => {
                 },
                 method: 'POST',
                 mode: 'cors',
-                redirect: 'follow',
             }).then(resp => {
                 if (resp.status >= 300) {
                     throw Error("failed creation")
