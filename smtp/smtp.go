@@ -33,7 +33,8 @@ Content-Type: text/html
 
 <div style="overflow:auto; max-width:1000px; text-align: center;">
 <h1>Welcome in SmallPAF!</h1><br>
-Open the link to start using the App with your email: <a href="%s/new-room?token=%s">link</a><br>
+Open the link to start using the App with your email: <br>
+<a href="%s/rooms?token=%s">link</a><br>
 <b>DON'T SHARE IT WITH ANYONE!</b><br>
 <img style="width: 500px;" src="https://cdn-images-1.medium.com/max/720/1*jH-WgGhgWB8zSzpnQXrVYA.png" alt="Planning meme"><br><br>
 </div>

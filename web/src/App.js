@@ -9,6 +9,7 @@ import { useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
+import Page404 from "./routes/Page404";
 import { styleState } from "./store";
 
 function App() {
@@ -49,7 +50,12 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<NewUser />} />
-              <Route path="/new-user-redirect" element={<NewUserOpenMail />} />
+              <Route path="new-user-redirect" element={<NewUserOpenMail />} />
+              <Route path="rooms">
+                <Route path=":room-id" />
+                <Route />
+              </Route>
+              <Route path="*" element={<Page404 />} />
             </Routes>
           </BrowserRouter>
         </Grid>

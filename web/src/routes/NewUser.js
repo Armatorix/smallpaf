@@ -1,8 +1,8 @@
-import { Button, FormControl, TextField, Typography } from "@mui/material";
+import { Button, FormControl, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
-
+import SendIcon from "@mui/icons-material/Send"
 export default function NewUser() {
     const [submitted, setSubmitted] = useState(false);
     const [email, setEmail] = useState('');
@@ -11,7 +11,12 @@ export default function NewUser() {
         return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} replace={true} />
     }
 
-    return <div className="App">
+    return <Grid
+        container
+        alignSelf="center"
+        alignItems="center"
+        justifyContent="center"
+    >
         <Typography variant="h4">Login with email</Typography>
         <Typography variant="body1">
             The email with the authentication link will be provided to your email.
@@ -36,10 +41,10 @@ export default function NewUser() {
         }}>
             <FormControl >
                 <TextField id="email" label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <Button type="submit">
+                <Button type="submit" variant="outlined" startIcon={<SendIcon />}>
                     Send auth email
                 </Button>
             </FormControl>
-        </form>
-    </div>
+        </form >
+    </Grid >
 }
