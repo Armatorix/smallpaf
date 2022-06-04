@@ -6,7 +6,7 @@ import { ENDPOINT } from "../config";
 import { roomFilterState, useAddUserToRoomSetter, useToken } from "../store";
 const AddUser = () => {
     const [clicked, setClicked] = useState(false)
-    const token = useToken()
+    const [token] = useToken()
     const [email, setEmail] = useState("")
     const roomId = useRecoilValue(roomFilterState)
     const addUserToRoom = useAddUserToRoomSetter()
@@ -16,11 +16,9 @@ const AddUser = () => {
     }
     return <Grid item component="form" onSubmit={(e) => {
         e.preventDefault();
-
-        fetch(ENDPOINT + `/api/v1/rooms/${roomId}/user`, {
+        fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/user`, {
             body: JSON.stringify({
-                Email: email,
-                RoomId: roomId
+                Email: email
             }),
             cache: 'no-cache',
             headers: {

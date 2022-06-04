@@ -108,7 +108,7 @@ func getUID(c echo.Context) (uuid.UUID, error) {
 
 type requestAddUserToRoom struct {
 	UserEmail string    `json:"Email" validate:"email,required"`
-	RoomID    uuid.UUID `json:"RoomID" validate:"required"`
+	RoomID    uuid.UUID `param:"roomId" validate:"required"`
 }
 
 func (ch *CrudHandler) AddUserToRoom(c echo.Context) error {
@@ -136,7 +136,7 @@ func (ch *CrudHandler) AddUserToRoom(c echo.Context) error {
 
 	newUser := model.User{Email: req.UserEmail}
 	err = ch.dbClient.WithContext(c.Request().Context()).
-		FirstOrCreate(&newUser).Error
+		FirstOrCreate(&newUser, "email = ?", newUser.Email).Error
 	if err != nil {
 		return err
 	}
