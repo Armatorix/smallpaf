@@ -6,12 +6,17 @@ const Room = () => {
     if (room === undefined) {
         return <CircularProgress />
     }
-    return <Grid container item direction="row" xs={12}>
+    return <Grid container item direction="column" xs={12}>
         <Grid item xs={4}>
             <Typography>Room <b>{room.Name}</b></Typography>
         </Grid>
-        <Grid container item xs={8}>
-            <ListRoomUsers />
+        <Grid container item direction="row">
+            <Grid container item xs={8}>
+                XD
+            </Grid>
+            <Grid container item xs={4}>
+                <ListRoomUsers />
+            </Grid>
         </Grid>
     </Grid>
 }
