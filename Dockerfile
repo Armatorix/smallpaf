@@ -6,7 +6,7 @@ COPY ./ ./
 RUN go mod download
 RUN CGO_ENABLED=0 go build
 
-FROM node:18.3.0 AS node-build
+FROM node:latest AS node-build
 
 WORKDIR /app/react
 

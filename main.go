@@ -57,6 +57,8 @@ func main() {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
 
+	e.Static("/", "react")
+
 	api.GET("/all", crudHandler.GetAll, authClient.GetMiddleware())
 
 	auth := api.Group("/auth")
