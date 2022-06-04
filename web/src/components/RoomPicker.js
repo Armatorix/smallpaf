@@ -1,43 +1,46 @@
+import { Grid, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { useState } from "react"
 import { Navigate } from "react-router-dom"
-import { useRecoilValue, useResetRecoilState } from "recoil"
-import { currentRoomState, userState, roomFilterState } from "../store"
+import { useRecoilValue } from "recoil"
+import { currentRoomState, userState } from "../store"
 
 const RoomPicker = () => {
     const currentRoom = useRecoilValue(currentRoomState)
-    const resetCurrentRoom = useResetRecoilState(roomFilterState)
-    const [room, setRoom] = useState((currentRoom === undefined) ? "new-room" : currentRoom.ID)
     const user = useRecoilValue(userState)
+    const [roomPicker, setRoomPicker] = useState(undefined)
 
-    // FIXME: shitty solution here... :O
-    if (currentRoom === undefined && room !== "new-room") {
-        return <Navigate to={`/rooms/${room}`} />
-    } else if (currentRoom !== undefined && room === "new-room") {
-        resetCurrentRoom();
-        return <Navigate to={`/rooms`} />
+    if (user === undefined) {
+        return <CircularProgress />
+    }
+
+    if (roomPicker !== undefined && roomPicker !== currentRoom?.ID) {
+        console.log(roomPicker, currentRoom)
+        return <Navigate to={`/rooms/${roomPicker}`} />
     }
 
 
-    return <FormControl >
-        <InputLabel id="room-picker">Room</InputLabel>
-        <Select
-            labelId="room-picker"
-            id="room-picker-select"
-            label="Room"
-            value={room}
-            onChange={(e) => {
-                setRoom(e.target.value)
-            }}
-        >
-            {user.Rooms.map((room) =>
-                <MenuItem value={room.ID} key={room.ID}>
-                    {room.Name}
-                </MenuItem>)}
-            <MenuItem key="new-room" value="new-room"><AddIcon /> New</MenuItem>
-        </Select>
-    </FormControl>
+    return <Grid item container width="auto">
+        <Button variant="outlined" href="/rooms"> <AddIcon />New room</Button>
+        <FormControl>
+
+            <InputLabel id="room-picker">Room</InputLabel>
+            <Select
+                labelId="room-picker"
+                id="room-picker-select"
+                label="Room"
+                value={(currentRoom !== undefined) ? currentRoom.ID : ""}
+                onChange={(e) => {
+                    setRoomPicker(e.target.value)
+                }}
+            >
+                {user.Rooms.map((room) =>
+                    <MenuItem value={room.ID} key={room.ID}>
+                        {room.Name}
+                    </MenuItem>)}
+            </Select>
+        </FormControl>
+    </Grid>
 }
 
 export default RoomPicker

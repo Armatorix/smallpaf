@@ -3,7 +3,6 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/Armatorix/smallpaf/db"
@@ -94,7 +93,8 @@ func (ch *CrudHandler) CreateRoom(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Println(room)
+	room.Tickets = make([]model.Ticket, 0)
+	room.UserEmails = make([]string, 0)
 	return c.JSON(http.StatusCreated, room)
 }
 

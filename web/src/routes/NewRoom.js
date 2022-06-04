@@ -1,9 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Button, FormControl, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
-import { useNewRoomSetter, useToken } from "../store"
+import { useNewRoomSetter, useToken } from "../store";
 
 const NewRoom = () => {
     const [newRoomID, setNewRoomID] = useState(undefined);
