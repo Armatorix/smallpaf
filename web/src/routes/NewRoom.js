@@ -6,13 +6,13 @@ import { ENDPOINT } from "../config.js";
 import { useToken } from "../store"
 
 const NewRoom = () => {
-    const [submitted, setSubmitted] = useState(false);
+    const [newRoomID, setNewRoomID] = useState(undefined);
     const [roomName, setRoomName] = useState('');
     const [jiraURL, setJiraURL] = useState('https://');
-    const [token, _] = useToken()
+    const [token] = useToken()
 
-    if (submitted) {
-        return <Navigate to={`/room/:TODO`} />
+    if (newRoomID) {
+        return <Navigate to={`/room/${newRoomID}`} />
     }
     return <Grid
         container
@@ -44,8 +44,10 @@ const NewRoom = () => {
                 if (resp.status !== 201) {
                     throw Error("failed creation")
                 }
-            }).then(() => {
-                setSubmitted(true);
+                return resp.json()
+            }).then((resp) => {
+                // TODO: append the room to the recoil rooms
+                setNewRoomID(resp.ID);
             }).catch(err => {
                 console.log(err)
             });
