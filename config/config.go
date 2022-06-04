@@ -29,10 +29,15 @@ type Auth struct {
 	SecretKey string `env:"AUTH_SECRET,required"`
 }
 
+type DB struct {
+	DSN string `env:"DB_DSN,required"`
+}
+
 type Config struct {
 	Smtp   Smtp
 	Server Server
 	Auth   Auth
+	DB     DB
 }
 
 func FromEnv() (*Config, error) {

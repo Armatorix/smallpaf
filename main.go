@@ -6,6 +6,7 @@ import (
 
 	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/config"
+	"github.com/Armatorix/smallpaf/db"
 	"github.com/Armatorix/smallpaf/smtp"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -28,6 +29,13 @@ func main() {
 	// Configuration
 	cfg, err := config.FromEnv()
 	if err != nil {
+		log.Fatal(err)
+	}
+	dbClient, err := db.NewClient(cfg.DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err = dbClient.Migrate(); err != nil {
 		log.Fatal(err)
 	}
 
