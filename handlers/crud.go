@@ -46,6 +46,14 @@ func (ch *CrudHandler) GetAll(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	for i, room := range user.Rooms {
+		err = ch.dbClient.
+			Raw("SELECT email FROM users WHERE id IN (SELECT user_id as id FROM user_rooms WHERE room_id = ?)", room.ID).
+			Pluck("email", &user.Rooms[i].UserEmails).Error
+		if err != nil {
+			return err
+		}
+	}
 	return c.JSON(http.StatusOK, user)
 }
 

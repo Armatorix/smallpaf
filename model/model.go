@@ -16,10 +16,11 @@ type User struct {
 
 type Room struct {
 	gorm.Model
-	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	Name    string
-	JiraUrl string
-	Tickets []Ticket
+	ID         uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Name       string
+	JiraUrl    string
+	Tickets    []Ticket
+	UserEmails []string `gorm:"-"`
 }
 
 type Ticket struct {
@@ -43,4 +44,13 @@ type Vote struct {
 type UserRoom struct {
 	UserID uuid.UUID
 	RoomId uuid.UUID
+}
+
+type BareUser struct {
+	ID    uuid.UUID
+	Email string
+}
+
+func (BareUser) TableName() string {
+	return "users"
 }
