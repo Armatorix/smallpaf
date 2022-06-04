@@ -44,13 +44,12 @@ function App() {
         method: 'GET',
         mode: 'cors',
       }).then(resp => {
-        if (resp.status !== 201) {
-          throw Error("failed creation")
+        if (resp.status >= 300) {
+          throw Error("failed to get user provfile")
         }
         return resp.json()
       }).then((resp) => {
         setUser(resp)
-        console.log(resp)
       }).catch(err => {
         console.log(err)
       });

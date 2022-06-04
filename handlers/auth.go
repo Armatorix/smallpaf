@@ -25,7 +25,7 @@ func NewAuthHandler(ac *auth.Authenticator, sc *smtp.Client, dc *db.DB) *AuthHan
 }
 
 type requestAuthCreate struct {
-	Email string `json:"email" validate:"email,required"`
+	Email string `json:"Email" validate:"email,required"`
 }
 
 func (ah *AuthHandler) SendAuthJWTToEmail(c echo.Context) error {

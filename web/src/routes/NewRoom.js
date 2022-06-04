@@ -3,10 +3,11 @@ import { Button, FormControl, Grid, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
-import { useToken } from "../store"
+import { useNewRoomSetter, useToken } from "../store"
 
 const NewRoom = () => {
     const [newRoomID, setNewRoomID] = useState(undefined);
+    const setNewRoom = useNewRoomSetter()
     const [roomName, setRoomName] = useState('');
     const [jiraURL, setJiraURL] = useState('https://');
     const [token] = useToken()
@@ -29,8 +30,8 @@ const NewRoom = () => {
 
             fetch(ENDPOINT + "/api/v1/rooms", {
                 body: JSON.stringify({
-                    name: roomName,
-                    jira_url: jiraURL
+                    Name: roomName,
+                    JiraUrl: jiraURL
                 }),
                 cache: 'no-cache',
                 headers: {
@@ -41,12 +42,12 @@ const NewRoom = () => {
                 mode: 'cors',
                 redirect: 'follow',
             }).then(resp => {
-                if (resp.status !== 201) {
+                if (resp.status >= 300) {
                     throw Error("failed creation")
                 }
                 return resp.json()
             }).then((resp) => {
-                // TODO: append the room to the recoil rooms
+                setNewRoom(resp)
                 setNewRoomID(resp.ID);
             }).catch(err => {
                 console.log(err)

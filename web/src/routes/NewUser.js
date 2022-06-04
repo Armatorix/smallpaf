@@ -26,7 +26,7 @@ export default function NewUser() {
             e.preventDefault();
 
             fetch(ENDPOINT + "/api/v1/auth/token", {
-                body: JSON.stringify({ email: email }),
+                body: JSON.stringify({ Email: email }),
                 cache: 'no-cache',
                 headers: {
                     'content-type': 'application/json'

@@ -49,8 +49,8 @@ func (ch *CrudHandler) GetAll(c echo.Context) error {
 }
 
 type requestCreateRoom struct {
-	Name    string `json:"name" validate:"required"`
-	JiraURL string `json:"jira_url"`
+	Name    string `json:"Name" validate:"required"`
+	JiraURL string `json:"JiraUrl"`
 }
 
 func (ch *CrudHandler) CreateRoom(c echo.Context) error {
