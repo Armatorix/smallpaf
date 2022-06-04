@@ -5,7 +5,7 @@ import {
   Typography
 } from "@mui/material";
 import { useEffect } from "react";
-import { Navigate, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
+import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
 import NewRoom from "./routes/NewRoom";
