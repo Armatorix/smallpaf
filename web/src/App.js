@@ -69,7 +69,7 @@ function App() {
             <Route path="/" element={(token === "") ? < NewUser /> : redirectToMain()} />
             <Route path="new-user-redirect" element={(token === "") ? < NewUserOpenMail /> : redirectToMain()} />
             <Route path="rooms" element={<NewRoom />} />
-            <Route path="/rooms/:roomId" element={<Room />} />
+            <Route path="rooms/:roomId" element={<Room />} />
             <Route path="*" element={<Page404 />} />
           </Routes>
         </Grid>

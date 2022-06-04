@@ -12,7 +12,7 @@ const NewRoom = () => {
     const [token] = useToken()
 
     if (newRoomID) {
-        return <Navigate to={`/room/${newRoomID}`} />
+        return <Navigate to={`/rooms/${newRoomID}`} />
     }
     return <Grid
         container
