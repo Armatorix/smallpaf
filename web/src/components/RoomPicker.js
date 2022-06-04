@@ -1,4 +1,4 @@
-import { Grid, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
+import { Grid, Button, CircularProgress, FormControl, InputLabel, MenuItem, Autocomplete, TextField } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import { useState } from "react"
 import { Navigate } from "react-router-dom"
@@ -19,27 +19,19 @@ const RoomPicker = () => {
     }
 
 
-    return <Grid item container width="auto">
+    return <Grid container item width="auto">
         <Button variant="outlined" href="/rooms"> <AddIcon />New room</Button>
-        <FormControl>
-
-            <InputLabel id="room-picker">Room</InputLabel>
-            <Select
-                labelId="room-picker"
-                id="room-picker-select"
-                label="Room"
-                value={(currentRoom !== undefined) ? currentRoom.ID : ""}
-                onChange={(e) => {
-                    setRoomPicker(e.target.value)
-                }}
-            >
-                {user.Rooms.map((room) =>
-                    <MenuItem value={room.ID} key={room.ID}>
-                        {room.Name}
-                    </MenuItem>)}
-            </Select>
-        </FormControl>
-    </Grid>
+        <Autocomplete
+            label="Room"
+            value={currentRoom}
+            options={user.Rooms}
+            onChange={(_, v) => {
+                setRoomPicker(v.ID)
+            }}
+            getOptionLabel={(option) => option.Name}
+            renderInput={(params) => <TextField {...params} label="Room" />}
+        />
+    </Grid >
 }
 
 export default RoomPicker
