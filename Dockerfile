@@ -6,7 +6,7 @@ COPY ./ ./
 RUN go mod download
 RUN CGO_ENABLED=0 go build
 
-FROM node:latest AS node-build
+FROM node:slim AS node-build
 
 WORKDIR /app/react
 
