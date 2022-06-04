@@ -8,8 +8,8 @@ import (
 type User struct {
 	gorm.Model
 	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	Email   string
-	Rooms   []Room `gorm:"many2many:user_rooms;"`
+	Email   string    `gorm:"unique"`
+	Rooms   []Room    `gorm:"many2many:user_rooms;"`
 	Tickets []Ticket
 	Votes   []Vote
 }

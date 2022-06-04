@@ -7,6 +7,7 @@ import (
 	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/config"
 	"github.com/Armatorix/smallpaf/db"
+	"github.com/Armatorix/smallpaf/handlers"
 	"github.com/Armatorix/smallpaf/smtp"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -19,10 +20,6 @@ type V struct {
 
 func (cv *V) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
-}
-
-type requestAuthCreate struct {
-	Email string `json:"email"`
 }
 
 func main() {
@@ -39,8 +36,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	smtpClient := smtp.NewClient(cfg.Smtp)
 	authClient := auth.NewAuth(&cfg.Auth)
+	authHandler := handlers.NewAuthHandler(
+		authClient,
+		smtp.NewClient(cfg.Smtp),
+		dbClient,
+	)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
@@ -48,31 +50,9 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
+
 	auth := e.Group("/auth")
-	auth.POST("/token", func(c echo.Context) error {
-		var req requestAuthCreate
-		if err := c.Bind(&req); err != nil {
-			log.Println(err)
-			return err
-		}
-
-		if err := c.Validate(req); err != nil {
-			log.Println(err)
-			return err
-		}
-
-		token, err := authClient.GenerateJWT("XDDDDD")
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
-		err = smtpClient.SendAuthLink(req.Email, token)
-		if err != nil {
-			log.Println(err)
-		}
-		return err
-	})
+	auth.POST("/token", authHandler.SendAuthJWTToEmail)
 
 	room := e.Group("/room/:roomId", authClient.GetMiddleware())
 	room.GET("", func(c echo.Context) error {

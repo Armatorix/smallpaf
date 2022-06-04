@@ -8,7 +8,7 @@ import (
 )
 
 type DB struct {
-	db *gorm.DB
+	*gorm.DB
 }
 
 func NewClient(cfg config.DB) (*DB, error) {
@@ -20,8 +20,12 @@ func NewClient(cfg config.DB) (*DB, error) {
 }
 
 func (db *DB) Migrate() error {
-	if err := db.db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
+	// FIXME: dummy fix for migrations to not run multiple times
+	if db.Exec(`SELECT * FROM users LIMIT 1`).Error == nil {
+		return nil
+	}
+	if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
 		return err
 	}
-	return db.db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
+	return db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
 }

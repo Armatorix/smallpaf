@@ -35,7 +35,7 @@ export default function NewUser() {
                 mode: 'cors',
                 redirect: 'follow',
             }).then(resp => {
-                if (resp.status !== 201) {
+                if (resp.status >= 300) {
                     throw Error("failed creation")
                 }
             }).then(() => {

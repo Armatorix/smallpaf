@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"github.com/Armatorix/smallpaf/config"
+	"github.com/Armatorix/smallpaf/model"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -25,11 +27,12 @@ func NewAuth(cfg *config.Auth) *Authenticator {
 
 type Claims struct {
 	jwt.RegisteredClaims
-	Email          string `json:"email"`
-	AdditionalInfo string `json:"additional_info"`
+	Email          string    `json:"email"`
+	Uid            uuid.UUID `json:"uid"`
+	AdditionalInfo string    `json:"additional_info"`
 }
 
-func (a *Authenticator) GenerateJWT(email string) (string, error) {
+func (a *Authenticator) GenerateJWT(user *model.User) (string, error) {
 	c := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "smallpaf-server",
@@ -38,7 +41,8 @@ func (a *Authenticator) GenerateJWT(email string) (string, error) {
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
-		Email:          email,
+		Email:          user.Email,
+		Uid:            user.ID,
 		AdditionalInfo: "what are you looking for?",
 	}
 
