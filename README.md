@@ -1,6 +1,7 @@
 # Small Planning Async Format
 
 created for asynchronous planning sessions
+
 ## Developemnt requirement
 
 * [air](https://github.com/cosmtrek/air) - for API hot reload
