@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
+import RoomPicker from "./components/RoomPicker";
 import ThemeToggle from "./components/ThemeToggle";
 import { ENDPOINT } from "./config";
 import NewRoom from "./routes/NewRoom";
@@ -60,10 +61,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar style={{ margin: "1em" }}>
           <Typography variant="h5" noWrap component="div" flexGrow={1}>
             SmallPAF - Planning Async Format
           </Typography>
+          {token !== "" && user?.Rooms?.length > 0 && < RoomPicker />}
           <ThemeToggle />
         </Toolbar>
       </AppBar>

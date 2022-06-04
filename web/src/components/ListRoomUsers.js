@@ -9,9 +9,10 @@ const ListRoomUsers = () => {
             <ListItem key="title">
                 Room users ({users.length})
             </ListItem>
-            {users.map((user) => <ListItemButton key={user}>
-                {user}
-            </ListItemButton>)}
+            {users.map((user) =>
+                <ListItemButton key={user}>
+                    {user}
+                </ListItemButton>)}
             <ListItem>
                 <AddUser />
             </ListItem>

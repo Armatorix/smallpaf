@@ -16,6 +16,7 @@ const NewRoom = () => {
         return <Navigate to={`/rooms/${newRoomID}`} />
     }
     return <Grid
+        item
         container
         alignSelf="center"
         alignItems="center"
@@ -25,41 +26,45 @@ const NewRoom = () => {
         <Grid item>
             <Typography variant="h4">Create new room</Typography>
         </Grid>
-        <Grid item component="form" spacing={3} onSubmit={(e) => {
-            e.preventDefault();
+        <Grid container item spacing={1} direction="column" component="form"
+            onSubmit={(e) => {
+                e.preventDefault();
 
-            fetch(ENDPOINT + "/api/v1/rooms", {
-                body: JSON.stringify({
-                    Name: roomName,
-                    JiraUrl: jiraURL
-                }),
-                cache: 'no-cache',
-                headers: {
-                    'content-type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                },
-                method: 'POST',
-                mode: 'cors',
-            }).then(resp => {
-                if (resp.status >= 300) {
-                    throw Error("failed creation")
-                }
-                return resp.json()
-            }).then((resp) => {
-                setNewRoom(resp)
-                setNewRoomID(resp.ID);
-            }).catch(err => {
-                console.log(err)
-            });
-        }}>
-            <FormControl >
-                <TextField id="room" label="Name" type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
-                <TextField id="jira-url" label="Jira URL" type="url" value={jiraURL} onChange={(e) => setJiraURL(e.target.value)} />
-                <Button type="submit" variant="outlined" startIcon={<AddIcon />}>
+                fetch(ENDPOINT + "/api/v1/rooms", {
+                    body: JSON.stringify({
+                        Name: roomName,
+                        JiraUrl: jiraURL
+                    }),
+                    cache: 'no-cache',
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `Bearer ${token}`
+                    },
+                    method: 'POST',
+                    mode: 'cors',
+                }).then(resp => {
+                    if (resp.status >= 300) {
+                        throw Error("failed creation")
+                    }
+                    return resp.json()
+                }).then((resp) => {
+                    setNewRoom(resp)
+                    setNewRoomID(resp.ID);
+                }).catch(err => {
+                    console.log(err)
+                });
+            }}>
+            <Grid item>
+                <TextField id="room" label="Name" type="text" fullWidth value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
+            </Grid>
+            <Grid item>
+                <TextField id="jira-url" label="Jira URL" type="url" fullWidth value={jiraURL} onChange={(e) => setJiraURL(e.target.value)} />
+            </Grid>
+            <Grid item>
+                <Button type="submit" variant="outlined" fullWidth startIcon={<AddIcon />}>
                     Create
                 </Button>
-            </FormControl>
-
+            </Grid>
         </Grid>
     </Grid >
 }
