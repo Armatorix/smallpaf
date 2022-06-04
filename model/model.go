@@ -24,11 +24,12 @@ type Room struct {
 
 type Ticket struct {
 	gorm.Model
-	ID     uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	RoomId uuid.UUID
-	UserId uuid.UUID
-	JiraID string
-	Votes  []Vote
+	ID          uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	RoomId      uuid.UUID
+	UserId      uuid.UUID
+	JiraID      string
+	Description string
+	Votes       []Vote
 }
 
 type Vote struct {
