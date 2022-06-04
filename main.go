@@ -57,6 +57,8 @@ func main() {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
 
+	api.GET("/all", crudHandler.GetAll, authClient.GetMiddleware())
+
 	auth := api.Group("/auth")
 	auth.POST("/token", authHandler.SendAuthJWTToEmail)
 

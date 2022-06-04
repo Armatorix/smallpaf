@@ -29,6 +29,25 @@ func NewCrudHandler(dbClient *db.DB) *CrudHandler {
 	}
 }
 
+func (ch *CrudHandler) GetAll(c echo.Context) error {
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	var user model.User
+	err = ch.dbClinet.
+		Preload("Rooms").
+		Preload("Tickets").
+		Preload("Votes").
+		WithContext(c.Request().Context()).
+		Find(&user, "id = ?", uid).Error
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, user)
+}
+
 type requestCreateRoom struct {
 	Name    string `json:"name" validate:"required"`
 	JiraURL string `json:"jira_url"`
