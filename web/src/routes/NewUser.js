@@ -1,7 +1,16 @@
-import { ENDPOINT } from "../config.js"
-import { FormControl, InputLabel, Input, FormHelperText, Button, Typography } from "@mui/material"
+import { Button, FormControl, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { ENDPOINT } from "../config.js";
 
 export default function NewUser() {
+    const [submitted, setSubmitted] = useState(false);
+    const [email, setEmail] = useState('');
+
+    if (submitted) {
+        return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} replace={true} />
+    }
+
     return <div className="App">
         <Typography variant="h4">Login with email</Typography>
         <Typography variant="body1">
@@ -21,18 +30,12 @@ export default function NewUser() {
                 mode: 'cors',
                 redirect: 'follow',
             })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (myJson) {
-                    console.log(myJson);
+                .then(() => {
+                    setSubmitted(true);
                 });
-            // TODO redirect on success
         }}>
             <FormControl >
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" aria-describedby="email-helper" required />
-                <FormHelperText id="email-helper"></FormHelperText>
+                <TextField id="email" label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <Button type="submit">
                     Send auth email
                 </Button>

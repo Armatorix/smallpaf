@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
 import NewUser from "./routes/NewUser.js";
+import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import { styleState } from "./store";
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<NewUser />} />
+              <Route path="/new-user-redirect" element={<NewUserOpenMail />} />
             </Routes>
           </BrowserRouter>
         </Grid>
