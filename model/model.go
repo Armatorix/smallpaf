@@ -13,6 +13,7 @@ type User struct {
 	Tickets []Ticket
 	Votes   []Vote
 }
+
 type Room struct {
 	gorm.Model
 	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
@@ -36,4 +37,9 @@ type Vote struct {
 	UserID   uuid.UUID
 	TicketID uuid.UUID
 	Points   int
+}
+
+type UserRoom struct {
+	UserID uuid.UUID
+	RoomId uuid.UUID
 }

@@ -61,7 +61,7 @@ func main() {
 	auth.POST("/token", authHandler.SendAuthJWTToEmail)
 
 	room := api.Group("/rooms", authClient.GetMiddleware())
-	room.GET(":roomId", crudHandler.CreateRoom)
+	room.POST("", crudHandler.CreateRoom)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }
