@@ -45,8 +45,8 @@ export default function NewUser() {
             });
         }}>
             <FormControl >
-                <TextField id="email" label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <Button type="submit" variant="outlined" startIcon={<SendIcon />}>
+                <TextField id="email" label="Email" type="email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <Button type="submit" variant="outlined" fullWidth startIcon={<SendIcon />}>
                     Send auth email
                 </Button>
             </FormControl>
