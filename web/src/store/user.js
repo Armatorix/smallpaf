@@ -76,5 +76,5 @@ export const useAddUserToRoomSetter = () => {
 
 export const useRoomUsers = () => {
     const room = useRoom()
-    return (room !== undefined) ? room.Users : undefined
+    return (room !== undefined) ? room.UserEmails : undefined
 }
