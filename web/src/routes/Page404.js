@@ -6,6 +6,7 @@ const Page404 = () => {
         alignSelf="center"
         alignItems="center"
         justifyContent="center"
+        direction="column"
     >
         <img src={`${process.env.PUBLIC_URL}/404.jpg`} alt="404-not-found" />
         <Button href="/" variant="outlined">Home</Button >

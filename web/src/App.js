@@ -7,6 +7,7 @@ import {
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import ThemeToggle from "./components/ThemeToggle";
+import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
@@ -51,9 +52,8 @@ function App() {
             <Routes>
               <Route path="/" element={<NewUser />} />
               <Route path="new-user-redirect" element={<NewUserOpenMail />} />
-              <Route path="rooms">
+              <Route path="rooms" element={<NewRoom />}>
                 <Route path=":room-id" />
-                <Route />
               </Route>
               <Route path="*" element={<Page404 />} />
             </Routes>

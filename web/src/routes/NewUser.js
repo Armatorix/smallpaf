@@ -8,7 +8,7 @@ export default function NewUser() {
     const [email, setEmail] = useState('');
 
     if (submitted) {
-        return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} replace={true} />
+        return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} />
     }
 
     return <Grid
@@ -26,7 +26,7 @@ export default function NewUser() {
             e.preventDefault();
 
             fetch(ENDPOINT + "/auth/token", {
-                body: JSON.stringify({ email: e.target.email.value }),
+                body: JSON.stringify({ email: email }),
                 cache: 'no-cache',
                 headers: {
                     'content-type': 'application/json'
@@ -34,10 +34,15 @@ export default function NewUser() {
                 method: 'POST',
                 mode: 'cors',
                 redirect: 'follow',
-            })
-                .then(() => {
-                    setSubmitted(true);
-                });
+            }).then(resp => {
+                if (resp.status !== 201) {
+                    throw Error("failed creation")
+                }
+            }).then(() => {
+                setSubmitted(true);
+            }).catch(err => {
+                console.log(err)
+            });
         }}>
             <FormControl >
                 <TextField id="email" label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
