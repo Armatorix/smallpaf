@@ -90,6 +90,14 @@ func (ch *CrudHandler) AddVoteToTicket(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	if vote.Points != req.Points {
+		vote.Points = req.Points
+		err = ch.dbClient.WithContext(c.Request().Context()).
+			Save(&vote).Error
+		if err != nil {
+			return err
+		}
+	}
 
 	return c.NoContent(http.StatusOK)
 }
