@@ -6,12 +6,12 @@ import { useRecoilValue } from "recoil";
 import { darkTheme, themeState, useToggleTheme } from "../store";
 
 export default function ThemeToggle() {
-    const theme = useRecoilValue(themeState);
-    const toggleThemeState = useToggleTheme();
+	const theme = useRecoilValue(themeState);
+	const toggleThemeState = useToggleTheme();
 
-    return (
-        <IconButton sx={{ ml: 1 }} onClick={toggleThemeState} color="inherit">
-            {theme === darkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
-    );
+	return (
+		<IconButton sx={{ ml: 1 }} onClick={toggleThemeState} color="inherit">
+			{theme === darkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+		</IconButton>
+	);
 }

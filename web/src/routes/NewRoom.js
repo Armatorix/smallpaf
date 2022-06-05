@@ -6,67 +6,98 @@ import { ENDPOINT } from "../config.js";
 import { useNewRoomSetter, useToken } from "../store";
 
 const NewRoom = () => {
-    const [newRoomID, setNewRoomID] = useState(undefined);
-    const setNewRoom = useNewRoomSetter()
-    const [roomName, setRoomName] = useState('');
-    const [jiraURL, setJiraURL] = useState('https://');
-    const [token] = useToken()
+	const [newRoomID, setNewRoomID] = useState(undefined);
+	const setNewRoom = useNewRoomSetter();
+	const [roomName, setRoomName] = useState("");
+	const [jiraURL, setJiraURL] = useState("https://");
+	const [token] = useToken();
 
-    if (newRoomID) {
-        return <Navigate to={`/rooms/${newRoomID}`} />
-    }
-    return <Grid
-        item
-        container
-        alignSelf="center"
-        alignItems="center"
-        justifyContent="center"
-        direction="column"
-    >
-        <Grid item>
-            <Typography variant="h4">Create new room</Typography>
-        </Grid>
-        <Grid container item spacing={1} direction="column" component="form"
-            onSubmit={(e) => {
-                e.preventDefault();
+	if (newRoomID) {
+		return <Navigate to={`/rooms/${newRoomID}`} />;
+	}
+	return (
+		<Grid
+			item
+			container
+			alignSelf="center"
+			alignItems="center"
+			justifyContent="center"
+			direction="column"
+		>
+			<Grid item>
+				<Typography variant="h4">Create new room</Typography>
+			</Grid>
+			<Grid
+				container
+				item
+				spacing={1}
+				direction="column"
+				component="form"
+				onSubmit={(e) => {
+					e.preventDefault();
 
-                fetch(ENDPOINT + "/api/v1/rooms", {
-                    body: JSON.stringify({
-                        Name: roomName,
-                        JiraUrl: jiraURL
-                    }),
-                    cache: 'no-cache',
-                    headers: {
-                        'content-type': 'application/json',
-                        'authorization': `Bearer ${token}`
-                    },
-                    method: 'POST',
-                    mode: 'cors',
-                }).then(resp => {
-                    if (resp.status >= 300) {
-                        throw Error("failed creation")
-                    }
-                    return resp.json()
-                }).then((resp) => {
-                    setNewRoom(resp);
-                    setNewRoomID(resp.ID);
-                }).catch(err => {
-                    console.log(err)
-                });
-            }}>
-            <Grid item>
-                <TextField id="room" label="Name" type="text" fullWidth value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
-            </Grid>
-            <Grid item>
-                <TextField id="jira-url" label="Jira URL" type="url" fullWidth value={jiraURL} onChange={(e) => setJiraURL(e.target.value)} />
-            </Grid>
-            <Grid item>
-                <Button type="submit" variant="outlined" fullWidth startIcon={<AddIcon />}>
-                    Create
-                </Button>
-            </Grid>
-        </Grid>
-    </Grid >
-}
+					fetch(ENDPOINT + "/api/v1/rooms", {
+						body: JSON.stringify({
+							Name: roomName,
+							JiraUrl: jiraURL,
+						}),
+						cache: "no-cache",
+						headers: {
+							"content-type": "application/json",
+							authorization: `Bearer ${token}`,
+						},
+						method: "POST",
+						mode: "cors",
+					})
+						.then((resp) => {
+							if (resp.status >= 300) {
+								throw Error("failed creation");
+							}
+							return resp.json();
+						})
+						.then((resp) => {
+							setNewRoom(resp);
+							setNewRoomID(resp.ID);
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+				}}
+			>
+				<Grid item>
+					<TextField
+						id="room"
+						label="Name"
+						type="text"
+						fullWidth
+						value={roomName}
+						onChange={(e) => setRoomName(e.target.value)}
+						required
+					/>
+				</Grid>
+				<Grid item>
+					<TextField
+						id="jira-url"
+						label="Jira URL"
+						type="url"
+						fullWidth
+						value={jiraURL}
+						onChange={(e) => setJiraURL(e.target.value)}
+					/>
+				</Grid>
+				<Grid item>
+					<Button
+						type="submit"
+						variant="outlined"
+						fullWidth
+						startIcon={<AddIcon />}
+					>
+						Create
+					</Button>
+				</Grid>
+			</Grid>
+		</Grid>
+	);
+};
 // TODO: fix the catching on http errors
-export default NewRoom
+export default NewRoom;
