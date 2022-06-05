@@ -53,7 +53,7 @@ func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
 }
 
 type requestAddVoteToTicket struct {
-	TicketId uuid.UUID `json:"TicketID" validate:"required"`
+	TicketId uuid.UUID `param:"ticketId" validate:"required"`
 	Points   int       `json:"Points" validate:"required"`
 }
 

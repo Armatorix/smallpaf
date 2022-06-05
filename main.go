@@ -73,6 +73,7 @@ func main() {
 	room.GET("", crudHandler.GetRoom)
 	room.PUT("/user", crudHandler.AddUserToRoom)
 	room.POST("/tickets", crudHandler.CreateTicketInRoom)
+	room.PUT("/tickets/:ticketId/votes", crudHandler.AddVoteToTicket)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }
