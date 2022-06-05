@@ -43,10 +43,17 @@ export const useNewRoomSetter = () => {
     const [user, setUser] = useRecoilState(userState)
 
     const setNewRoom = (room) => {
-        setUser({
-            ...user,
-            Rooms: [...user.Rooms, room]
-        })
+        if (user.Rooms === undefined) {
+            setUser({
+                ...user,
+                Rooms: [room]
+            })
+        } else {
+            setUser({
+                ...user,
+                Rooms: [...user.Rooms, room]
+            })
+        }
     }
     return setNewRoom
 }

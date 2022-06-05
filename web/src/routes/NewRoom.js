@@ -48,7 +48,7 @@ const NewRoom = () => {
                     }
                     return resp.json()
                 }).then((resp) => {
-                    setNewRoom(resp)
+                    setNewRoom(resp);
                     setNewRoomID(resp.ID);
                 }).catch(err => {
                     console.log(err)
