@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { IconButton, Modal, Typography } from "@mui/material";
+import { Button, Modal, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 
@@ -10,16 +10,28 @@ const style = {
 	transform: "translate(-50%, -50%)",
 };
 
+const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
+
 const VoteModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const theme = useTheme();
-	console.log(theme);
-	console.log(props);
 	return (
 		<>
-			<IconButton onClick={() => setOpen(true)}>XD</IconButton>
+			<Button
+				{...props}
+				variant="outlined"
+				onClick={() => setOpen(true)}
+				style={{
+					minWidth: "2em",
+				}}
+				color={props.vote === undefined ? "warning" : "success"}
+			>
+				{props.vote === undefined ? "-" : props.vote.Points}
+			</Button>
 			<Modal open={open} onClose={() => setOpen(false)}>
 				<Box
+					alignItems="center"
+					justifyContent="center"
 					sx={{
 						...style,
 						width: 400,
@@ -28,7 +40,22 @@ const VoteModal = (props) => {
 						border: "2px solid #000",
 					}}
 				>
-					<Typography>Text in a modal</Typography>
+					{POINTS.map((point) => (
+						<Button
+							variant="outlined"
+							sx={{
+								margin: "0.4em",
+								padding: "0.5em",
+								justifyContent: "center",
+								minWidth: "2.5em",
+							}}
+							onClick={() => {
+								setOpen(false);
+							}}
+						>
+							{point}
+						</Button>
+					))}
 				</Box>
 			</Modal>
 		</>

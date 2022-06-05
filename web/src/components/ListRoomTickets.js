@@ -36,11 +36,7 @@ const ListRoomTickets = () => {
 						<VoteModal
 							edge="end"
 							ticket={ticket.ID}
-							vote={
-								userVotesMap[ticket.ID] !== undefined
-									? userVotesMap[ticket.ID]
-									: undefined
-							}
+							vote={userVotesMap[ticket.ID]}
 						/>
 					</ListItem>
 				))}
