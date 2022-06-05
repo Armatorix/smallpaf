@@ -1,4 +1,6 @@
-import { List, ListItemButton, Paper } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LinkIcon from "@mui/icons-material/Link";
+import { IconButton, List, ListItem, ListItemText, Paper } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { currentRoomState } from "../store";
 const ListRoomTickets = () => {
@@ -8,7 +10,22 @@ const ListRoomTickets = () => {
 		<Paper elevation={2}>
 			<List>
 				{room.Tickets.map((ticket) => (
-					<ListItemButton key={ticket.ID}>{ticket.JiraID}</ListItemButton>
+					<ListItem>
+						<ListItemText
+							primary={ticket.JiraID}
+							secondary={ticket.Description}
+						/>
+						<IconButton
+							edge="end"
+							aria-label="delete"
+							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
+						>
+							<LinkIcon />
+						</IconButton>
+						<IconButton edge="end" aria-label="delete">
+							<DeleteIcon />
+						</IconButton>
+					</ListItem>
 				))}
 			</List>
 		</Paper>
