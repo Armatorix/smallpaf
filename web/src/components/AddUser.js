@@ -1,18 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Grid, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
 import { ENDPOINT } from "../config";
-import {
-	roomFilterState,
-	useAddUserToCurrentRoomSetter,
-	useToken,
-} from "../store";
-const AddUser = () => {
+import { useAddUserToCurrentRoomSetter, useToken } from "../store";
+const AddUser = (props) => {
 	const [clicked, setClicked] = useState(false);
 	const [token] = useToken();
 	const [email, setEmail] = useState("");
-	const roomId = useRecoilValue(roomFilterState);
 	const addUserToCurrentRoom = useAddUserToCurrentRoomSetter();
 
 	if (!clicked) {
@@ -25,7 +19,6 @@ const AddUser = () => {
 				}}
 				startIcon={<AddIcon />}
 			>
-				{" "}
 				Add User
 			</Button>
 		);
@@ -36,7 +29,7 @@ const AddUser = () => {
 			component="form"
 			onSubmit={(e) => {
 				e.preventDefault();
-				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/user`, {
+				fetch(`${ENDPOINT}/api/v1/rooms/${props.roomId}/user`, {
 					body: JSON.stringify({
 						Email: email,
 					}),

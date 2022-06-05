@@ -70,6 +70,7 @@ func main() {
 	rooms.POST("", crudHandler.CreateRoom)
 
 	room := rooms.Group("/:roomId")
+	room.GET("", crudHandler.GetRoom)
 	room.PUT("/user", crudHandler.AddUserToRoom)
 	room.POST("/tickets", crudHandler.CreateTicketInRoom)
 

@@ -1,12 +1,41 @@
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
-import { useResetRecoilState } from "recoil";
+import { CircularProgress, Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import AddTicket from "../components/AddTicket";
 import ListRoomUsers from "../components/ListRoomUsers";
-import { useRoom, userState } from "../store";
+import { ENDPOINT } from "../config";
+import { currentRoomState, useToken } from "../store";
+import { useParams } from "react-router-dom";
 const Room = () => {
-	const room = useRoom();
-	const reloadUser = useResetRecoilState(userState);
+	const [token] = useToken();
+	const [room, setRoom] = useRecoilState(currentRoomState);
+	const { roomId } = useParams();
+	useEffect(() => {
+		if (token !== "" && room === undefined) {
+			fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
+				cache: "no-cache",
+				headers: {
+					"content-type": "application/json",
+					authorization: `Bearer ${token}`,
+				},
+				method: "GET",
+				mode: "cors",
+			})
+				.then((resp) => {
+					if (resp.status >= 300) {
+						throw Error("failed to get user provfile");
+					}
+					return resp.json();
+				})
+				.then((resp) => {
+					setRoom(resp);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	}, [token, room, setRoom, roomId]);
+
 	if (room === undefined) {
 		return <CircularProgress />;
 	}
@@ -15,14 +44,6 @@ const Room = () => {
 			<Grid item xs={4}>
 				<Typography>
 					Room <b>{room.Name}</b>
-					<IconButton
-						onClick={() => {
-							reloadUser();
-						}}
-					>
-						{" "}
-						<RefreshIcon />
-					</IconButton>
 				</Typography>
 			</Grid>
 			<Grid container item direction="row">

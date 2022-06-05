@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
 
 export const userState = atom({
 	key: "userState",
@@ -11,22 +11,9 @@ export const roomFilterState = atom({
 	default: undefined,
 });
 
-export const currentRoomState = selector({
-	key: "currentRoomSelectorState",
-	get: ({ get }) => {
-		const roomId = get(roomFilterState);
-		const user = get(userState);
-		if (user === undefined || roomId === undefined) {
-			return undefined;
-		}
-		let rooms = user.Rooms;
-		for (const room of rooms) {
-			if (room.ID === roomId) {
-				return room;
-			}
-		}
-		return undefined;
-	},
+export const currentRoomState = atom({
+	key: "currentRoomState",
+	default: undefined,
 });
 
 export const useRoom = () => {

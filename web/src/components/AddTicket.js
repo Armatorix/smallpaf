@@ -1,10 +1,10 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Grid, FormControl, TextField } from "@mui/material";
+import { Button, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { ENDPOINT } from "../config";
 import {
-	roomFilterState,
+	currentRoomState,
 	useAddTicketToCurrentRoomSetter,
 	useToken,
 } from "../store";
@@ -15,7 +15,7 @@ const AddTicket = () => {
 		JiraID: "",
 	});
 	const [token] = useToken();
-	const roomId = useRecoilValue(roomFilterState);
+	const currentRoom = useRecoilValue(currentRoomState);
 	const addTicketToCurrentRoom = useAddTicketToCurrentRoomSetter();
 
 	if (!clicked) {
@@ -37,7 +37,7 @@ const AddTicket = () => {
 			component="form"
 			onSubmit={(e) => {
 				e.preventDefault();
-				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets`, {
+				fetch(`${ENDPOINT}/api/v1/rooms/${currentRoom.ID}/tickets`, {
 					body: JSON.stringify(ticket),
 					cache: "no-cache",
 					headers: {
