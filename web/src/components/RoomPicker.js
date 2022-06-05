@@ -25,7 +25,6 @@ const RoomPicker = () => {
 		roomPicker !== undefined &&
 		!window.location.pathname.includes(roomPicker)
 	) {
-		console.log(roomPicker, currentRoom);
 		resetCurrentRoom();
 		return <Navigate to={`/rooms/${roomPicker}`} />;
 	}
