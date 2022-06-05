@@ -13,32 +13,35 @@ const RoomPicker = () => {
 	const currentRoom = useRecoilValue(currentRoomState);
 	const resetCurrentRoom = useResetRecoilState(currentRoomState);
 	const user = useRecoilValue(userState);
-	const [roomPicker, setRoomPicker] = useState(undefined);
+	const [roomPicker, setRoomPicker] = useState(
+		currentRoom !== undefined ? currentRoom.ID : ""
+	);
 
-	if (user === undefined || currentRoom === undefined) {
+	if (user === undefined) {
 		return <CircularProgress />;
 	}
 
-	if (roomPicker !== undefined) {
-		if (!window.location.pathname.includes(roomPicker)) {
-			resetCurrentRoom();
-			return <Navigate to={`/rooms/${roomPicker}`} />;
-		}
-		setRoomPicker(undefined);
+	if (
+		roomPicker !== undefined &&
+		!window.location.pathname.includes(roomPicker)
+	) {
+		console.log(roomPicker, currentRoom);
+		resetCurrentRoom();
+		return <Navigate to={`/rooms/${roomPicker}`} />;
 	}
 
 	return (
 		<StyledAutocomplete
 			label="Room"
-			value={currentRoom}
+			value={roomPicker}
 			options={user.Rooms}
 			disableClearable
 			onChange={(_, v) => {
 				setRoomPicker(v.ID);
 			}}
-			isOptionEqualToValue={(option, value) => option.ID === value.ID}
+			isOptionEqualToValue={(option, value) => option.ID === value}
 			getOptionLabel={(option) =>
-				`${option.Name} - ${option.JiraUrl} - ${option.ID}`
+				option.ID === undefined ? option : option.ID
 			}
 			renderInput={(params) => <TextField {...params} label="Room" />}
 		/>
