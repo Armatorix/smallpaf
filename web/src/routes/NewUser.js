@@ -29,7 +29,8 @@ export default function NewUser() {
 				The email with the authentication link will be provided to your email.
 				No passwords - just open the link and start planning your sprints!
 			</Typography>
-			<form
+			<FormControl
+				fullWidth
 				onSubmit={(e) => {
 					e.preventDefault();
 
@@ -56,26 +57,24 @@ export default function NewUser() {
 						});
 				}}
 			>
-				<FormControl>
-					<TextField
-						id="email"
-						label="Email"
-						type="email"
-						fullWidth
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						required
-					/>
-					<Button
-						type="submit"
-						variant="outlined"
-						fullWidth
-						startIcon={<SendIcon />}
-					>
-						Send auth email
-					</Button>
-				</FormControl>
-			</form>
+				<TextField
+					id="email"
+					label="Email"
+					type="email"
+					fullWidth
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+					required
+				/>
+				<Button
+					type="submit"
+					variant="outlined"
+					fullWidth
+					startIcon={<SendIcon />}
+				>
+					Send auth email
+				</Button>
+			</FormControl>
 		</Grid>
 	);
 }
