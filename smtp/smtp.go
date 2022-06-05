@@ -19,7 +19,7 @@ func NewClient(cfg config.Smtp) *Client {
 		clientEmail:   cfg.From,
 		clientAddress: cfg.Address(),
 		auth:          smtp.PlainAuth("", cfg.From, cfg.Password, cfg.Host),
-		webAddress:    "http://localhost:3000",
+		webAddress:    cfg.WebAddressRedirect,
 	}
 }
 

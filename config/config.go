@@ -7,10 +7,11 @@ import (
 )
 
 type Smtp struct {
-	From     string `env:"SMTP_FROM,required"`
-	Password string `env:"SMTP_PASSWORD,required"`
-	Host     string `env:"SMTP_HOST,required"`
-	Port     int    `env:"SMTP_PORT" envDefault:"587"`
+	From               string `env:"SMTP_FROM,required"`
+	Password           string `env:"SMTP_PASSWORD,required"`
+	Host               string `env:"SMTP_HOST,required"`
+	Port               int    `env:"SMTP_PORT" envDefault:"587"`
+	WebAddressRedirect string `env:"SMTP_WEB_REDIRECT_URL" envDefault:"http://localhost:3000"`
 }
 
 func (s *Smtp) Address() string {
@@ -30,7 +31,7 @@ type Auth struct {
 }
 
 type DB struct {
-	DSN string `env:"DB_DSN,required"`
+	DSN string `env:"DATABASE_URL,required"`
 }
 
 type Config struct {
