@@ -1,11 +1,11 @@
 import LinkIcon from "@mui/icons-material/Link";
 import { IconButton, List, ListItem, ListItemText, Paper } from "@mui/material";
 import { useRecoilValue } from "recoil";
-import { currentRoomState, userState } from "../store";
+import { currentRoomState, userVotesMapState } from "../store";
+import VoteModal from "./VoteModal";
 const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
-	const user = useRecoilValue(userState);
-	console.log(user);
+	const userVotesMap = useRecoilValue(userVotesMapState);
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -22,15 +22,14 @@ const ListRoomTickets = () => {
 						<ListItemText
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
+							ticket={ticket.ID}
+							vote={
+								userVotesMap[ticket.ID] !== undefined
+									? userVotesMap[ticket.ID]
+									: undefined
+							}
 						/>
-						<IconButton
-							edge="end"
-							aria-label="delete"
-							target="_blank"
-							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
-						>
-							POINTZ
-						</IconButton>
+						<VoteModal edge="end" />
 					</ListItem>
 				))}
 			</List>
