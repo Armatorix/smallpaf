@@ -31,6 +31,7 @@ export default function NewUser() {
 			</Typography>
 			<FormControl
 				fullWidth
+				component="form"
 				onSubmit={(e) => {
 					e.preventDefault();
 
