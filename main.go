@@ -71,6 +71,7 @@ func main() {
 
 	room := rooms.Group("/:roomId")
 	room.PUT("/user", crudHandler.AddUserToRoom)
+	room.POST("/tickets", crudHandler.CreateTicketInRoom)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }

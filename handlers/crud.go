@@ -38,21 +38,12 @@ func (ch *CrudHandler) GetAll(c echo.Context) error {
 	var user model.User
 	err = ch.dbClient.
 		Preload("Rooms").
-		Preload("Tickets").
-		Preload("Votes").
 		WithContext(c.Request().Context()).
 		Find(&user, "id = ?", uid).Error
 	if err != nil {
 		return err
 	}
-	for i, room := range user.Rooms {
-		err = ch.dbClient.
-			Raw("SELECT email FROM users WHERE id IN (SELECT user_id as id FROM user_rooms WHERE room_id = ?)", room.ID).
-			Pluck("email", &user.Rooms[i].UserEmails).Error
-		if err != nil {
-			return err
-		}
-	}
+
 	return c.JSON(http.StatusOK, user)
 }
 
@@ -158,6 +149,50 @@ func (ch *CrudHandler) AddUserToRoom(c echo.Context) error {
 		return err
 	}
 	return c.NoContent(http.StatusOK)
+}
+
+type requestCreateTicketInRoom struct {
+	JiraID      string    `json:"JiraID" validate:"required"`
+	Description string    `json:"Description"`
+	RoomID      uuid.UUID `param:"roomId" validate:"required"`
+}
+
+func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
+	var req requestCreateTicketInRoom
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	ticket := &model.Ticket{
+		RoomId:      req.RoomID,
+		UserId:      uid,
+		JiraID:      req.JiraID,
+		Description: req.Description,
+	}
+	err = ch.dbClient.WithContext(c.Request().Context()).
+		Create(&ticket).Error
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, ticket)
 }
 
 func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, error) {

@@ -12,7 +12,7 @@ const AddTicket = () => {
 	const [clicked, setClicked] = useState(false);
 	const [ticket, setTicket] = useState({
 		Description: "",
-		JiraNumber: "",
+		JiraID: "",
 	});
 	const [token] = useToken();
 	const roomId = useRecoilValue(roomFilterState);
@@ -37,14 +37,14 @@ const AddTicket = () => {
 			component="form"
 			onSubmit={(e) => {
 				e.preventDefault();
-				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/ticket`, {
+				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets`, {
 					body: JSON.stringify(ticket),
 					cache: "no-cache",
 					headers: {
 						"content-type": "application/json",
 						authorization: `Bearer ${token}`,
 					},
-					method: "PUT",
+					method: "POST",
 					mode: "cors",
 				})
 					.then((resp) => {
@@ -54,7 +54,7 @@ const AddTicket = () => {
 					})
 					.then(() => {
 						addTicketToCurrentRoom(ticket);
-						setTicket({ JiraNumber: "", Description: "" });
+						setTicket({ JiraID: "", Description: "" });
 						setClicked(false);
 					})
 					.catch((err) => {
@@ -67,10 +67,11 @@ const AddTicket = () => {
 				label="Jira Number"
 				type="text"
 				value={ticket.email}
+				required
 				onChange={(e) =>
 					setTicket({
 						...ticket,
-						JiraNumber: e.target.value,
+						JiraID: e.target.value,
 					})
 				}
 			/>
