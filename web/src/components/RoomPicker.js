@@ -1,8 +1,13 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userState } from "../store";
+
+const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+	minWidth: "15%",
+}));
 
 const RoomPicker = () => {
 	const currentRoom = useRecoilValue(currentRoomState);
@@ -18,7 +23,7 @@ const RoomPicker = () => {
 	}
 
 	return (
-		<Autocomplete
+		<StyledAutocomplete
 			label="Room"
 			value={currentRoom}
 			options={user.Rooms}
