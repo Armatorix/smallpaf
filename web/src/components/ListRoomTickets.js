@@ -1,4 +1,3 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import LinkIcon from "@mui/icons-material/Link";
 import { IconButton, List, ListItem, ListItemText, Paper } from "@mui/material";
 import { useRecoilValue } from "recoil";
@@ -11,6 +10,14 @@ const ListRoomTickets = () => {
 			<List>
 				{room.Tickets.map((ticket) => (
 					<ListItem>
+						<IconButton
+							edge="start"
+							aria-label="delete"
+							target="_blank"
+							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
+						>
+							<LinkIcon />
+						</IconButton>
 						<ListItemText
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
@@ -21,10 +28,7 @@ const ListRoomTickets = () => {
 							target="_blank"
 							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
 						>
-							<LinkIcon />
-						</IconButton>
-						<IconButton edge="end" aria-label="delete">
-							<DeleteIcon />
+							POINTZ
 						</IconButton>
 					</ListItem>
 				))}

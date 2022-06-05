@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Grid, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -74,6 +75,18 @@ const AddUser = (props) => {
 					startIcon={<AddIcon />}
 				>
 					Add
+				</Button>
+				<Button
+					variant="outlined"
+					fullWidth
+					onClick={() => {
+						setEmail("");
+						setClicked(false);
+					}}
+					color="error"
+					startIcon={<CancelIcon />}
+				>
+					Cancel
 				</Button>
 			</FormControl>
 		</Grid>

@@ -1,15 +1,18 @@
 import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
+
+const defautlTicketValue = {
+	Description: "",
+	JiraID: "",
+};
 const AddTicket = () => {
 	const [clicked, setClicked] = useState(false);
-	const [ticket, setTicket] = useState({
-		Description: "",
-		JiraID: "",
-	});
+	const [ticket, setTicket] = useState(defautlTicketValue);
 	const [token] = useToken();
 	const currentRoom = useRecoilValue(currentRoomState);
 	const resetRoom = useResetRecoilState(currentRoomState);
@@ -49,7 +52,7 @@ const AddTicket = () => {
 						}
 					})
 					.then(() => {
-						setTicket({ JiraID: "", Description: "" });
+						setTicket(defautlTicketValue);
 						resetRoom();
 						setClicked(false);
 					})
@@ -90,6 +93,18 @@ const AddTicket = () => {
 				startIcon={<AddIcon />}
 			>
 				Add
+			</Button>
+			<Button
+				variant="outlined"
+				fullWidth
+				onClick={() => {
+					setTicket(defautlTicketValue);
+					setClicked(false);
+				}}
+				color="error"
+				startIcon={<CancelIcon />}
+			>
+				Cancel
 			</Button>
 		</FormControl>
 	);
