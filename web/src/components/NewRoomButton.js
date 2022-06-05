@@ -11,7 +11,6 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 const NewRoomButton = () => (
 	<ColorButton variant="outlined" color="primary" href="/rooms">
-		{" "}
 		<AddIcon />
 		New room
 	</ColorButton>

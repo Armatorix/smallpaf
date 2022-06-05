@@ -1,4 +1,10 @@
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import {
+	CircularProgress,
+	Grid,
+	Link,
+	Typography,
+	unstable_composeClasses,
+} from "@mui/material";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import AddTicket from "../components/AddTicket";
@@ -40,20 +46,17 @@ const Room = () => {
 		return <CircularProgress />;
 	}
 	return (
-		<Grid container item direction="column" xs={12}>
-			<Grid item xs={4}>
+		<Grid container item direction="row" spacing={4} xs={12}>
+			<Grid container item direction="column" xs={8}>
 				<Typography>
-					Room <b>{room.Name}</b>
+					Room <b>{room.Name}</b> <br />
+					<Link>{room.JiraUrl}</Link>
 				</Typography>
+				<AddTicket />
+				XD
 			</Grid>
-			<Grid container item direction="row">
-				<Grid container item xs={8}>
-					<AddTicket />
-					XD
-				</Grid>
-				<Grid container item xs={4}>
-					<ListRoomUsers />
-				</Grid>
+			<Grid container item direction="column" xs={4}>
+				<ListRoomUsers />
 			</Grid>
 		</Grid>
 	);
