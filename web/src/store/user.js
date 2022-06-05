@@ -25,7 +25,7 @@ export const userVotesMapState = selector({
 		}
 		var m = {};
 		for (const vote of user.Votes) {
-			m[vote.ID] = vote;
+			m[vote.TicketID] = vote;
 		}
 		return m;
 	},
