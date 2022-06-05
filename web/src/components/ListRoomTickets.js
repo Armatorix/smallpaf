@@ -1,11 +1,21 @@
 import LinkIcon from "@mui/icons-material/Link";
-import { IconButton, List, ListItem, ListItemText, Paper } from "@mui/material";
+import {
+	CircularProgress,
+	IconButton,
+	List,
+	ListItem,
+	ListItemText,
+	Paper,
+} from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userVotesMapState } from "../store";
 import VoteModal from "./VoteModal";
 const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
+	if (room === undefined || userVotesMap === undefined) {
+		return <CircularProgress />;
+	}
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -22,6 +32,9 @@ const ListRoomTickets = () => {
 						<ListItemText
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
+						/>
+						<VoteModal
+							edge="end"
 							ticket={ticket.ID}
 							vote={
 								userVotesMap[ticket.ID] !== undefined
@@ -29,7 +42,6 @@ const ListRoomTickets = () => {
 									: undefined
 							}
 						/>
-						<VoteModal edge="end" />
 					</ListItem>
 				))}
 			</List>

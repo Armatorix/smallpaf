@@ -18,7 +18,7 @@ export const currentRoomState = atom({
 
 export const userVotesMapState = selector({
 	key: "userVotesMapState",
-	getL: ({ get }) => {
+	get: ({ get }) => {
 		const user = get(userState);
 		if (user === undefined) {
 			return undefined;
