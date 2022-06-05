@@ -59,7 +59,10 @@ func main() {
 
 	// static for react
 	e.Static("", "react")
-	// e.Any("*", func(c echo.Context) error { return c.File("react/index.html") })
+	e.Any("*", func(c echo.Context) error {
+		c.Path()
+		return c.File("react/index.html")
+	})
 
 	api.GET("/user", crudHandler.GetUser, authClient.GetMiddleware())
 
