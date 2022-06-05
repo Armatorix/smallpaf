@@ -7,10 +7,10 @@ import (
 
 type User struct {
 	gorm.Model
-	ID      uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	Email   string    `gorm:"unique"`
-	Rooms   []Room    `gorm:"many2many:user_rooms;"`
-	Tickets []Ticket
+	ID    uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Email string    `gorm:"unique"`
+	Rooms []Room    `gorm:"many2many:user_rooms;"`
+	Votes []Vote
 }
 
 type Room struct {

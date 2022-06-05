@@ -35,7 +35,7 @@ func (ch *CrudHandler) GetUser(c echo.Context) error {
 	var user model.User
 	err = ch.dbClient.
 		Preload("Rooms").
-		Preload("Tickets").
+		Preload("Votes").
 		WithContext(c.Request().Context()).
 		Find(&user, "id = ?", uid).Error
 	if err != nil {

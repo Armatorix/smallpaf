@@ -1,15 +1,16 @@
 import LinkIcon from "@mui/icons-material/Link";
 import { IconButton, List, ListItem, ListItemText, Paper } from "@mui/material";
 import { useRecoilValue } from "recoil";
-import { currentRoomState } from "../store";
+import { currentRoomState, userState } from "../store";
 const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
-	console.log(room);
+	const user = useRecoilValue(userState);
+	console.log(user);
 	return (
 		<Paper elevation={2}>
 			<List>
 				{room.Tickets.map((ticket) => (
-					<ListItem>
+					<ListItem key={ticket.ID}>
 						<IconButton
 							edge="start"
 							aria-label="delete"
