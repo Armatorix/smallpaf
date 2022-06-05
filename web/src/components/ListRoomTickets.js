@@ -18,6 +18,7 @@ const ListRoomTickets = () => {
 						<IconButton
 							edge="end"
 							aria-label="delete"
+							target="_blank"
 							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
 						>
 							<LinkIcon />
