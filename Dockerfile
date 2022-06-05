@@ -19,10 +19,12 @@ WORKDIR /app
 
 COPY --from=go-build \
     /go/src/github.com/Armatorix/smallpaf/smallpaf \
-    ./
+    /app/smallpaf
 
 COPY --from=node-build \
     /app/react/build \
     ./react
+
+RUN apt-get update -y && apt-get install ca-certificates -y
 
 CMD ["/app/smallpaf"]
