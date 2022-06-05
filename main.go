@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/config"
@@ -58,7 +60,16 @@ func main() {
 	})
 
 	// static for react
-	e.Static("", "react")
+	staticPath := "react/"
+	err = filepath.Walk(staticPath,
+		func(path string, _ os.FileInfo, _ error) error {
+			routePath := path[len(staticPath):]
+			e.Static(routePath, path)
+			return nil
+		})
+	if err != nil {
+		log.Fatal(err)
+	}
 	e.Any("*", func(c echo.Context) error {
 		c.Path()
 		return c.File("react/index.html")
