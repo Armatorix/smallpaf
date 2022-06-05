@@ -61,7 +61,7 @@ func main() {
 	e.Static("", "react")
 	// e.Any("*", func(c echo.Context) error { return c.File("react/index.html") })
 
-	api.GET("/all", crudHandler.GetAll, authClient.GetMiddleware())
+	api.GET("/user", crudHandler.GetUser, authClient.GetMiddleware())
 
 	auth := api.Group("/auth")
 	auth.POST("/token", authHandler.SendAuthJWTToEmail)

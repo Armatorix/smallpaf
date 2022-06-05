@@ -40,7 +40,7 @@ function App() {
 
 	useEffect(() => {
 		if (token !== "" && user === undefined) {
-			fetch(ENDPOINT + "/api/v1/all", {
+			fetch(ENDPOINT + "/api/v1/user", {
 				cache: "no-cache",
 				headers: {
 					"content-type": "application/json",

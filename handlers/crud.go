@@ -29,7 +29,7 @@ func NewCrudHandler(dbClient *db.DB) *CrudHandler {
 	}
 }
 
-func (ch *CrudHandler) GetAll(c echo.Context) error {
+func (ch *CrudHandler) GetUser(c echo.Context) error {
 	uid, err := getUID(c)
 	if err != nil {
 		return err
