@@ -45,50 +45,6 @@ export const useNewRoomSetter = () => {
 	return setNewRoom;
 };
 
-export const useAddUserToCurrentRoomSetter = () => {
-	const [user, setUser] = useRecoilState(userState);
-	const roomFilter = useRecoilValue(roomFilterState);
-	const addUserToCurrentRoom = (email) => {
-		for (const [idx, room] of user.Rooms.entries()) {
-			if (room.ID === roomFilter) {
-				setUser({
-					...user,
-					Rooms: [
-						...user.Rooms.slice(idx + 1, idx),
-						{
-							...room,
-							UserEmails: [...room.UserEmails, email],
-						},
-					],
-				});
-			}
-		}
-	};
-	return addUserToCurrentRoom;
-};
-
-export const useAddTicketToCurrentRoomSetter = () => {
-	const [user, setUser] = useRecoilState(userState);
-	const roomFilter = useRecoilValue(roomFilterState);
-	const addTicketToCurrentRoom = (ticket) => {
-		for (const [idx, room] of user.Rooms.entries()) {
-			if (room.ID === roomFilter) {
-				setUser({
-					...user,
-					Rooms: [
-						...user.Rooms.slice(idx + 1, idx),
-						{
-							...room,
-							Tickets: [...room.Tickets, ticket],
-						},
-					],
-				});
-			}
-		}
-	};
-	return addTicketToCurrentRoom;
-};
-
 export const useRoomUsers = () => {
 	const room = useRoom();
 	return room !== undefined ? room.UserEmails : undefined;

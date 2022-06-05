@@ -1,13 +1,16 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Grid, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
-import { useAddUserToCurrentRoomSetter, useToken } from "../store";
+import { currentRoomState, useToken } from "../store";
 const AddUser = (props) => {
 	const [clicked, setClicked] = useState(false);
 	const [token] = useToken();
 	const [email, setEmail] = useState("");
-	const addUserToCurrentRoom = useAddUserToCurrentRoomSetter();
+	const resetRoom = useResetRecoilState(currentRoomState);
+	const { roomId } = useParams();
 
 	if (!clicked) {
 		return (
@@ -29,7 +32,7 @@ const AddUser = (props) => {
 			component="form"
 			onSubmit={(e) => {
 				e.preventDefault();
-				fetch(`${ENDPOINT}/api/v1/rooms/${props.roomId}/user`, {
+				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/user`, {
 					body: JSON.stringify({
 						Email: email,
 					}),
@@ -47,7 +50,7 @@ const AddUser = (props) => {
 						}
 					})
 					.then(() => {
-						addUserToCurrentRoom(email);
+						resetRoom();
 						setEmail("");
 						setClicked(false);
 					})

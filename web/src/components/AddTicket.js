@@ -1,13 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, FormControl, TextField } from "@mui/material";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
-import {
-	currentRoomState,
-	useAddTicketToCurrentRoomSetter,
-	useToken,
-} from "../store";
+import { currentRoomState, useToken } from "../store";
 const AddTicket = () => {
 	const [clicked, setClicked] = useState(false);
 	const [ticket, setTicket] = useState({
@@ -16,7 +12,7 @@ const AddTicket = () => {
 	});
 	const [token] = useToken();
 	const currentRoom = useRecoilValue(currentRoomState);
-	const addTicketToCurrentRoom = useAddTicketToCurrentRoomSetter();
+	const resetRoom = useResetRecoilState(currentRoomState);
 
 	if (!clicked) {
 		return (
@@ -53,8 +49,8 @@ const AddTicket = () => {
 						}
 					})
 					.then(() => {
-						addTicketToCurrentRoom(ticket);
 						setTicket({ JiraID: "", Description: "" });
+						resetRoom();
 						setClicked(false);
 					})
 					.catch((err) => {
