@@ -57,7 +57,9 @@ func main() {
 		return c.JSONBlob(http.StatusOK, []byte(`{"status":"ok"}`))
 	})
 
+	// static for react
 	e.Static("/", "react")
+	e.Any("*", func(c echo.Context) error { return c.File("react/index.html") })
 
 	api.GET("/all", crudHandler.GetAll, authClient.GetMiddleware())
 
