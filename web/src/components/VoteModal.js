@@ -1,7 +1,10 @@
 import { useTheme } from "@emotion/react";
-import { Button, Modal, IconButton } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { ENDPOINT } from "../config";
+import { currentRoomState, userState, useToken } from "../store";
 
 const style = {
 	position: "absolute",
@@ -15,6 +18,10 @@ const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 const VoteModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const theme = useTheme();
+	const [token] = useToken();
+	const currentRoom = useRecoilValue(currentRoomState);
+	const resetUser = useResetRecoilState(userState);
+	console.log(props.vote);
 	return (
 		<>
 			<Button
@@ -42,6 +49,7 @@ const VoteModal = (props) => {
 				>
 					{POINTS.map((point) => (
 						<Button
+							key={`${props.ticketid}-${point}`}
 							variant="outlined"
 							sx={{
 								margin: "0.4em",
@@ -50,7 +58,33 @@ const VoteModal = (props) => {
 								minWidth: "2.5em",
 							}}
 							onClick={() => {
-								setOpen(false);
+								fetch(
+									`${ENDPOINT}/api/v1/rooms/${currentRoom.ID}/tickets/${props.ticketid}/votes`,
+									{
+										body: JSON.stringify({
+											Points: point,
+										}),
+										cache: "no-cache",
+										headers: {
+											"content-type": "application/json",
+											authorization: `Bearer ${token}`,
+										},
+										method: "PUT",
+										mode: "cors",
+									}
+								)
+									.then((resp) => {
+										if (resp.status >= 300) {
+											throw Error("failed creation");
+										}
+									})
+									.then(() => {
+										resetUser();
+										setOpen(false);
+									})
+									.catch((err) => {
+										console.log(err);
+									});
 							}}
 						>
 							{point}

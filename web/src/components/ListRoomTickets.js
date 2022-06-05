@@ -16,6 +16,7 @@ const ListRoomTickets = () => {
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
+	console.log(userVotesMap);
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -35,7 +36,7 @@ const ListRoomTickets = () => {
 						/>
 						<VoteModal
 							edge="end"
-							ticket={ticket.ID}
+							ticketid={ticket.ID}
 							vote={userVotesMap[ticket.ID]}
 						/>
 					</ListItem>
