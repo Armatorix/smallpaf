@@ -1,27 +1,18 @@
-import {
-	CircularProgress,
-	List,
-	ListItem,
-	ListItemButton,
-	Paper,
-} from "@mui/material";
-import { useRoomUsers } from "../store";
-import AddUser from "./AddUser";
-
+import { List, ListItemButton, Paper } from "@mui/material";
+import { useRecoilValue } from "recoil";
+import { currentRoomState } from "../store";
 const ListRoomTickets = () => {
+	const room = useRecoilValue(currentRoomState);
+	console.log(room);
 	return (
 		<Paper elevation={2}>
 			<List>
-				<ListItem key="title">Room users ({users.length})</ListItem>
-				{users.map((user) => (
-					<ListItemButton key={user}>{user}</ListItemButton>
+				{room.Tickets.map((ticket) => (
+					<ListItemButton key={ticket.ID}>{ticket.JiraID}</ListItemButton>
 				))}
-				<ListItem>
-					<AddUser />
-				</ListItem>
 			</List>
 		</Paper>
 	);
 };
 
-export default ListRoomUsers;
+export default ListRoomTickets;

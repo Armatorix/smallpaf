@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import AddTicket from "../components/AddTicket";
+import ListRoomTickets from "../components/ListRoomTickets";
 import ListRoomUsers from "../components/ListRoomUsers";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
@@ -47,7 +48,7 @@ const Room = () => {
 					<Link>{room.JiraUrl}</Link>
 				</Typography>
 				<AddTicket />
-				XD
+				<ListRoomTickets />
 			</Grid>
 			<Grid container item direction="column" xs={4}>
 				<ListRoomUsers />
