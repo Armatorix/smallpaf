@@ -1,11 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import {
-	Autocomplete,
-	Button,
-	CircularProgress,
-	Grid,
-	TextField,
-} from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -25,23 +18,16 @@ const RoomPicker = () => {
 	}
 
 	return (
-		<Grid container item width="auto">
-			<Button variant="outlined" href="/rooms">
-				{" "}
-				<AddIcon />
-				New room
-			</Button>
-			<Autocomplete
-				label="Room"
-				value={currentRoom}
-				options={user.Rooms}
-				onChange={(_, v) => {
-					setRoomPicker(v.ID);
-				}}
-				getOptionLabel={(option) => option.Name}
-				renderInput={(params) => <TextField {...params} label="Room" />}
-			/>
-		</Grid>
+		<Autocomplete
+			label="Room"
+			value={currentRoom}
+			options={user.Rooms}
+			onChange={(_, v) => {
+				setRoomPicker(v.ID);
+			}}
+			getOptionLabel={(option) => option.Name}
+			renderInput={(params) => <TextField {...params} label="Room" />}
+		/>
 	);
 };
 

@@ -12,6 +12,7 @@ import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import RoomPicker from "./components/RoomPicker";
 import ThemeToggle from "./components/ThemeToggle";
+import NewRoomButton from "./components/NewRoomButton";
 import { ENDPOINT } from "./config";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
@@ -71,6 +72,7 @@ function App() {
 					<Typography variant="h5" noWrap component="div" flexGrow={1}>
 						SmallPAF - Planning Async Format
 					</Typography>
+					<NewRoomButton />
 					{token !== "" && user?.Rooms?.length > 0 && <RoomPicker />}
 					<ThemeToggle />
 				</Toolbar>
