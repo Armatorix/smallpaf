@@ -106,6 +106,7 @@ function App() {
 					padding="2em"
 					alignItems="center"
 					justifyContent="center"
+					elevation={1}
 				>
 					<Routes>
 						<Route

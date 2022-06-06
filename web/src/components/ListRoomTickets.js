@@ -16,6 +16,7 @@ import {
 	userVotesMapState,
 } from "../store";
 import RevealModal from "./RevealModal";
+import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
 
 export const HideRevealedCheckbox = () => {
@@ -58,6 +59,7 @@ export const ListRoomTickets = () => {
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
 						/>
+
 						{!ticket.Revealed && (
 							<RevealModal
 								ticketid={ticket.ID}
@@ -70,6 +72,13 @@ export const ListRoomTickets = () => {
 								edge="end"
 								ticketid={ticket.ID}
 								vote={userVotesMap[ticket.ID]}
+							/>
+						)}
+						{ticket.Revealed && (
+							<VotedModal
+								edge="end"
+								ticketid={ticket.ID}
+								votes={ticket.Votes}
 							/>
 						)}
 					</ListItem>

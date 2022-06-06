@@ -1,75 +1,41 @@
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
 import { currentRoomState, userState, useToken } from "../store";
 
 const VotedModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [token] = useToken();
-	const currentRoom = useRecoilValue(currentRoomState);
 	const resetUser = useResetRecoilState(userState);
 	const resetRoom = useResetRecoilState(currentRoomState);
+
+	let total = 0;
+	let min = props.votes[0].Points;
+	let max = props.votes[0].Points;
+	props.votes.forEach((el) => {
+		total += el.Points;
+		if (el.Points > max) {
+			max = el.Points;
+		} else if (el.Points < min) {
+			min = el.Points;
+		}
+	});
 	return (
 		<>
 			<Button
 				{...props}
-				variant="outlined"
+				variant="contained"
 				onClick={() => setOpen(true)}
-				style={{
-					minWidth: "3.5em",
-				}}
 				color={props.vote === undefined ? "warning" : "success"}
 			>
-				{props.vote === undefined ? "-" : props.vote.Points}
+				AVG: {(total / props.votes.length).toFixed(1)} MIN: {min} MAX: {max}
 			</Button>
 			<Dialog open={open} onClose={() => setOpen(false)}>
-				<DialogTitle justifyContent="center">Pick your estimation</DialogTitle>
+				<DialogTitle justifyContent="center"></DialogTitle>
 				<DialogActions>
-					{POINTS.map((point) => (
-						<Button
-							key={`${props.ticketid}-${point}`}
-							variant={point === props?.vote?.Points ? "contained" : "outlined"}
-							sx={{
-								margin: "0.4em",
-								padding: "0.5em",
-								justifyContent: "center",
-								minWidth: "2.5em",
-							}}
-							onClick={() => {
-								fetch(
-									`${ENDPOINT}/api/v1/rooms/${currentRoom.ID}/tickets/${props.ticketid}/votes`,
-									{
-										body: JSON.stringify({
-											Points: point,
-										}),
-										cache: "no-cache",
-										headers: {
-											"content-type": "application/json",
-											authorization: `Bearer ${token}`,
-										},
-										method: "PUT",
-										mode: "cors",
-									}
-								)
-									.then((resp) => {
-										if (resp.status >= 300) {
-											throw Error("failed creation");
-										}
-									})
-									.then(() => {
-										resetUser();
-										resetRoom();
-										setOpen(false);
-									})
-									.catch((err) => {
-										console.log(err);
-									});
-							}}
-						>
-							{point}
-						</Button>
-					))}
+					2x
+					<Button variant="contained">2</Button>
+					3x <Button variant="contained">3</Button>
 				</DialogActions>
 			</Dialog>
 		</>
