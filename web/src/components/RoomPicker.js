@@ -30,7 +30,6 @@ const RoomPicker = () => {
 		resetCurrentRoom();
 		return <Navigate to={`/rooms/${roomPicker.ID}`} />;
 	}
-	console.log(user.Rooms);
 	return (
 		<StyledAutocomplete
 			label="Room"
