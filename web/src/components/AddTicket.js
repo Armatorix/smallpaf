@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
 import CancelIcon from "@mui/icons-material/Cancel";
 import {
 	Button,
@@ -8,11 +7,10 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	InputAdornment,
 	TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
 
