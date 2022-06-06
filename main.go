@@ -64,15 +64,16 @@ func main() {
 	err = filepath.Walk(staticPath,
 		func(path string, _ os.FileInfo, _ error) error {
 			routePath := path[len(staticPath):]
-			e.Static(routePath, path)
+			e.GET(routePath, func(c echo.Context) error {
+				return c.File(path)
+			})
 			return nil
 		})
 	if err != nil {
 		log.Fatal(err)
 	}
 	e.Any("*", func(c echo.Context) error {
-		c.Path()
-		return c.File("react/index.html")
+		return c.File("/app/public/index.html")
 	})
 
 	api.GET("/user", crudHandler.GetUser, authClient.GetMiddleware())
