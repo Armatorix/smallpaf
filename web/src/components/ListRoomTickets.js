@@ -58,6 +58,9 @@ export const ListRoomTickets = () => {
 						<ListItemText
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
+							style={{
+								maxWidth: "60%",
+							}}
 						/>
 
 						{!ticket.Revealed && (
