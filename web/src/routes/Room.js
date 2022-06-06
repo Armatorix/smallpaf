@@ -43,13 +43,20 @@ const Room = () => {
 	return (
 		<Grid container item direction="row" spacing={4} xs={12}>
 			<Grid container item direction="column" xs={8}>
-				<Typography>
-					Room <b>{room.Name}</b> <br />
-					<Link href={room.JiraUrl} target="_blank">
-						{room.JiraUrl}
-					</Link>
-				</Typography>
-				<AddTicket />
+				<Grid container item direction="row">
+					<Grid item xs={9}>
+						<Typography>
+							Room <b>{room.Name}</b> <br />
+							<Link href={room.JiraUrl} target="_blank">
+								{room.JiraUrl}
+							</Link>
+						</Typography>
+					</Grid>
+					<Grid item xs={3}>
+						<AddTicket fullWidth roomid={roomId} />
+					</Grid>
+				</Grid>
+
 				<ListRoomTickets />
 			</Grid>
 			<Grid container item direction="column" xs={4}>

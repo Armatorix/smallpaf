@@ -1,16 +1,39 @@
 import LinkIcon from "@mui/icons-material/Link";
 import {
+	Checkbox,
 	CircularProgress,
+	FormControlLabel,
 	IconButton,
 	List,
 	ListItem,
 	ListItemText,
 	Paper,
 } from "@mui/material";
-import { useRecoilValue } from "recoil";
-import { currentRoomState, userVotesMapState } from "../store";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+	currentRoomState,
+	hideRevealedTicketsState,
+	userVotesMapState,
+} from "../store";
 import VoteModal from "./VoteModal";
-const ListRoomTickets = () => {
+
+export const HideRevealedCheckbox = () => {
+	const [hide, setHide] = useRecoilState(hideRevealedTicketsState);
+	return (
+		<FormControlLabel
+			control={
+				<Checkbox
+					checked={hide}
+					onChange={() => setHide(!hide)}
+					name="hide-revealed"
+				/>
+			}
+			label="Hide revealed"
+		/>
+	);
+};
+
+export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
 	if (room === undefined || userVotesMap === undefined) {

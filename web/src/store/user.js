@@ -16,6 +16,11 @@ export const currentRoomState = atom({
 	default: undefined,
 });
 
+export const hideRevealedTicketsState = atom({
+	key: "hideRevealedTicketsState",
+	default: false,
+});
+
 export const userVotesMapState = selector({
 	key: "userVotesMapState",
 	get: ({ get }) => {
