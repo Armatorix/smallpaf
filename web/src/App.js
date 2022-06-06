@@ -20,9 +20,14 @@ import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
 import Room from "./routes/Room";
 import { styleState, userState, useToken } from "./store";
+import LogoutButton from "./components/LogoutButton";
 
-const redirectToMain = () => {
-	return <Navigate to={`/rooms`} />;
+const redirectToRoom = () => {
+	return <Navigate to="/rooms" />;
+};
+
+const redirectToLoginPage = () => {
+	return <Navigate to="/" />;
 };
 
 function App() {
@@ -37,7 +42,7 @@ function App() {
 			setToken(queryToken);
 		}
 	}, [searchParams, setSearchParams, setToken]);
-
+	const isAuthed = token !== "";
 	useEffect(() => {
 		if (token !== "" && user === undefined) {
 			fetch(ENDPOINT + "/api/v1/user", {
@@ -73,8 +78,9 @@ function App() {
 						SmallPAF - Planning Async Format
 					</Typography>
 					<NewRoomButton />
-					{token !== "" && user?.Rooms?.length > 0 && <RoomPicker />}
+					{isAuthed && user?.Rooms?.length > 0 && <RoomPicker />}
 					<ThemeToggle />
+					{isAuthed && <LogoutButton />}
 				</Toolbar>
 			</AppBar>
 			<Grid
@@ -102,14 +108,20 @@ function App() {
 					<Routes>
 						<Route
 							path="/"
-							element={token === "" ? <NewUser /> : redirectToMain()}
+							element={isAuthed ? redirectToRoom() : <NewUser />}
 						/>
 						<Route
 							path="new-user-redirect"
-							element={token === "" ? <NewUserOpenMail /> : redirectToMain()}
+							element={isAuthed ? redirectToRoom() : <NewUserOpenMail />}
 						/>
-						<Route path="rooms" element={<NewRoom />} />
-						<Route path="rooms/:roomId" element={<Room />} />
+						<Route
+							path="rooms"
+							element={isAuthed ? <NewRoom /> : redirectToLoginPage()}
+						/>
+						<Route
+							path="rooms/:roomId"
+							element={isAuthed ? <Room /> : redirectToLoginPage()}
+						/>
 						<Route path="*" element={<Page404 />} />
 					</Routes>
 				</Grid>
