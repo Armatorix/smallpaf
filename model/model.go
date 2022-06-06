@@ -49,8 +49,8 @@ func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
 type Vote struct {
 	gorm.Model
 	ID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	UserID   uuid.UUID
-	TicketID uuid.UUID
+	UserID   uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
+	TicketID uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
 	Points   int
 }
 

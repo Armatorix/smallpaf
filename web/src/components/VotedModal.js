@@ -10,8 +10,8 @@ const VotedModal = (props) => {
 	const resetRoom = useResetRecoilState(currentRoomState);
 
 	let total = 0;
-	let min = props.votes[0].Points;
-	let max = props.votes[0].Points;
+	let min = props?.votes[0]?.Points;
+	let max = props?.votes[0]?.Points;
 	props.votes.forEach((el) => {
 		total += el.Points;
 		if (el.Points > max) {

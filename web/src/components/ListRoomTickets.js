@@ -58,9 +58,6 @@ export const ListRoomTickets = () => {
 						<ListItemText
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
-							style={{
-								maxWidth: "60%",
-							}}
 						/>
 
 						{!ticket.Revealed && (
@@ -68,6 +65,7 @@ export const ListRoomTickets = () => {
 								ticketid={ticket.ID}
 								roomid={room.ID}
 								voted={ticket.TotalVoted}
+								disabled={ticket.TotalVoted === 0}
 							/>
 						)}
 						{!ticket.Revealed && (

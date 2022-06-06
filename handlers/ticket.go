@@ -93,7 +93,9 @@ func (ch *CrudHandler) AddVoteToTicket(c echo.Context) error {
 	if vote.Points != req.Points {
 		vote.Points = req.Points
 		err = ch.dbClient.WithContext(c.Request().Context()).
-			Save(&vote).Error
+			Model(&vote).
+			Where("ticket_id = ? AND user_id = ?", req.TicketId, vote.UserID).
+			Update("points", vote.Points).Error
 		if err != nil {
 			return err
 		}
