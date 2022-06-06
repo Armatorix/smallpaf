@@ -1,5 +1,11 @@
 import { useTheme } from "@emotion/react";
-import { Button, Modal } from "@mui/material";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogTitle,
+	Modal,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
@@ -28,28 +34,19 @@ const VoteModal = (props) => {
 				variant="outlined"
 				onClick={() => setOpen(true)}
 				style={{
-					minWidth: "2em",
+					minWidth: "3.5em",
 				}}
 				color={props.vote === undefined ? "warning" : "success"}
 			>
 				{props.vote === undefined ? "-" : props.vote.Points}
 			</Button>
-			<Modal open={open} onClose={() => setOpen(false)}>
-				<Box
-					alignItems="center"
-					justifyContent="center"
-					sx={{
-						...style,
-						width: 400,
-						padding: "2em",
-						background: theme.palette.background.paper,
-						border: "2px solid #000",
-					}}
-				>
+			<Dialog open={open} onClose={() => setOpen(false)}>
+				<DialogTitle justifyContent="center">Pick your estimation</DialogTitle>
+				<DialogActions>
 					{POINTS.map((point) => (
 						<Button
 							key={`${props.ticketid}-${point}`}
-							variant="outlined"
+							variant={point === props?.vote?.Points ? "contained" : "outlined"}
 							sx={{
 								margin: "0.4em",
 								padding: "0.5em",
@@ -89,8 +86,8 @@ const VoteModal = (props) => {
 							{point}
 						</Button>
 					))}
-				</Box>
-			</Modal>
+				</DialogActions>
+			</Dialog>
 		</>
 	);
 };
