@@ -41,49 +41,53 @@ export const ListRoomTickets = () => {
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
-	console.log(room, userVotesMap);
 	return (
 		<Paper elevation={2}>
 			<List>
-				{room.Tickets.map((ticket) => (
-					<ListItem key={ticket.ID}>
-						<IconButton
-							edge="start"
-							aria-label="delete"
-							target="_blank"
-							href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href}`}
-						>
-							<LinkIcon />
-						</IconButton>
-						<ListItemText
-							primary={ticket.JiraID}
-							secondary={ticket.Description}
-						/>
+				{room.Tickets !== undefined &&
+					room.Tickets.slice(0)
+						.reverse()
+						.map((ticket) => (
+							<ListItem key={ticket.ID}>
+								<IconButton
+									edge="start"
+									aria-label="delete"
+									target="_blank"
+									href={`${
+										new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href
+									}`}
+								>
+									<LinkIcon />
+								</IconButton>
+								<ListItemText
+									primary={ticket.JiraID}
+									secondary={ticket.Description}
+								/>
 
-						{!ticket.Revealed && (
-							<RevealModal
-								ticketid={ticket.ID}
-								roomid={room.ID}
-								voted={ticket.TotalVoted}
-								disabled={ticket.TotalVoted === 0}
-							/>
-						)}
-						{!ticket.Revealed && (
-							<VoteModal
-								edge="end"
-								ticketid={ticket.ID}
-								vote={userVotesMap[ticket.ID]}
-							/>
-						)}
-						{ticket.Revealed && (
-							<VotedModal
-								edge="end"
-								ticketid={ticket.ID}
-								votes={ticket.Votes}
-							/>
-						)}
-					</ListItem>
-				))}
+								{!ticket.Revealed && (
+									<RevealModal
+										ticketid={ticket.ID}
+										roomid={room.ID}
+										voted={ticket.TotalVoted}
+										disabled={ticket.TotalVoted === 0}
+									/>
+								)}
+								{!ticket.Revealed && (
+									<VoteModal
+										edge="end"
+										ticketid={ticket.ID}
+										vote={userVotesMap[ticket.ID]}
+									/>
+								)}
+								{ticket.Revealed && (
+									<VotedModal
+										edge="end"
+										ticketid={ticket.ID}
+										votes={ticket.Votes}
+									/>
+								)}
+							</ListItem>
+						))}
 			</List>
 		</Paper>
 	);
