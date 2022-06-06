@@ -77,7 +77,9 @@ function App() {
 					<Typography variant="h5" noWrap component="div" flexGrow={1}>
 						SmallPAF - Planning Async Format
 					</Typography>
-					<NewRoomButton />
+					{isAuthed && window.location.pathname !== "/rooms" && (
+						<NewRoomButton />
+					)}
 					{isAuthed && user?.Rooms?.length > 0 && <RoomPicker />}
 					<ThemeToggle />
 					{isAuthed && <LogoutButton />}
