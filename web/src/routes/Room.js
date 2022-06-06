@@ -45,7 +45,9 @@ const Room = () => {
 			<Grid container item direction="column" xs={8}>
 				<Typography>
 					Room <b>{room.Name}</b> <br />
-					<Link href={room.JiraUrl}>{room.JiraUrl}</Link>
+					<Link href={room.JiraUrl} target="_blank">
+						{room.JiraUrl}
+					</Link>
 				</Typography>
 				<AddTicket />
 				<ListRoomTickets />

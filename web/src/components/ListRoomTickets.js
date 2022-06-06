@@ -16,7 +16,6 @@ const ListRoomTickets = () => {
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
-	console.log(userVotesMap);
 	return (
 		<Paper elevation={2}>
 			<List>
