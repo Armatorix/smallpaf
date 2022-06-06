@@ -6,6 +6,7 @@ import (
 	"github.com/Armatorix/smallpaf/model"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type requestCreateTicketInRoom struct {
@@ -72,7 +73,7 @@ func (ch *CrudHandler) AddVoteToTicket(c echo.Context) error {
 		return err
 	}
 
-	hasRights, err := ch.shouldAddEstimation(uid, req.TicketId)
+	hasRights, err := ch.haveAccessToTheTicket(uid, req.TicketId)
 	if err != nil {
 		return err
 	}
@@ -123,7 +124,7 @@ func (ch *CrudHandler) RevealTicket(c echo.Context) error {
 		return err
 	}
 
-	hasRights, err := ch.shouldAddEstimation(uid, req.TicketId)
+	hasRights, err := ch.haveAccessToTheTicket(uid, req.TicketId)
 	if err != nil {
 		return err
 	}
@@ -138,5 +139,47 @@ func (ch *CrudHandler) RevealTicket(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	return c.NoContent(http.StatusOK)
+}
+
+type requestResetVoting struct {
+	TicketId uuid.UUID `param:"ticketId" validate:"required"`
+}
+
+func (ch *CrudHandler) ResetVoting(c echo.Context) error {
+	var req requestResetVoting
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, err := ch.haveAccessToTheTicket(uid, req.TicketId)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	ch.dbClient.Transaction(func(tx *gorm.DB) error {
+		vote := model.Vote{TicketID: req.TicketId}
+		err = tx.Unscoped().
+			Where("ticket_id = ?", req.TicketId).
+			Delete(&vote).Error
+		if err != nil {
+			return err
+		}
+		ticket := model.Ticket{ID: req.TicketId}
+		return tx.Model(&ticket).Update("revealed", false).Error
+
+	})
 	return c.NoContent(http.StatusOK)
 }

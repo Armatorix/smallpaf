@@ -25,7 +25,7 @@ func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, e
 	return true, nil
 }
 
-func (ch *CrudHandler) shouldAddEstimation(uid uuid.UUID, tid uuid.UUID) (bool, error) {
+func (ch *CrudHandler) haveAccessToTheTicket(uid uuid.UUID, tid uuid.UUID) (bool, error) {
 	res := ch.dbClient.Raw("SELET * FROM user_rooms WHERE room_id = (SELECT room_id FROM tickets WHERE ticket_id = ?) AND user_id = ?", tid, uid)
 	if res.Error != nil {
 		if errors.Is(res.Error, gorm.ErrRecordNotFound) {

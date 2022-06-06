@@ -1,3 +1,7 @@
+import CheckIcon from "@mui/icons-material/Check";
+import CancelIcon from "@mui/icons-material/Cancel";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
 	Button,
 	Dialog,
@@ -8,6 +12,7 @@ import {
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { currentRoomState, userState, useToken } from "../store";
+import { ENDPOINT } from "../config";
 
 const VotedModal = (props) => {
 	const [open, setOpen] = useState(false);
@@ -49,7 +54,56 @@ const VotedModal = (props) => {
 						</>
 					))}
 				</DialogContent>
-				<DialogActions></DialogActions>
+				<DialogActions>
+					<Button
+						type="submit"
+						variant="contained"
+						fullWidth
+						onClick={(e) => {
+							e.preventDefault();
+							fetch(
+								`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/reset`,
+								{
+									cache: "no-cache",
+									headers: {
+										"content-type": "application/json",
+										authorization: `Bearer ${token}`,
+									},
+									method: "POST",
+									mode: "cors",
+								}
+							)
+								.then((resp) => {
+									if (resp.status >= 300) {
+										throw Error("failed creation");
+									}
+								})
+								.then(() => {
+									resetRoom();
+									resetUser();
+									setOpen(false);
+								})
+								.catch((err) => {
+									console.log(err);
+								});
+						}}
+						startIcon={<RestartAltIcon />}
+						color="error"
+					>
+						Reset
+					</Button>
+					<Button
+						variant="outlined"
+						fullWidth
+						onClick={() => {
+							setOpen(false);
+						}}
+						color="error"
+						startIcon={<CancelIcon />}
+					>
+						Cancel
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</>
 	);

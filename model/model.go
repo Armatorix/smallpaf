@@ -41,7 +41,7 @@ func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
 		return err
 	}
 	if t.Revealed {
-		return tx.Find(&t.Votes).Error
+		return tx.Find(&t.Votes, "ticket_id = ?", t.ID).Error
 	}
 	return nil
 }
