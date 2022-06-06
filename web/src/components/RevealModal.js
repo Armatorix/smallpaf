@@ -29,6 +29,7 @@ const RevealModal = (props) => {
 				onClick={() => setOpen(true)}
 				color="primary"
 			>
+				{props.voted}
 				<VisibilityIcon />
 			</IconButton>
 			<Dialog

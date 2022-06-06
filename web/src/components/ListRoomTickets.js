@@ -40,6 +40,7 @@ export const ListRoomTickets = () => {
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
+	console.log(room, userVotesMap);
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -58,7 +59,11 @@ export const ListRoomTickets = () => {
 							secondary={ticket.Description}
 						/>
 						{!ticket.Revealed && (
-							<RevealModal ticketid={ticket.ID} roomid={room.ID} />
+							<RevealModal
+								ticketid={ticket.ID}
+								roomid={room.ID}
+								voted={ticket.TotalVoted}
+							/>
 						)}
 						{!ticket.Revealed && (
 							<VoteModal

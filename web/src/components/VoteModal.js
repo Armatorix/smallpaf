@@ -11,6 +11,7 @@ const VoteModal = (props) => {
 	const [token] = useToken();
 	const currentRoom = useRecoilValue(currentRoomState);
 	const resetUser = useResetRecoilState(userState);
+	const resetRoom = useResetRecoilState(currentRoomState);
 	return (
 		<>
 			<Button
@@ -60,6 +61,7 @@ const VoteModal = (props) => {
 									})
 									.then(() => {
 										resetUser();
+										resetRoom();
 										setOpen(false);
 									})
 									.catch((err) => {

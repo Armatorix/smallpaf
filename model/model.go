@@ -30,7 +30,13 @@ type Ticket struct {
 	JiraID      string
 	Description string
 	Revealed    bool
+	TotalVoted  int `gorm:"-"`
 	Votes       []Vote
+}
+
+func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
+	return tx.Raw("SELECT COUNT(*) FROM votes WHERE ticket_id = ?", t.ID).
+		Scan(&t.TotalVoted).Error
 }
 
 type Vote struct {
