@@ -34,15 +34,16 @@ const VotedModal = (props) => {
 			min = el.Points;
 		}
 	});
+	let avg = (total / props.votes.length).toFixed(1);
 	return (
 		<>
 			<Button
 				{...props}
 				variant="contained"
 				onClick={() => setOpen(true)}
-				color={props.vote === undefined ? "warning" : "success"}
+				color={Math.abs((avg - min) * (avg - max)) > 2 ? "warning" : "success"}
 			>
-				AVG: {(total / props.votes.length).toFixed(1)} MIN: {min} MAX: {max}
+				AVG: {avg} MIN: {min} MAX: {max}
 			</Button>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle justifyContent="center">Vote results</DialogTitle>
