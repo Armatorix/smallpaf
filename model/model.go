@@ -29,6 +29,7 @@ type Ticket struct {
 	UserId      uuid.UUID
 	JiraID      string
 	Description string
+	Revealed    bool
 	Votes       []Vote
 }
 
