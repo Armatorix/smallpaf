@@ -34,7 +34,7 @@ const AddTicket = (props) => {
 					minWidth: "3.5em",
 				}}
 				startIcon={<AddIcon />}
-				color={props.vote === undefined ? "warning" : "success"}
+				color="primary"
 			>
 				Add ticket
 			</Button>
