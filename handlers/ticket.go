@@ -101,3 +101,40 @@ func (ch *CrudHandler) AddVoteToTicket(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+type requestRevealTicket struct {
+	TicketId uuid.UUID `param:"ticketId" validate:"required"`
+}
+
+func (ch *CrudHandler) RevealTicket(c echo.Context) error {
+	var req requestRevealTicket
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, err := ch.shouldAddEstimation(uid, req.TicketId)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	ticket := model.Ticket{
+		ID: req.TicketId,
+	}
+	err = ch.dbClient.Model(&ticket).Update("revealed", true).Error
+	if err != nil {
+		return err
+	}
+	return c.NoContent(http.StatusOK)
+}

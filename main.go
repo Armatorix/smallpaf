@@ -89,6 +89,7 @@ func main() {
 	room.PUT("/user", crudHandler.AddUserToRoom)
 	room.POST("/tickets", crudHandler.CreateTicketInRoom)
 	room.PUT("/tickets/:ticketId/votes", crudHandler.AddVoteToTicket)
+	room.POST("/tickets/:ticketId/reveal", crudHandler.RevealTicket)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }

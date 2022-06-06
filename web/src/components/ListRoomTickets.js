@@ -57,7 +57,9 @@ export const ListRoomTickets = () => {
 							primary={ticket.JiraID}
 							secondary={ticket.Description}
 						/>
-						{!ticket.Revealed && <RevealModal />}
+						{!ticket.Revealed && (
+							<RevealModal ticketid={ticket.ID} roomid={room.ID} />
+						)}
 						{!ticket.Revealed && (
 							<VoteModal
 								edge="end"
