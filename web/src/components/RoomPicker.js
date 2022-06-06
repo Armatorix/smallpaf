@@ -14,7 +14,9 @@ const RoomPicker = () => {
 	const resetCurrentRoom = useResetRecoilState(currentRoomState);
 	const user = useRecoilValue(userState);
 	const [roomPicker, setRoomPicker] = useState(
-		currentRoom !== undefined ? currentRoom.ID : ""
+		currentRoom === undefined || user.Rooms === undefined
+			? undefined
+			: user.Rooms.find((el) => currentRoom.ID === el.ID)
 	);
 
 	if (user === undefined) {
@@ -23,12 +25,12 @@ const RoomPicker = () => {
 
 	if (
 		roomPicker !== undefined &&
-		!window.location.pathname.includes(roomPicker)
+		!window.location.pathname.includes(roomPicker.ID)
 	) {
 		resetCurrentRoom();
-		return <Navigate to={`/rooms/${roomPicker}`} />;
+		return <Navigate to={`/rooms/${roomPicker.ID}`} />;
 	}
-
+	console.log(user.Rooms);
 	return (
 		<StyledAutocomplete
 			label="Room"
@@ -36,11 +38,11 @@ const RoomPicker = () => {
 			options={user.Rooms}
 			disableClearable
 			onChange={(_, v) => {
-				setRoomPicker(v.ID);
+				setRoomPicker(v);
 			}}
-			isOptionEqualToValue={(option, value) => option.ID === value}
+			isOptionEqualToValue={(option, value) => option.ID === value.ID}
 			getOptionLabel={(option) =>
-				option.ID === undefined ? option : option.ID
+				option?.ID === undefined ? option : option.Name
 			}
 			renderInput={(params) => <TextField {...params} label="Room" />}
 		/>
