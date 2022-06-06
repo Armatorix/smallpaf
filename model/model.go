@@ -35,8 +35,15 @@ type Ticket struct {
 }
 
 func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
-	return tx.Raw("SELECT COUNT(*) FROM votes WHERE ticket_id = ?", t.ID).
+	err = tx.Raw("SELECT COUNT(*) FROM votes WHERE ticket_id = ?", t.ID).
 		Scan(&t.TotalVoted).Error
+	if err != nil {
+		return err
+	}
+	if t.Revealed {
+		return tx.Find(&t.Votes).Error
+	}
+	return nil
 }
 
 type Vote struct {
