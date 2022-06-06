@@ -60,7 +60,7 @@ func main() {
 	})
 
 	// static for react
-	staticPath := "react/"
+	staticPath := "/app/public"
 	err = filepath.Walk(staticPath,
 		func(path string, _ os.FileInfo, _ error) error {
 			routePath := path[len(staticPath):]

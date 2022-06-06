@@ -23,7 +23,7 @@ COPY --from=go-build \
 
 COPY --from=node-build \
     /app/react/build \
-    ./react
+    /app/public
 
 RUN apt-get update -y && apt-get install ca-certificates -y
 
