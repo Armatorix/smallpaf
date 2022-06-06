@@ -1,4 +1,10 @@
-import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { currentRoomState, userState, useToken } from "../store";
@@ -12,7 +18,10 @@ const VotedModal = (props) => {
 	let total = 0;
 	let min = props?.votes[0]?.Points;
 	let max = props?.votes[0]?.Points;
+	let votesGrouped = {};
 	props.votes.forEach((el) => {
+		if (votesGrouped[el.Points] === undefined) votesGrouped[el.Points] = 0;
+		votesGrouped[el.Points] += 1;
 		total += el.Points;
 		if (el.Points > max) {
 			max = el.Points;
@@ -31,12 +40,16 @@ const VotedModal = (props) => {
 				AVG: {(total / props.votes.length).toFixed(1)} MIN: {min} MAX: {max}
 			</Button>
 			<Dialog open={open} onClose={() => setOpen(false)}>
-				<DialogTitle justifyContent="center"></DialogTitle>
-				<DialogActions>
-					2x
-					<Button variant="contained">2</Button>
-					3x <Button variant="contained">3</Button>
-				</DialogActions>
+				<DialogTitle justifyContent="center">Vote results</DialogTitle>
+				<DialogContent>
+					{Object.keys(votesGrouped).map((point) => (
+						<>
+							{votesGrouped[point]}x{" "}
+							<Button variant="contained">{point}</Button>
+						</>
+					))}
+				</DialogContent>
+				<DialogActions></DialogActions>
 			</Dialog>
 		</>
 	);
