@@ -1,30 +1,29 @@
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
 	Button,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	MenuItem,
+	Select,
 } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { currentRoomState, userState, useToken } from "../store";
 import { ENDPOINT } from "../config";
 
-const VotedModal = (props) => {
-	const [open, setOpen] = useState(false);
-	const [token] = useToken();
-	const resetUser = useResetRecoilState(userState);
-	const resetRoom = useResetRecoilState(currentRoomState);
+const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
+const stats = (votes) => {
 	let total = 0;
-	let min = props?.votes[0]?.Points;
-	let max = props?.votes[0]?.Points;
+	let min = votes[0]?.Points;
+	let max = votes[0]?.Points;
 	let votesGrouped = {};
-	props.votes.forEach((el) => {
+	votes.forEach((el) => {
 		if (votesGrouped[el.Points] === undefined) votesGrouped[el.Points] = 0;
 		votesGrouped[el.Points] += 1;
 		total += el.Points;
@@ -34,7 +33,30 @@ const VotedModal = (props) => {
 			min = el.Points;
 		}
 	});
-	let avg = (total / props.votes.length).toFixed(1);
+	let avg = (total / votes.length).toFixed(1);
+	let closest = closestPoint(avg);
+	return [min, max, avg, closest, votesGrouped];
+};
+
+const closestPoint = (value) => {
+	let diff = POINTS.at(-1) + 1;
+	for (let i = 0; i < POINTS.length; i++) {
+		if (Math.abs(POINTS.at(i) - value) > diff) {
+			return POINTS.at(i - 1);
+		}
+		diff = Math.abs(POINTS.at(i) - value);
+	}
+	return POINTS.at(-1);
+};
+
+const VotedModal = (props) => {
+	const [min, max, avg, closest, votesGrouped] = stats(props.votes);
+	const [open, setOpen] = useState(false);
+	const [token] = useToken();
+	const resetUser = useResetRecoilState(userState);
+	const resetRoom = useResetRecoilState(currentRoomState);
+	const [pickerValue, setPickerValue] = useState(closest);
+
 	return (
 		<>
 			<Button
@@ -45,7 +67,12 @@ const VotedModal = (props) => {
 			>
 				AVG: {avg} MIN: {min} MAX: {max}
 			</Button>
-			<Dialog open={open} onClose={() => setOpen(false)}>
+			<Dialog
+				open={open}
+				onClose={() => setOpen(false)}
+				maxWidth="md"
+				fullWidth
+			>
 				<DialogTitle justifyContent="center">Vote results</DialogTitle>
 				<DialogContent>
 					{Object.keys(votesGrouped).map((point) => (
@@ -56,8 +83,59 @@ const VotedModal = (props) => {
 					))}
 				</DialogContent>
 				<DialogActions>
+					{props.showJiraApply && (
+						<>
+							<Button
+								variant="contained"
+								fullWidth
+								onClick={(e) => {
+									e.preventDefault();
+									fetch(
+										`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/jira-apply`,
+										{
+											cache: "no-cache",
+											headers: {
+												"content-type": "application/json",
+												authorization: `Bearer ${token}`,
+											},
+											method: "POST",
+											mode: "cors",
+										}
+									)
+										.then((resp) => {
+											if (resp.status >= 300) {
+												throw Error("failed creation");
+											}
+										})
+										.then(() => {
+											resetRoom();
+											resetUser();
+											setOpen(false);
+										})
+										.catch((err) => {
+											console.log(err);
+										});
+								}}
+								startIcon={<ImportExportIcon />}
+								color="success"
+							>
+								Apply
+							</Button>
+							<Select
+								labelId="jira-estimate-value"
+								id="jira-estimate-value-select"
+								value={pickerValue}
+								onChange={(v) => {
+									setPickerValue(v.target.value);
+								}}
+							>
+								{POINTS.map((point) => (
+									<MenuItem value={point}>{point}</MenuItem>
+								))}
+							</Select>
+						</>
+					)}
 					<Button
-						type="submit"
 						variant="contained"
 						fullWidth
 						onClick={(e) => {
@@ -109,4 +187,10 @@ const VotedModal = (props) => {
 		</>
 	);
 };
+
+VotedModal.defaultProps = {
+	showJiraApply: false,
+	votes: [],
+};
+
 export default VotedModal;

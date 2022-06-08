@@ -84,6 +84,7 @@ export const ListRoomTickets = () => {
 										edge="end"
 										ticketid={ticket.ID}
 										votes={ticket.Votes}
+										showJiraApply={true}
 									/>
 								)}
 							</ListItem>
