@@ -94,6 +94,9 @@ const VotedModal = (props) => {
 										`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/jira-apply`,
 										{
 											cache: "no-cache",
+											body: JSON.stringify({
+												value: pickerValue,
+											}),
 											headers: {
 												"content-type": "application/json",
 												authorization: `Bearer ${token}`,
@@ -119,7 +122,7 @@ const VotedModal = (props) => {
 								startIcon={<ImportExportIcon />}
 								color="success"
 							>
-								Apply
+								JIRA Apply
 							</Button>
 							<Select
 								labelId="jira-estimate-value"
