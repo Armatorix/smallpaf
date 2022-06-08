@@ -83,7 +83,7 @@ const VotedModal = (props) => {
 					))}
 				</DialogContent>
 				<DialogActions>
-					{props.showJiraApply && (
+					{props.withjirasync && (
 						<>
 							<Button
 								variant="contained"
@@ -192,7 +192,7 @@ const VotedModal = (props) => {
 };
 
 VotedModal.defaultProps = {
-	showJiraApply: false,
+	withjirasync: false,
 	votes: [],
 };
 

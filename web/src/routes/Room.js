@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import AddTicket from "../components/AddTicket";
 import ListRoomTickets from "../components/ListRoomTickets";
 import ListRoomUsers from "../components/ListRoomUsers";
+import RoomSettingsModal from "../components/RoomSettingsModal";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
 const Room = () => {
@@ -45,12 +46,15 @@ const Room = () => {
 			<Grid container item direction="column" xs={8}>
 				<Grid container item direction="row">
 					<Grid item xs={9}>
-						<Typography>
-							Room <b>{room.Name}</b> <br />
-							<Link href={room.JiraUrl} target="_blank">
-								{room.JiraUrl}
-							</Link>
-						</Typography>
+						<Grid container direction="row">
+							<RoomSettingsModal />
+							<Typography>
+								Room <b>{room.Name}</b> <br />
+								<Link href={room.JiraUrl} target="_blank">
+									{room.JiraUrl}
+								</Link>
+							</Typography>
+						</Grid>
 					</Grid>
 					<Grid item xs={3}>
 						<AddTicket fullWidth roomid={roomId} />
