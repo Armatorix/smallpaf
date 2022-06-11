@@ -82,10 +82,8 @@ export const ListRoomTickets = () => {
 								{ticket.Revealed && (
 									<VotedModal
 										edge="end"
-										ticketid={ticket.ID}
-										votes={ticket.Votes}
+										ticket={ticket}
 										withjirasync={room.JiraToken !== ""}
-										roomid={room.ID}
 									/>
 								)}
 							</ListItem>

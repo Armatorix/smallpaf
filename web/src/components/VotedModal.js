@@ -50,7 +50,7 @@ const closestPoint = (value) => {
 };
 
 const VotedModal = (props) => {
-	const [min, max, avg, closest, votesGrouped] = stats(props.votes);
+	const [min, max, avg, closest, votesGrouped] = stats(props.ticket.Votes);
 	const [open, setOpen] = useState(false);
 	const [token] = useToken();
 	const resetUser = useResetRecoilState(userState);
@@ -91,7 +91,7 @@ const VotedModal = (props) => {
 								onClick={(e) => {
 									e.preventDefault();
 									fetch(
-										`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/jira-apply`,
+										`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticket.ID}/jira-apply`,
 										{
 											cache: "no-cache",
 											body: JSON.stringify({
@@ -144,7 +144,7 @@ const VotedModal = (props) => {
 						onClick={(e) => {
 							e.preventDefault();
 							fetch(
-								`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/reset`,
+								`${ENDPOINT}/api/v1/rooms/${props.ticket.RoomId}/tickets/${props.ticket.ID}/reset`,
 								{
 									cache: "no-cache",
 									headers: {
@@ -193,7 +193,9 @@ const VotedModal = (props) => {
 
 VotedModal.defaultProps = {
 	withjirasync: false,
-	votes: [],
+	ticket: {
+		votes: [],
+	},
 };
 
 export default VotedModal;
