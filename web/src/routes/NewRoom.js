@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Link, Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ENDPOINT } from "../config.js";
@@ -96,6 +96,14 @@ const NewRoom = () => {
 						value={jiraToken}
 						onChange={(e) => setJiraToken(e.target.value)}
 					/>
+				</Grid>
+				<Grid item>
+					<Link
+						href="https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/"
+						target="_blank"
+					>
+						How to generate access token?
+					</Link>
 				</Grid>
 				<Grid item>
 					<Button
