@@ -2,6 +2,7 @@ import { atom, useRecoilState } from "recoil";
 
 const hideVotedLocalStorageKey = "hideVoted";
 const hideSubmittedLocalStorageKey = "hideSubmitted";
+const hideRevealedLocalStorageKey = "hideRevealed";
 
 export const hideVotedState = atom({
 	key: "hideVotedState",
@@ -15,6 +16,13 @@ export const hideSubmittedState = atom({
 	default:
 		localStorage.getItem(hideSubmittedLocalStorageKey) !== null
 			? localStorage.getItem(hideSubmittedLocalStorageKey) === "true"
+			: false,
+});
+export const hideRevealedState = atom({
+	key: "hideRevealedState",
+	default:
+		localStorage.getItem(hideRevealedLocalStorageKey) !== null
+			? localStorage.getItem(hideRevealedLocalStorageKey) === "true"
 			: false,
 });
 
@@ -34,4 +42,13 @@ export const useHideSubmitted = () => {
 		localStorage.setItem(hideSubmittedLocalStorageKey, newValue);
 	};
 	return [hideSubmitted, setHideSubmitted];
+};
+
+export const useHideRevealed = () => {
+	const [hideRevealed, set] = useRecoilState(hideRevealedState);
+	const setHideRevealed = (newValue) => {
+		set(newValue);
+		localStorage.setItem(hideRevealedLocalStorageKey, newValue);
+	};
+	return [hideRevealed, setHideRevealed];
 };

@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userVotesMapState } from "../store";
-import { useHideSubmitted, useHideVoted } from "../store/filters";
+import {
+	useHideRevealed,
+	useHideSubmitted,
+	useHideVoted,
+} from "../store/filters";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
@@ -22,6 +26,7 @@ export const ListRoomTickets = () => {
 	const userVotesMap = useRecoilValue(userVotesMapState);
 	const [hideVoted, setHideVoted] = useHideVoted();
 	const [hideSubmitted, setHideSubmitted] = useHideSubmitted();
+	const [hideRevealed, setHideRevealed] = useHideRevealed();
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
@@ -50,6 +55,17 @@ export const ListRoomTickets = () => {
 						<FormControlLabel
 							control={
 								<Checkbox
+									checked={hideRevealed}
+									onChange={() => {
+										setHideRevealed(!hideRevealed);
+									}}
+								/>
+							}
+							label="Hide revealed"
+						/>
+						<FormControlLabel
+							control={
+								<Checkbox
 									checked={hideSubmitted}
 									onChange={() => {
 										setHideSubmitted(!hideSubmitted);
@@ -65,7 +81,8 @@ export const ListRoomTickets = () => {
 						.filter(
 							(el) =>
 								!(hideVoted && userVotesMap[el.ID]) &&
-								!(hideSubmitted && el.JiraPoints !== 0)
+								!(hideSubmitted && el.JiraPoints !== 0) &&
+								!(hideRevealed && el.Revealed)
 						)
 						.reverse()
 						.map((ticket) => (
