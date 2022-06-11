@@ -58,7 +58,9 @@ const Room = () => {
 						</Grid>
 					</Grid>
 					<Grid item xs={12} md={3}>
-						<ImportTicketsModal fullWidth roomid={roomId} />
+						{room.JiraToken === "" && (
+							<ImportTicketsModal fullWidth roomid={roomId} />
+						)}
 					</Grid>
 					<Grid item xs={12} md={3}>
 						<AddTicket fullWidth roomid={roomId} />
