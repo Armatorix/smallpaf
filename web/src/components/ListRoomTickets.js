@@ -19,8 +19,10 @@ import {
 	useHideRevealed,
 	useHideSubmitted,
 	useHideVoted,
+	userState,
 	userVotesMapState,
 } from "../store";
+import DisplayTicketInfoModal from "./DisplayTicketInfoModal";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
@@ -56,6 +58,7 @@ const isTicketSearched = (ticket, searchBy, andFilter) => {
 
 export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
+	const user = useRecoilValue(userState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
 	const [hideVoted, setHideVoted] = useHideVoted();
 	const [hideSubmitted, setHideSubmitted] = useHideSubmitted();
@@ -72,7 +75,6 @@ export const ListRoomTickets = () => {
 					<Grid
 						container
 						order="row"
-						component="FormGroup"
 						style={{ paddingLeft: "2%", paddingRight: "2%" }}
 						spacing={2}
 					>
@@ -162,6 +164,17 @@ export const ListRoomTickets = () => {
 								>
 									<LinkIcon />
 								</IconButton>
+
+								{room.JiraToken !== "" && (
+									<DisplayTicketInfoModal
+										edge="start"
+										aria-label="delete"
+										ticketid={ticket.JiraID}
+										jiraurl={room.JiraUrl}
+										jiratoken={room.JiraToken}
+										email={user.Email}
+									/>
+								)}
 								<ListItemText
 									primary={ticket.JiraID}
 									secondary={ticket.Description}

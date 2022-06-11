@@ -83,7 +83,7 @@ const VotedModal = (props) => {
 						<Chip label={`MIN: ${min}`} variant="outlined" />
 						<Chip label={`MAX: ${max}`} variant="outlined" />
 					</Grid>
-					<Grid item center>
+					<Grid item>
 						{props.ticket.JiraPoints !== 0 && (
 							<Chip
 								label={`submitted: ${props.ticket.JiraPoints}`}
