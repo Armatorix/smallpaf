@@ -10,6 +10,7 @@ import {
 	TextField,
 	ToggleButton,
 } from "@mui/material";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userVotesMapState } from "../store";
 import {
@@ -27,6 +28,7 @@ export const ListRoomTickets = () => {
 	const [hideVoted, setHideVoted] = useHideVoted();
 	const [hideSubmitted, setHideSubmitted] = useHideSubmitted();
 	const [hideRevealed, setHideRevealed] = useHideRevealed();
+	const [textFilter, setTextFilter] = useState("");
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
@@ -65,7 +67,13 @@ export const ListRoomTickets = () => {
 						>
 							Hide submitted
 						</ToggleButton>
-						<TextField id="outlined-basic" label="Filter" variant="outlined" />
+						<TextField
+							id="outlined-basic"
+							label="Filter"
+							variant="outlined"
+							value={textFilter}
+							onChange={(e) => setTextFilter(e.target.value)}
+						/>
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&
