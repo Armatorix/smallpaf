@@ -23,6 +23,22 @@ import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
 
 const isTicketSearched = (ticket, searchBy) => {
+	if (searchBy === "") {
+		return true;
+	}
+	// get search words
+	let words = searchBy
+		.toLowerCase()
+		.split(" ")
+		.map((s) => s.trim())
+		.filter((s) => s !== "");
+	let description = ticket.Description.toLowerCase();
+	let ticketNo = ticket.JiraID.toLowerCase();
+	for (let i = 0; i < words.length; i++) {
+		if (!description.includes(words[i]) && !ticketNo.includes(words[i])) {
+			return false;
+		}
+	}
 	return true;
 };
 
