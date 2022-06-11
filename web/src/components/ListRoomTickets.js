@@ -62,6 +62,11 @@ export const ListRoomTickets = () => {
 				</ListItemText>
 				{room.Tickets !== undefined &&
 					room.Tickets.slice(0)
+						.filter(
+							(el) =>
+								!(hideVoted && userVotesMap[el.ID]) &&
+								!(hideSubmitted && el.JiraPoints !== 0)
+						)
 						.reverse()
 						.map((ticket) => (
 							<ListItem key={ticket.ID}>
@@ -73,6 +78,7 @@ export const ListRoomTickets = () => {
 										new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href
 									}`}
 								>
+									{console.log(ticket)}
 									<LinkIcon />
 								</IconButton>
 								<ListItemText
