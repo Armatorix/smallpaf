@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userVotesMapState } from "../store";
+import { useHideSubmitted, useHideVoted } from "../store/filters";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
@@ -19,9 +20,12 @@ import VoteModal from "./VoteModal";
 export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
+	const [hideVoted, setHideVoted] = useHideVoted();
+	const [hideSubmitted, setHideSubmitted] = useHideSubmitted();
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
+	console.log(hideVoted, hideSubmitted);
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -32,8 +36,28 @@ export const ListRoomTickets = () => {
 						component="FormGroup"
 						style={{ paddingLeft: "5%" }}
 					>
-						<FormControlLabel control={<Checkbox />} label="Hide voted" />
-						<FormControlLabel control={<Checkbox />} label="Hide submitted" />
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={hideVoted}
+									onChange={() => {
+										setHideVoted(!hideVoted);
+									}}
+								/>
+							}
+							label="Hide voted"
+						/>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={hideSubmitted}
+									onChange={() => {
+										setHideSubmitted(!hideSubmitted);
+									}}
+								/>
+							}
+							label="Hide submitted"
+						/>
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&

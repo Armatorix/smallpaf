@@ -7,14 +7,14 @@ export const hideVotedState = atom({
 	key: "hideVotedState",
 	default:
 		localStorage.getItem(hideVotedLocalStorageKey) !== null
-			? localStorage.getItem(hideVotedLocalStorageKey)
+			? localStorage.getItem(hideVotedLocalStorageKey) === "true"
 			: false,
 });
 export const hideSubmittedState = atom({
 	key: "hideSubmittedState",
 	default:
 		localStorage.getItem(hideSubmittedLocalStorageKey) !== null
-			? localStorage.getItem(hideSubmittedLocalStorageKey)
+			? localStorage.getItem(hideSubmittedLocalStorageKey) === "true"
 			: false,
 });
 
