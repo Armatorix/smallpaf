@@ -31,7 +31,12 @@ const RoomSettingsModal = (props) => {
 			>
 				<SettingsIcon />
 			</IconButton>
-			<Dialog open={open} onClose={() => setOpen(false)}>
+			<Dialog
+				open={open}
+				onClose={() => setOpen(false)}
+				maxWidth="md"
+				fullWidth
+			>
 				<DialogTitle justifyContent="center">Room settings</DialogTitle>
 				<FormControl
 					component="form"
