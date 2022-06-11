@@ -31,6 +31,7 @@ type Ticket struct {
 	JiraID      string
 	Description string
 	Revealed    bool
+	JiraPoints  int
 	TotalVoted  int `gorm:"-"`
 	Votes       []Vote
 }

@@ -25,11 +25,24 @@ func (db *DB) Migrate() error {
 		if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
 			return err
 		}
-		db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
+		err := db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
+		if err != nil {
+			return err
+		}
 	}
 
 	if !db.Migrator().HasColumn(&model.UserRoom{}, "JiraToken") {
-		return db.Migrator().AddColumn(&model.UserRoom{}, "JiraToken")
+		err := db.Migrator().AddColumn(&model.UserRoom{}, "JiraToken")
+		if err != nil {
+			return err
+		}
+	}
+
+	if !db.Migrator().HasColumn(&model.Ticket{}, "JiraPoints") {
+		err := db.Migrator().AddColumn(&model.Ticket{}, "JiraPoints")
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

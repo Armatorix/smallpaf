@@ -251,5 +251,10 @@ func (ch *CrudHandler) ApplyVotingToJira(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	err = ch.dbClient.Model(&ticket).Update("jira_points", req.Points).Error
+	if err != nil {
+		return err
+	}
 	return c.NoContent(http.StatusOK)
 }
