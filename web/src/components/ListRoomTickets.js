@@ -22,6 +22,10 @@ import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
 
+const isTicketSearched = (ticket, searchBy) => {
+	return true;
+};
+
 export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
@@ -82,7 +86,8 @@ export const ListRoomTickets = () => {
 							(el) =>
 								!(hideVoted && userVotesMap[el.ID]) &&
 								!(hideSubmitted && el.JiraPoints !== 0) &&
-								!(hideRevealed && el.Revealed)
+								!(hideRevealed && el.Revealed) &&
+								isTicketSearched(el, textFilter)
 						)
 						.reverse()
 						.map((ticket) => (
