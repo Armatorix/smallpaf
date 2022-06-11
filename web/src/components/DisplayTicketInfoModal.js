@@ -12,22 +12,16 @@ import { useEffect, useState } from "react";
 const DisplayTicketInfoModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [issue, setIssue] = useState(undefined);
-	console.log(issue);
-	console.log(props);
 	useEffect(() => {
 		if (!open) {
 			return;
 		}
 		fetch(new URL(`/rest/api/3/issue/${props.ticketid}`, props.jiraurl).href, {
-			cache: "no-cache",
 			headers: {
 				Accept: "application/json",
 				Authorization: "Basic " + encode(props.email + ":" + props.jiratoken),
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods": "GET",
 			},
 			method: "GET",
-			mode: "cors",
 		})
 			.then((resp) => {
 				if (resp.status >= 300) {
@@ -37,7 +31,6 @@ const DisplayTicketInfoModal = (props) => {
 			})
 			.then((resp) => {
 				setIssue(resp);
-				console.log(resp);
 			})
 			.catch((err) => {
 				console.log(err);

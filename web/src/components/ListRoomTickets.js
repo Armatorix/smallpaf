@@ -165,7 +165,7 @@ export const ListRoomTickets = () => {
 									<LinkIcon />
 								</IconButton>
 
-								{room.JiraToken !== "" && (
+								{false && room.JiraToken !== "" && (
 									<DisplayTicketInfoModal
 										edge="start"
 										aria-label="delete"
