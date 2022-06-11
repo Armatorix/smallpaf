@@ -43,9 +43,9 @@ const Room = () => {
 	}
 	return (
 		<Grid container item direction="row" spacing={4} xs={12}>
-			<Grid container item direction="column" xs={8}>
+			<Grid container item direction="column" xs={12} md={8}>
 				<Grid container item direction="row">
-					<Grid item xs={9}>
+					<Grid item xs={12} md={9}>
 						<Grid container direction="row">
 							<RoomSettingsModal roomid={roomId} />
 							<Typography>
@@ -56,14 +56,14 @@ const Room = () => {
 							</Typography>
 						</Grid>
 					</Grid>
-					<Grid item xs={3}>
+					<Grid item xs={12} md={3}>
 						<AddTicket fullWidth roomid={roomId} />
 					</Grid>
 				</Grid>
 
 				<ListRoomTickets />
 			</Grid>
-			<Grid container item direction="column" xs={4}>
+			<Grid container item direction="column" xs={12} md={4}>
 				<ListRoomUsers />
 			</Grid>
 		</Grid>
