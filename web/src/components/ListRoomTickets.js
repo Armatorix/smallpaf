@@ -85,6 +85,7 @@ export const ListRoomTickets = () => {
 										ticketid={ticket.ID}
 										votes={ticket.Votes}
 										withjirasync={room.JiraToken !== ""}
+										roomid={room.ID}
 									/>
 								)}
 							</ListItem>

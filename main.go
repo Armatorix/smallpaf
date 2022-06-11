@@ -93,6 +93,7 @@ func main() {
 	room.PUT("/tickets/:ticketId/votes", crudHandler.AddVoteToTicket)
 	room.POST("/tickets/:ticketId/reveal", crudHandler.RevealTicket)
 	room.POST("/tickets/:ticketId/reset", crudHandler.ResetVoting)
+	room.POST("/tickets/:ticketId/jira-apply", crudHandler.ApplyVotingToJira)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }

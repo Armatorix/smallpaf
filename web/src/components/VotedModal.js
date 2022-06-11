@@ -95,7 +95,7 @@ const VotedModal = (props) => {
 										{
 											cache: "no-cache",
 											body: JSON.stringify({
-												value: pickerValue,
+												Points: pickerValue,
 											}),
 											headers: {
 												"content-type": "application/json",

@@ -15,7 +15,7 @@ func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, *
 		UserID: uid,
 		RoomId: rid,
 	}
-	err := ch.dbClient.First(&ur).Error
+	err := ch.dbClient.First(&ur, "user_id = ? AND room_id = ?", uid, rid).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil, nil
@@ -50,4 +50,20 @@ func getUID(c echo.Context) (uuid.UUID, error) {
 		return uuid.Nil, errUserUIDMissing
 	}
 	return uuid.Parse(uid)
+}
+
+func getEmail(c echo.Context) (string, error) {
+	token, ok := c.Get("user").(*jwt.Token)
+	if !ok {
+		return "", errUserTokenMissing
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", errUserClaimMissing
+	}
+	email, ok := claims["email"].(string)
+	if !ok {
+		return "", errUserUIDMissing
+	}
+	return email, nil
 }
