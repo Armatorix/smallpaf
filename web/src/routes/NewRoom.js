@@ -10,6 +10,7 @@ const NewRoom = () => {
 	const setNewRoom = useNewRoomSetter();
 	const [roomName, setRoomName] = useState("");
 	const [jiraURL, setJiraURL] = useState("https://");
+	const [jiraToken, setJiraToken] = useState("");
 	const [token] = useToken();
 
 	if (newRoomID) {
@@ -40,6 +41,7 @@ const NewRoom = () => {
 						body: JSON.stringify({
 							Name: roomName,
 							JiraUrl: jiraURL,
+							JiraToken: jiraToken,
 						}),
 						cache: "no-cache",
 						headers: {
@@ -83,6 +85,16 @@ const NewRoom = () => {
 						fullWidth
 						value={jiraURL}
 						onChange={(e) => setJiraURL(e.target.value)}
+					/>
+				</Grid>
+				<Grid item>
+					<TextField
+						id="jira-token"
+						label="Jira token"
+						type="text"
+						fullWidth
+						value={jiraToken}
+						onChange={(e) => setJiraToken(e.target.value)}
 					/>
 				</Grid>
 				<Grid item>

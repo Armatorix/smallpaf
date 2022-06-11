@@ -56,8 +56,9 @@ func (ch *CrudHandler) GetRoom(c echo.Context) error {
 }
 
 type requestCreateRoom struct {
-	Name    string `json:"Name" validate:"required"`
-	JiraURL string `json:"JiraUrl"`
+	Name      string `json:"Name" validate:"required"`
+	JiraURL   string `json:"JiraUrl"`
+	JiraToken string `json:"JiraToken"`
 }
 
 func (ch *CrudHandler) CreateRoom(c echo.Context) error {
@@ -84,8 +85,9 @@ func (ch *CrudHandler) CreateRoom(c echo.Context) error {
 			return err
 		}
 		userRoom := model.UserRoom{
-			UserID: uid,
-			RoomId: room.ID,
+			UserID:    uid,
+			RoomId:    room.ID,
+			JiraToken: req.JiraToken,
 		}
 		return tx.Create(&userRoom).Error
 	})
