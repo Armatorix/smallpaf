@@ -58,7 +58,6 @@ const VotedModal = (props) => {
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [pickerValue, setPickerValue] = useState(closest);
 
-	console.log(props);
 	return (
 		<>
 			<Button

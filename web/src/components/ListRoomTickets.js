@@ -30,7 +30,6 @@ export const ListRoomTickets = () => {
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
 	}
-	console.log(hideVoted, hideSubmitted);
 	return (
 		<Paper elevation={2}>
 			<List>
@@ -95,7 +94,6 @@ export const ListRoomTickets = () => {
 										new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href
 									}`}
 								>
-									{console.log(ticket)}
 									<LinkIcon />
 								</IconButton>
 								<ListItemText
