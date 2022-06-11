@@ -86,7 +86,9 @@ func main() {
 
 	room := rooms.Group("/:roomId")
 	room.GET("", crudHandler.GetRoom)
+	room.PUT("/jira-token", crudHandler.PutRoomJiraToken)
 	room.PUT("/user", crudHandler.AddUserToRoom)
+
 	room.POST("/tickets", crudHandler.CreateTicketInRoom)
 	room.PUT("/tickets/:ticketId/votes", crudHandler.AddVoteToTicket)
 	room.POST("/tickets/:ticketId/reveal", crudHandler.RevealTicket)

@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, error) {
+func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, *model.UserRoom, error) {
 	ur := model.UserRoom{
 		UserID: uid,
 		RoomId: rid,
@@ -18,11 +18,11 @@ func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, e
 	err := ch.dbClient.First(&ur).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return false, nil, nil
 		}
-		return false, err
+		return false, nil, err
 	}
-	return true, nil
+	return true, &ur, nil
 }
 
 func (ch *CrudHandler) haveAccessToTheTicket(uid uuid.UUID, tid uuid.UUID) (bool, error) {

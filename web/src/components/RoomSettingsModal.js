@@ -19,12 +19,7 @@ const RoomSettingsModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [token] = useToken();
 	const currentRoom = useRecoilValue(currentRoomState);
-	const [jiraToken, setJiraToken] = useState(
-		currentRoom?.Settings?.JiraToken !== undefined
-			? currentRoom?.Settings?.JiraToken
-			: ""
-	);
-	const resetUser = useResetRecoilState(userState);
+	const [jiraToken, setJiraToken] = useState(currentRoom?.JiraToken);
 	const resetRoom = useResetRecoilState(currentRoomState);
 	return (
 		<>
@@ -42,7 +37,7 @@ const RoomSettingsModal = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/settings`, {
+						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/jira-token`, {
 							cache: "no-cache",
 							body: JSON.stringify({ JiraToken: jiraToken }),
 							headers: {
@@ -72,7 +67,7 @@ const RoomSettingsModal = (props) => {
 						type="text"
 						fullWidth
 						value={jiraToken}
-						onChange={(e) => setJiraToken(e.target.jiraToken)}
+						onChange={(e) => setJiraToken(e.target.value)}
 					/>
 					<DialogActions>
 						<Button

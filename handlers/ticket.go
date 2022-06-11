@@ -30,7 +30,7 @@ func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
 		return err
 	}
 
-	hasRights, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
 	if err != nil {
 		return err
 	}

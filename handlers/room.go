@@ -28,7 +28,7 @@ func (ch *CrudHandler) GetRoom(c echo.Context) error {
 		return err
 	}
 
-	hasRights, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	hasRights, usersRoom, err := ch.hasRoomAdminRights(uid, req.RoomID)
 	if err != nil {
 		return err
 	}
@@ -51,6 +51,7 @@ func (ch *CrudHandler) GetRoom(c echo.Context) error {
 		return err
 	}
 
+	room.JiraToken = usersRoom.JiraToken
 	return c.JSON(http.StatusOK, room)
 }
 
@@ -94,4 +95,48 @@ func (ch *CrudHandler) CreateRoom(c echo.Context) error {
 	room.Tickets = make([]model.Ticket, 0)
 	room.UserEmails = make([]string, 0)
 	return c.JSON(http.StatusCreated, room)
+}
+
+type requestPutRoomJiraToken struct {
+	RoomID    uuid.UUID `param:"roomId" validate:"required"`
+	JiraToken string    `json:"JiraToken"`
+}
+
+func (ch *CrudHandler) PutRoomJiraToken(c echo.Context) error {
+	var req requestPutRoomJiraToken
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	usersRoom := model.UserRoom{
+		UserID:    uid,
+		RoomId:    req.RoomID,
+		JiraToken: req.JiraToken,
+	}
+	err = ch.dbClient.WithContext(c.Request().Context()).
+		Model(&usersRoom).
+		Where("room_id = ? AND user_id = ?", usersRoom.RoomId, usersRoom.UserID).
+		Update("jira_token", usersRoom.JiraToken).Error
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }

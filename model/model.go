@@ -20,6 +20,7 @@ type Room struct {
 	JiraUrl    string
 	Tickets    []Ticket
 	UserEmails []string `gorm:"-"`
+	JiraToken  string   `gorm:"-"`
 }
 
 type Ticket struct {

@@ -47,7 +47,7 @@ const Room = () => {
 				<Grid container item direction="row">
 					<Grid item xs={9}>
 						<Grid container direction="row">
-							<RoomSettingsModal />
+							<RoomSettingsModal roomid={roomId} />
 							<Typography>
 								Room <b>{room.Name}</b> <br />
 								<Link href={room.JiraUrl} target="_blank">
