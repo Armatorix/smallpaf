@@ -63,9 +63,17 @@ const VotedModal = (props) => {
 				{...props}
 				variant="contained"
 				onClick={() => setOpen(true)}
-				color={Math.abs((avg - min) * (avg - max)) > 2 ? "warning" : "success"}
+				color={
+					props.ticket.JiraPoints !== 0
+						? "secondary"
+						: Math.abs((avg - min) * (avg - max)) > 2
+						? "warning"
+						: "success"
+				}
 			>
-				AVG: {avg} MIN: {min} MAX: {max}
+				AVG: {avg} MIN: {min} MAX: {max}{" "}
+				{props.ticket.JiraPoints !== 0 &&
+					`submitted: ${props.ticket.JiraPoints}`}
 			</Button>
 			<Dialog
 				open={open}
