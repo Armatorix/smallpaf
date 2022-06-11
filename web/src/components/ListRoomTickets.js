@@ -10,31 +10,11 @@ import {
 	ListItemText,
 	Paper,
 } from "@mui/material";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-	currentRoomState,
-	hideRevealedTicketsState,
-	userVotesMapState,
-} from "../store";
+import { useRecoilValue } from "recoil";
+import { currentRoomState, userVotesMapState } from "../store";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
-
-export const HideRevealedCheckbox = () => {
-	const [hide, setHide] = useRecoilState(hideRevealedTicketsState);
-	return (
-		<FormControlLabel
-			control={
-				<Checkbox
-					checked={hide}
-					onChange={() => setHide(!hide)}
-					name="hide-revealed"
-				/>
-			}
-			label="Hide revealed"
-		/>
-	);
-};
 
 export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
@@ -52,15 +32,8 @@ export const ListRoomTickets = () => {
 						component="FormGroup"
 						style={{ paddingLeft: "5%" }}
 					>
-						<FormControlLabel
-							control={<Checkbox defaultChecked />}
-							label="Label"
-						/>
-						<FormControlLabel
-							disabled
-							control={<Checkbox />}
-							label="Disabled"
-						/>
+						<FormControlLabel control={<Checkbox />} label="Hide voted" />
+						<FormControlLabel control={<Checkbox />} label="Hide submitted" />
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&
