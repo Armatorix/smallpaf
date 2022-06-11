@@ -15,16 +15,16 @@ import { useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
 
-const defautlTicketValue = {
-	Description: "",
-	JiraID: "",
+const defautlImportValue = {
+	FilterId: 0,
 };
+
 const ImportTicketsModal = (props) => {
 	const [open, setOpen] = useState(false);
-	const [ticket, setTicket] = useState(defautlTicketValue);
+	const [importBody, setImportBody] = useState(defautlImportValue);
 	const [token] = useToken();
 	const resetRoom = useResetRecoilState(currentRoomState);
-
+	const [progress, setProgress] = useState(false);
 	return (
 		<>
 			<Button
@@ -48,9 +48,10 @@ const ImportTicketsModal = (props) => {
 				<FormControl
 					component="form"
 					onSubmit={(e) => {
+						setProgress(true);
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets`, {
-							body: JSON.stringify(ticket),
+						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/import`, {
+							body: JSON.stringify(importBody),
 							cache: "no-cache",
 							headers: {
 								"content-type": "application/json",
@@ -65,48 +66,31 @@ const ImportTicketsModal = (props) => {
 								}
 							})
 							.then(() => {
-								setTicket(defautlTicketValue);
+								setImportBody(defautlImportValue);
 								resetRoom();
 								setOpen(false);
 							})
 							.catch((err) => {
 								console.log(err);
-							});
+							})
+							.finally(() => setProgress(false));
 					}}
 				>
-					<DialogTitle justifyContent="center">Add new ticket</DialogTitle>
+					<DialogTitle justifyContent="center">
+						Import tickets by filter
+					</DialogTitle>
 					<DialogContent>
 						<DialogContent>
 							<TextField
-								id="jira-number"
-								label="Jira Number"
-								type="text"
-								value={ticket.email}
+								id="filter-number"
+								label="Filter number"
+								type="number"
+								value={importBody.FilterId}
 								fullWidth
 								required
 								onChange={(e) =>
-									setTicket({
-										...ticket,
-										JiraID: e.target.value,
-									})
-								}
-							/>
-						</DialogContent>
-						<DialogContent>
-							<TextField
-								id="description"
-								label="Description"
-								type="text"
-								value={ticket.Description}
-								fullWidth
-								multiline
-								inputProps={{
-									maxLength: 512,
-								}}
-								onChange={(e) =>
-									setTicket({
-										...ticket,
-										Description: e.target.value,
+									setImportBody({
+										FilterId: e.target.value,
 									})
 								}
 							/>
@@ -118,14 +102,15 @@ const ImportTicketsModal = (props) => {
 							variant="outlined"
 							fullWidth
 							startIcon={<AddIcon />}
+							disabled={progress}
 						>
-							Add
+							Import
 						</Button>
 						<Button
 							variant="outlined"
 							fullWidth
 							onClick={() => {
-								setTicket(defautlTicketValue);
+								setImportBody(defautlImportValue);
 								setOpen(false);
 							}}
 							color="error"
