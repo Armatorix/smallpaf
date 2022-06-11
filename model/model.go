@@ -55,6 +55,7 @@ type Vote struct {
 }
 
 type UserRoom struct {
-	UserID uuid.UUID
-	RoomId uuid.UUID
+	UserID    uuid.UUID
+	RoomId    uuid.UUID
+	JiraToken string
 }

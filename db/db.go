@@ -21,11 +21,15 @@ func NewClient(cfg config.DB) (*DB, error) {
 
 func (db *DB) Migrate() error {
 	// FIXME: dummy fix for migrations to not run multiple times
-	if db.Exec(`SELECT * FROM users LIMIT 1`).Error == nil {
-		return nil
+	if db.Exec(`SELECT * FROM users LIMIT 1`).Error != nil {
+		if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
+			return err
+		}
+		db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
 	}
-	if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Error; err != nil {
-		return err
+
+	if !db.Migrator().HasColumn(&model.UserRoom{}, "JiraToken") {
+		return db.Migrator().AddColumn(&model.UserRoom{}, "JiraToken")
 	}
-	return db.AutoMigrate(&model.User{}, &model.Room{}, &model.Ticket{}, &model.Vote{})
+	return nil
 }
