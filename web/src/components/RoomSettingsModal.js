@@ -81,7 +81,7 @@ const RoomSettingsModal = (props) => {
 							fullWidth
 							startIcon={<CheckIcon />}
 						>
-							Reveal
+							Save
 						</Button>
 						<Button
 							variant="outlined"
