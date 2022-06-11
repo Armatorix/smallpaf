@@ -179,7 +179,10 @@ func (ch *CrudHandler) ResetVoting(c echo.Context) error {
 			return err
 		}
 		ticket := model.Ticket{ID: req.TicketId}
-		return tx.Model(&ticket).Update("revealed", false).Error
+		return tx.Model(&ticket).Updates(map[string]any{
+			"revealed":    false,
+			"jira_points": 0,
+		}).Error
 
 	})
 	if err != nil {
