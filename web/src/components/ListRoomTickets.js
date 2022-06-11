@@ -68,7 +68,7 @@ export const ListRoomTickets = () => {
 							Hide submitted
 						</ToggleButton>
 						<TextField
-							id="outlined-basic"
+							id="text-filter"
 							label="Filter"
 							variant="outlined"
 							value={textFilter}
