@@ -93,7 +93,7 @@ func main() {
 	tickets.POST("", crudHandler.CreateTicketInRoom)
 	tickets.POST("/import", crudHandler.ImportTickets)
 
-	ticket := room.Group("/:ticketId")
+	ticket := tickets.Group("/:ticketId")
 	ticket.PUT("/votes", crudHandler.AddVoteToTicket)
 	ticket.POST("/reveal", crudHandler.RevealTicket)
 	ticket.POST("/reset", crudHandler.ResetVoting)
