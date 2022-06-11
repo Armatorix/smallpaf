@@ -1,15 +1,13 @@
-import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import CheckIcon from "@mui/icons-material/Check";
+import PollIcon from "@mui/icons-material/Poll";
 import {
 	Button,
 	Dialog,
 	DialogActions,
-	DialogContent,
 	DialogTitle,
 	FormControl,
 	IconButton,
-	TextField,
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
@@ -30,7 +28,7 @@ const RevealModal = (props) => {
 				color="primary"
 			>
 				{props.voted}
-				<VisibilityIcon />
+				<PollIcon />
 			</IconButton>
 			<Dialog
 				open={open}
