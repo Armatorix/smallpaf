@@ -9,6 +9,8 @@ import {
 	ListItem,
 	ListItemText,
 	Paper,
+	TextField,
+	ToggleButton,
 } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { currentRoomState, userVotesMapState } from "../store";
@@ -40,39 +42,32 @@ export const ListRoomTickets = () => {
 						component="FormGroup"
 						style={{ paddingLeft: "5%" }}
 					>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={hideVoted}
-									onChange={() => {
-										setHideVoted(!hideVoted);
-									}}
-								/>
-							}
-							label="Hide voted"
-						/>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={hideRevealed}
-									onChange={() => {
-										setHideRevealed(!hideRevealed);
-									}}
-								/>
-							}
-							label="Hide revealed"
-						/>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={hideSubmitted}
-									onChange={() => {
-										setHideSubmitted(!hideSubmitted);
-									}}
-								/>
-							}
-							label="Hide submitted"
-						/>
+						<ToggleButton
+							selected={hideVoted}
+							onChange={() => {
+								setHideVoted(!hideVoted);
+							}}
+						>
+							Hide voted
+						</ToggleButton>
+
+						<ToggleButton
+							selected={hideRevealed}
+							onChange={() => {
+								setHideRevealed(!hideRevealed);
+							}}
+						>
+							Hide revealed
+						</ToggleButton>
+						<ToggleButton
+							selected={hideSubmitted}
+							onChange={() => {
+								setHideSubmitted(!hideSubmitted);
+							}}
+						>
+							Hide submitted
+						</ToggleButton>
+						<TextField id="outlined-basic" label="Filter" variant="outlined" />
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&

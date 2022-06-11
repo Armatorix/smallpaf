@@ -117,7 +117,7 @@ const VotedModal = (props) => {
 								onClick={(e) => {
 									e.preventDefault();
 									fetch(
-										`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticket.ID}/jira-apply`,
+										`${ENDPOINT}/api/v1/rooms/${props.ticket.RoomId}/tickets/${props.ticket.ID}/jira-apply`,
 										{
 											cache: "no-cache",
 											body: JSON.stringify({
