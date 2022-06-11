@@ -1,20 +1,21 @@
-import ImportExportIcon from "@mui/icons-material/ImportExport";
-import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import {
 	Button,
+	Chip,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	Grid,
 	MenuItem,
 	Select,
 } from "@mui/material";
 import { useState } from "react";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import { currentRoomState, userState, useToken } from "../store";
+import { useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
+import { currentRoomState, userState, useToken } from "../store";
 
 const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
@@ -71,9 +72,26 @@ const VotedModal = (props) => {
 						: "success"
 				}
 			>
-				AVG: {avg} MIN: {min} MAX: {max}{" "}
-				{props.ticket.JiraPoints !== 0 &&
-					`submitted: ${props.ticket.JiraPoints}`}
+				<Grid
+					container
+					direction="column"
+					justifyItems="center"
+					justifyContent="center"
+				>
+					<Grid item>
+						<Chip label={`AVG: ${avg}`} variant="outlined" />
+						<Chip label={`MIN: ${min}`} variant="outlined" />
+						<Chip label={`MAX: ${max}`} variant="outlined" />
+					</Grid>
+					<Grid item center>
+						{props.ticket.JiraPoints !== 0 && (
+							<Chip
+								label={`submitted: ${props.ticket.JiraPoints}`}
+								variant="filled"
+							/>
+						)}
+					</Grid>
+				</Grid>
 			</Button>
 			<Dialog
 				open={open}

@@ -3,6 +3,7 @@ import {
 	Checkbox,
 	CircularProgress,
 	FormControlLabel,
+	Grid,
 	IconButton,
 	List,
 	ListItem,
@@ -44,6 +45,24 @@ export const ListRoomTickets = () => {
 	return (
 		<Paper elevation={2}>
 			<List>
+				<ListItemText>
+					<Grid
+						container
+						order="row"
+						component="FormGroup"
+						style={{ paddingLeft: "5%" }}
+					>
+						<FormControlLabel
+							control={<Checkbox defaultChecked />}
+							label="Label"
+						/>
+						<FormControlLabel
+							disabled
+							control={<Checkbox />}
+							label="Disabled"
+						/>
+					</Grid>
+				</ListItemText>
 				{room.Tickets !== undefined &&
 					room.Tickets.slice(0)
 						.reverse()
