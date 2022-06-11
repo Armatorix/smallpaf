@@ -89,8 +89,8 @@ const NewRoom = () => {
 				</Grid>
 				<Grid item>
 					<TextField
-						id="jira-token"
-						label="Jira token"
+						id="jira-access-token"
+						label="Jira access token"
 						type="text"
 						fullWidth
 						value={jiraToken}
