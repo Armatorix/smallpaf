@@ -74,46 +74,53 @@ export const ListRoomTickets = () => {
 						component="FormGroup"
 						style={{ paddingLeft: "5%" }}
 					>
-						<ToggleButton
-							selected={hideVoted}
-							onChange={() => {
-								setHideVoted(!hideVoted);
-							}}
-						>
-							Hide voted
-						</ToggleButton>
+						<Grid container item xs={12} lg={6}>
+							<ToggleButton
+								selected={hideVoted}
+								onChange={() => {
+									setHideVoted(!hideVoted);
+								}}
+								style={{ fontSize: "0.6em" }}
+							>
+								Hide voted
+							</ToggleButton>
 
-						<ToggleButton
-							selected={hideRevealed}
-							onChange={() => {
-								setHideRevealed(!hideRevealed);
-							}}
-						>
-							Hide revealed
-						</ToggleButton>
-						<ToggleButton
-							selected={hideSubmitted}
-							onChange={() => {
-								setHideSubmitted(!hideSubmitted);
-							}}
-						>
-							Hide submitted
-						</ToggleButton>
-						<TextField
-							id="text-filter"
-							label="Filter"
-							variant="outlined"
-							value={textFilter}
-							onChange={(e) => setTextFilter(e.target.value)}
-						/>
-						<ToggleButton
-							selected={true}
-							onChange={() => {
-								setAndFilter(!andFilter);
-							}}
-						>
-							{andFilter ? "AND" : "OR"}
-						</ToggleButton>
+							<ToggleButton
+								selected={hideRevealed}
+								onChange={() => {
+									setHideRevealed(!hideRevealed);
+								}}
+								style={{ fontSize: "0.6em" }}
+							>
+								Hide revealed
+							</ToggleButton>
+							<ToggleButton
+								selected={hideSubmitted}
+								onChange={() => {
+									setHideSubmitted(!hideSubmitted);
+								}}
+								style={{ fontSize: "0.6em" }}
+							>
+								Hide submitted
+							</ToggleButton>
+						</Grid>
+						<Grid container item xs={12} lg={6}>
+							<TextField
+								id="text-filter"
+								label="Filter"
+								variant="outlined"
+								value={textFilter}
+								onChange={(e) => setTextFilter(e.target.value)}
+							/>
+							<ToggleButton
+								selected={true}
+								onChange={() => {
+									setAndFilter(!andFilter);
+								}}
+							>
+								{andFilter ? "AND" : "OR"}
+							</ToggleButton>
+						</Grid>
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&
