@@ -12,17 +12,19 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { currentRoomState, userVotesMapState } from "../store";
 import {
+	currentRoomState,
+	useAndFilter,
 	useHideRevealed,
 	useHideSubmitted,
 	useHideVoted,
-} from "../store/filters";
+	userVotesMapState,
+} from "../store";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
 
-const isTicketSearched = (ticket, searchBy) => {
+const isTicketSearched = (ticket, searchBy, andFilter) => {
 	if (searchBy === "") {
 		return true;
 	}
@@ -34,12 +36,21 @@ const isTicketSearched = (ticket, searchBy) => {
 		.filter((s) => s !== "");
 	let description = ticket.Description.toLowerCase();
 	let ticketNo = ticket.JiraID.toLowerCase();
-	for (let i = 0; i < words.length; i++) {
-		if (!description.includes(words[i]) && !ticketNo.includes(words[i])) {
-			return false;
+	if (andFilter) {
+		for (let i = 0; i < words.length; i++) {
+			if (!description.includes(words[i]) && !ticketNo.includes(words[i])) {
+				return false;
+			}
 		}
+		return true;
+	} else {
+		for (let i = 0; i < words.length; i++) {
+			if (description.includes(words[i]) || ticketNo.includes(words[i])) {
+				return true;
+			}
+		}
+		return false;
 	}
-	return true;
 };
 
 export const ListRoomTickets = () => {
@@ -48,6 +59,7 @@ export const ListRoomTickets = () => {
 	const [hideVoted, setHideVoted] = useHideVoted();
 	const [hideSubmitted, setHideSubmitted] = useHideSubmitted();
 	const [hideRevealed, setHideRevealed] = useHideRevealed();
+	const [andFilter, setAndFilter] = useAndFilter();
 	const [textFilter, setTextFilter] = useState("");
 	if (room === undefined || userVotesMap === undefined) {
 		return <CircularProgress />;
@@ -94,6 +106,14 @@ export const ListRoomTickets = () => {
 							value={textFilter}
 							onChange={(e) => setTextFilter(e.target.value)}
 						/>
+						<ToggleButton
+							selected={true}
+							onChange={() => {
+								setAndFilter(!andFilter);
+							}}
+						>
+							{andFilter ? "AND" : "OR"}
+						</ToggleButton>
 					</Grid>
 				</ListItemText>
 				{room.Tickets !== undefined &&
@@ -103,7 +123,7 @@ export const ListRoomTickets = () => {
 								!(hideVoted && userVotesMap[el.ID]) &&
 								!(hideSubmitted && el.JiraPoints !== 0) &&
 								!(hideRevealed && el.Revealed) &&
-								isTicketSearched(el, textFilter)
+								isTicketSearched(el, textFilter, andFilter)
 						)
 						.reverse()
 						.map((ticket) => (

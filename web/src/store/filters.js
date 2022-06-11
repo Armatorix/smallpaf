@@ -3,6 +3,7 @@ import { atom, useRecoilState } from "recoil";
 const hideVotedLocalStorageKey = "hideVoted";
 const hideSubmittedLocalStorageKey = "hideSubmitted";
 const hideRevealedLocalStorageKey = "hideRevealed";
+const andFilterLocalStorageKey = "andFilter";
 
 export const hideVotedState = atom({
 	key: "hideVotedState",
@@ -23,6 +24,13 @@ export const hideRevealedState = atom({
 	default:
 		localStorage.getItem(hideRevealedLocalStorageKey) !== null
 			? localStorage.getItem(hideRevealedLocalStorageKey) === "true"
+			: false,
+});
+export const andFilterState = atom({
+	key: "andFilterState",
+	default:
+		localStorage.getItem(andFilterLocalStorageKey) !== null
+			? localStorage.getItem(andFilterLocalStorageKey) === "true"
 			: false,
 });
 
@@ -51,4 +59,13 @@ export const useHideRevealed = () => {
 		localStorage.setItem(hideRevealedLocalStorageKey, newValue);
 	};
 	return [hideRevealed, setHideRevealed];
+};
+
+export const useAndFilter = () => {
+	const [andFilter, set] = useRecoilState(andFilterState);
+	const setAndFilter = (newValue) => {
+		set(newValue);
+		localStorage.setItem(andFilterLocalStorageKey, newValue);
+	};
+	return [andFilter, setAndFilter];
 };
