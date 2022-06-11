@@ -3,6 +3,7 @@ import {
 	CircularProgress,
 	Grid,
 	IconButton,
+	InputAdornment,
 	List,
 	ListItem,
 	ListItemText,
@@ -72,37 +73,46 @@ export const ListRoomTickets = () => {
 						container
 						order="row"
 						component="FormGroup"
-						style={{ paddingLeft: "5%" }}
+						style={{ paddingLeft: "2%", paddingRight: "2%" }}
+						spacing={2}
 					>
 						<Grid container item xs={12} lg={6}>
-							<ToggleButton
-								selected={hideVoted}
-								onChange={() => {
-									setHideVoted(!hideVoted);
-								}}
-								style={{ fontSize: "0.6em" }}
-							>
-								Hide voted
-							</ToggleButton>
-
-							<ToggleButton
-								selected={hideRevealed}
-								onChange={() => {
-									setHideRevealed(!hideRevealed);
-								}}
-								style={{ fontSize: "0.6em" }}
-							>
-								Hide revealed
-							</ToggleButton>
-							<ToggleButton
-								selected={hideSubmitted}
-								onChange={() => {
-									setHideSubmitted(!hideSubmitted);
-								}}
-								style={{ fontSize: "0.6em" }}
-							>
-								Hide submitted
-							</ToggleButton>
+							<Grid container item xs={4}>
+								<ToggleButton
+									fullWidth
+									selected={hideVoted}
+									onChange={() => {
+										setHideVoted(!hideVoted);
+									}}
+									style={{ fontSize: "0.6em" }}
+								>
+									Hide voted
+								</ToggleButton>
+							</Grid>
+							<Grid container item xs={4}>
+								<ToggleButton
+									fullWidth
+									selected={hideRevealed}
+									onChange={() => {
+										setHideRevealed(!hideRevealed);
+									}}
+									style={{ fontSize: "0.6em" }}
+								>
+									Hide revealed
+								</ToggleButton>
+							</Grid>
+							<Grid container item xs={4}>
+								<ToggleButton
+									fullWidth
+									selected={hideSubmitted}
+									onChange={() => {
+										setHideSubmitted(!hideSubmitted);
+									}}
+									style={{ fontSize: "0.6em" }}
+								>
+									Hide submitted
+								</ToggleButton>
+							</Grid>
 						</Grid>
 						<Grid container item xs={12} lg={6}>
 							<TextField
@@ -111,15 +121,22 @@ export const ListRoomTickets = () => {
 								variant="outlined"
 								value={textFilter}
 								onChange={(e) => setTextFilter(e.target.value)}
-							/>
-							<ToggleButton
-								selected={true}
-								onChange={() => {
-									setAndFilter(!andFilter);
+								fullWidth
+								InputProps={{
+									endAdornment: (
+										<InputAdornment>
+											<ToggleButton
+												selected={true}
+												onChange={() => {
+													setAndFilter(!andFilter);
+												}}
+											>
+												{andFilter ? "AND" : "OR"}
+											</ToggleButton>
+										</InputAdornment>
+									),
 								}}
-							>
-								{andFilter ? "AND" : "OR"}
-							</ToggleButton>
+							/>
 						</Grid>
 					</Grid>
 				</ListItemText>
