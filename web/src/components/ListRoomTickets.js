@@ -1,8 +1,6 @@
 import LinkIcon from "@mui/icons-material/Link";
 import {
-	Checkbox,
 	CircularProgress,
-	FormControlLabel,
 	Grid,
 	IconButton,
 	List,
