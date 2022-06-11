@@ -89,9 +89,9 @@ function App() {
 				container
 				alignSelf="center"
 				alignItems="center"
-				minWidth="650px"
 				width="100%"
 				height="100%"
+				paddingLeft="1em"
 				paddingY="3em"
 				justifyContent="center"
 			>
@@ -101,9 +101,9 @@ function App() {
 					component={Paper}
 					direction="column"
 					spacing={2}
-					width="90%"
+					width="98%"
 					maxWidth="1200px"
-					padding="2em"
+					padding="4%"
 					alignItems="center"
 					justifyContent="center"
 					elevation={1}

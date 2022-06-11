@@ -30,9 +30,6 @@ const AddTicket = (props) => {
 				{...props}
 				variant="outlined"
 				onClick={() => setOpen(true)}
-				style={{
-					minWidth: "3.5em",
-				}}
 				startIcon={<AddIcon />}
 				color="primary"
 			>
