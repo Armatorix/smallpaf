@@ -169,7 +169,7 @@ func (ch *CrudHandler) ResetVoting(c echo.Context) error {
 		return c.NoContent(http.StatusUnauthorized)
 	}
 
-	ch.dbClient.Transaction(func(tx *gorm.DB) error {
+	err = ch.dbClient.Transaction(func(tx *gorm.DB) error {
 		vote := model.Vote{TicketID: req.TicketId}
 		err = tx.Unscoped().
 			Where("ticket_id = ?", req.TicketId).
@@ -181,5 +181,8 @@ func (ch *CrudHandler) ResetVoting(c echo.Context) error {
 		return tx.Model(&ticket).Update("revealed", false).Error
 
 	})
+	if err != nil {
+		return err
+	}
 	return c.NoContent(http.StatusOK)
 }
