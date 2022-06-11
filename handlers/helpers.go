@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/Armatorix/smallpaf/model"
 	"github.com/golang-jwt/jwt"
@@ -66,4 +67,12 @@ func getEmail(c echo.Context) (string, error) {
 		return "", errUserUIDMissing
 	}
 	return email, nil
+}
+
+func createTicketsJiraIDsLowerOccMap(ts []model.Ticket) map[string]bool {
+	m := make(map[string]bool)
+	for _, t := range ts {
+		m[strings.ToLower(t.JiraID)] = true
+	}
+	return m
 }

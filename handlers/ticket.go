@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Armatorix/smallpaf/jira"
 	"github.com/Armatorix/smallpaf/model"
@@ -98,21 +98,39 @@ func (ch *CrudHandler) ImportTickets(c echo.Context) error {
 		return err
 	}
 
+	currentTickets := []model.Ticket{}
+	err = ch.dbClient.Find(&currentTickets, "room_id = ?", req.RoomID).Error
+	if err != nil {
+		return err
+	}
+	currentTicketsMap := createTicketsJiraIDsLowerOccMap(currentTickets)
 	tickets, err := jiraClient.ImportTicketsByFilter(req.FilterId)
-	log.Println(tickets, err)
-	// call for tickets + iteration
+	if err != nil {
+		return err
+	}
+	newTickets := make([]model.Ticket, 0, len(tickets))
+	for _, t := range tickets {
+		if !currentTicketsMap[strings.ToLower(t.Key)] {
+			newTickets = append(newTickets, model.Ticket{
+				RoomId:      req.RoomID,
+				UserId:      uid,
+				JiraID:      t.Key,
+				Description: t.Fields.Summary,
+				Revealed:    false,
+				JiraPoints:  0,
+				TotalVoted:  0,
+			})
+		}
+	}
 
-	// ticket := &model.Ticket{
-	// 	RoomId:      req.RoomID,
-	// 	UserId:      uid,
-	// 	JiraID:      req.JiraID,
-	// 	Description: req.Description,
-	// }
-	// err = ch.dbClient.WithContext(c.Request().Context()).
-	// 	Create(&ticket).Error
-	// if err != nil {
-	// 	return err
-	// }
+	if len(newTickets) == 0 {
+		return c.NoContent(http.StatusNoContent)
+	}
+	err = ch.dbClient.WithContext(c.Request().Context()).
+		Create(&newTickets).Error
+	if err != nil {
+		return err
+	}
 
 	return c.NoContent(http.StatusCreated)
 }
