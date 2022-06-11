@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
-import { currentRoomState, userState, useToken } from "../store";
+import { currentRoomState, useToken } from "../store";
 
 const RoomSettingsModal = (props) => {
 	const [open, setOpen] = useState(false);
