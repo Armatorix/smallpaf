@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Armatorix/smallpaf/jira"
@@ -55,7 +56,7 @@ func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
 }
 
 type requestImportTickets struct {
-	FilterId string    `json:"FilterId" validate:"required"`
+	FilterId int       `json:"FilterId" validate:"required"`
 	RoomID   uuid.UUID `param:"roomId" validate:"required"`
 }
 
@@ -74,14 +75,31 @@ func (ch *CrudHandler) ImportTickets(c echo.Context) error {
 		return err
 	}
 
-	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	email, err := getEmail(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, usersRoom, err := ch.hasRoomAdminRights(uid, req.RoomID)
 	if err != nil {
 		return err
 	}
 	if !hasRights {
 		return c.NoContent(http.StatusUnauthorized)
 	}
+	room := model.Room{ID: req.RoomID}
+	err = ch.dbClient.First(&room).Error
+	if err != nil {
+		return err
+	}
 
+	jiraClient, err := jira.NewClient(email, usersRoom.JiraToken, room.JiraUrl)
+	if err != nil {
+		return err
+	}
+
+	tickets, err := jiraClient.ImportTicketsByFilter(req.FilterId)
+	log.Println(tickets, err)
 	// call for tickets + iteration
 
 	// ticket := &model.Ticket{

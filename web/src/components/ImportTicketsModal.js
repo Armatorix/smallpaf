@@ -90,7 +90,7 @@ const ImportTicketsModal = (props) => {
 								required
 								onChange={(e) =>
 									setImportBody({
-										FilterId: e.target.value,
+										FilterId: parseInt(e.target.value),
 									})
 								}
 							/>

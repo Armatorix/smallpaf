@@ -8,24 +8,35 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	jira "github.com/andygrunwald/go-jira"
 )
 
 var errFailedStatusCode = errors.New("failed status code")
 
 type Client struct {
-	auth    string
-	jiraURL *url.URL
+	auth       string
+	jiraURL    *url.URL
+	jiraClient *jira.Client
 }
 
 func NewClient(user, pass string, jiraURLStr string) (*Client, error) {
-
 	u, err := url.Parse(jiraURLStr)
 	if err != nil {
 		return nil, err
 	}
+	tp := jira.BasicAuthTransport{
+		Username: user,
+		Password: pass,
+	}
+	jiraClient, err := jira.NewClient(tp.Client(), jiraURLStr)
+	if err != nil {
+		return nil, err
+	}
 	return &Client{
-		auth:    base64.StdEncoding.EncodeToString([]byte(user + ":" + pass)),
-		jiraURL: u,
+		auth:       base64.StdEncoding.EncodeToString([]byte(user + ":" + pass)),
+		jiraURL:    u,
+		jiraClient: jiraClient,
 	}, nil
 }
 
@@ -70,4 +81,16 @@ func (c *Client) SetTicketPoints(ticketId string, points int) error {
 		return errFailedStatusCode
 	}
 	return nil
+}
+
+func (c *Client) ImportTicketsByFilter(filterId int) ([]jira.Issue, error) {
+	issues, resp, err := c.jiraClient.Issue.Search(fmt.Sprintf("filter=%d", filterId), nil)
+	if resp != nil && resp.Body != nil {
+		defer resp.Body.Close()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return issues, nil
 }
