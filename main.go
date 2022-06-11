@@ -89,11 +89,15 @@ func main() {
 	room.PUT("/jira-token", crudHandler.PutRoomJiraToken)
 	room.PUT("/user", crudHandler.AddUserToRoom)
 
-	room.POST("/tickets", crudHandler.CreateTicketInRoom)
-	room.PUT("/tickets/:ticketId/votes", crudHandler.AddVoteToTicket)
-	room.POST("/tickets/:ticketId/reveal", crudHandler.RevealTicket)
-	room.POST("/tickets/:ticketId/reset", crudHandler.ResetVoting)
-	room.POST("/tickets/:ticketId/jira-apply", crudHandler.ApplyVotingToJira)
+	tickets := room.Group("/tickets")
+	tickets.POST("", crudHandler.CreateTicketInRoom)
+	tickets.POST("/import", crudHandler.ImportTickets)
+
+	ticket := room.Group("/:ticketId")
+	ticket.PUT("/votes", crudHandler.AddVoteToTicket)
+	ticket.POST("/reveal", crudHandler.RevealTicket)
+	ticket.POST("/reset", crudHandler.ResetVoting)
+	ticket.POST("/jira-apply", crudHandler.ApplyVotingToJira)
 
 	log.Fatal(e.Start(cfg.Server.Address()))
 }

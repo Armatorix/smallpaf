@@ -54,6 +54,51 @@ func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
 	return c.JSON(http.StatusCreated, ticket)
 }
 
+type requestImportTickets struct {
+	FilterId string    `json:"FilterId" validate:"required"`
+	RoomID   uuid.UUID `param:"roomId" validate:"required"`
+}
+
+func (ch *CrudHandler) ImportTickets(c echo.Context) error {
+	var req requestImportTickets
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	// call for tickets + iteration
+
+	// ticket := &model.Ticket{
+	// 	RoomId:      req.RoomID,
+	// 	UserId:      uid,
+	// 	JiraID:      req.JiraID,
+	// 	Description: req.Description,
+	// }
+	// err = ch.dbClient.WithContext(c.Request().Context()).
+	// 	Create(&ticket).Error
+	// if err != nil {
+	// 	return err
+	// }
+
+	return c.NoContent(http.StatusCreated)
+}
+
 type requestAddVoteToTicket struct {
 	TicketId uuid.UUID `param:"ticketId" validate:"required"`
 	Points   int       `json:"Points" validate:"required"`
