@@ -35,7 +35,7 @@ export const HideRevealedCheckbox = () => {
 	);
 };
 
-export const ListRoomTickets = (props) => {
+export const ListRoomTickets = () => {
 	const room = useRecoilValue(currentRoomState);
 	const userVotesMap = useRecoilValue(userVotesMapState);
 	if (room === undefined || userVotesMap === undefined) {
@@ -84,7 +84,7 @@ export const ListRoomTickets = (props) => {
 										edge="end"
 										ticketid={ticket.ID}
 										votes={ticket.Votes}
-										withjirasync={props.withjirasync}
+										withjirasync={room.JiraToken !== ""}
 									/>
 								)}
 							</ListItem>
@@ -92,10 +92,6 @@ export const ListRoomTickets = (props) => {
 			</List>
 		</Paper>
 	);
-};
-
-ListRoomTickets.defaultProps = {
-	withjirasync: false,
 };
 
 export default ListRoomTickets;
