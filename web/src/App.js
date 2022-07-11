@@ -125,6 +125,7 @@ function App() {
 							path="rooms/:roomId"
 							element={isAuthed ? <Room /> : redirectToLoginPage()}
 						/>
+						<Route path="logout" element={Logout} />
 						<Route path="*" element={<Page404 />} />
 					</Routes>
 				</Grid>
