@@ -32,6 +32,9 @@ const AddTicket = (props) => {
 				onClick={() => setOpen(true)}
 				startIcon={<AddIcon />}
 				color="primary"
+				style={{
+					height: "-webkit-fill-available"
+				}}
 			>
 				Add ticket
 			</Button>
