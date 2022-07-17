@@ -118,6 +118,23 @@ const useStatesUpdates = () => {
             })
     }
 
+    const updateJiraToken = (jiraToken) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/jira-token`, {
+            cache: "no-cache",
+            body: JSON.stringify({ JiraToken: jiraToken }),
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "PUT",
+            mode: "cors",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
 
     const jiraGetIssue = (jiraUrl, email, jiraToken, ticketId) => {
         return fetch(new URL(`/rest/api/3/issue/${ticketId}`, jiraUrl).href, {
@@ -141,6 +158,7 @@ const useStatesUpdates = () => {
         getRoom,
         getUser,
         emailAuth,
+        updateJiraToken,
 
         jiraGetIssue,
     }

@@ -8,19 +8,19 @@ import {
 	DialogTitle,
 	FormControl,
 	IconButton,
-	TextField,
+	TextField
 } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
+import useStatesUpdates from "../api";
 import { currentRoomState, useToken } from "../store";
 
 const RoomSettingsModal = (props) => {
 	const [open, setOpen] = useState(false);
-	const [token] = useToken();
 	const currentRoom = useRecoilValue(currentRoomState);
 	const [jiraToken, setJiraToken] = useState(currentRoom?.JiraToken);
 	const resetRoom = useResetRecoilState(currentRoomState);
+	const { updateJiraToken } = useStatesUpdates();
 	return (
 		<>
 			<IconButton
@@ -42,21 +42,7 @@ const RoomSettingsModal = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/jira-token`, {
-							cache: "no-cache",
-							body: JSON.stringify({ JiraToken: jiraToken }),
-							headers: {
-								"content-type": "application/json",
-								authorization: `Bearer ${token}`,
-							},
-							method: "PUT",
-							mode: "cors",
-						})
-							.then((resp) => {
-								if (resp.status >= 300) {
-									throw Error("failed creation");
-								}
-							})
+						updateJiraToken(jiraToken)
 							.then(() => {
 								resetRoom();
 								setOpen(false);
