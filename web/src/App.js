@@ -21,6 +21,7 @@ import Page404 from "./routes/Page404";
 import Room from "./routes/Room";
 import { styleState, userState, useToken } from "./store";
 import LogoutButton from "./components/LogoutButton";
+import Logout from "./routes/Logout";
 
 const redirectToRoom = () => {
 	return <Navigate to="/rooms" />;
