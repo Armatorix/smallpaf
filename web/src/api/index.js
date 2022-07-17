@@ -118,8 +118,8 @@ const useStatesUpdates = () => {
             })
     }
 
-    const updateJiraToken = (jiraToken) => {
-        return fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/jira-token`, {
+    const updateJiraToken = (roomId, jiraToken) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/jira-token`, {
             cache: "no-cache",
             body: JSON.stringify({ JiraToken: jiraToken }),
             headers: {
