@@ -1,22 +1,26 @@
 import { CircularProgress, Grid, Link, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import useStatesUpdates from "../api";
 import AddTicket from "../components/AddTicket";
 import ImportTicketsModal from "../components/ImportTicketsModal";
 import ListRoomTickets from "../components/ListRoomTickets";
 import ListRoomUsers from "../components/ListRoomUsers";
 import RoomSettingsModal from "../components/RoomSettingsModal";
 import { currentRoomState } from "../store";
-import useStatesUpdates from "../api"
 
 const Room = () => {
 	const { roomId } = useParams();
-	const room = useRecoilValue(currentRoomState);
-	const { updateRoomState } = useStatesUpdates()
+	const [room, setRoom] = useRecoilState(currentRoomState);
+	const { getRoom } = useStatesUpdates()
 	useEffect(() => {
 		if (room === undefined) {
-			updateRoomState(roomId);
+			getRoom(roomId).then((resp) => {
+				setRoom(resp)
+			}).catch((err) => {
+				console.log(err)
+			})
 		}
 	}, [room, roomId]);
 
