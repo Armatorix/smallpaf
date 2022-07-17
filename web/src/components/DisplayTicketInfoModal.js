@@ -5,37 +5,29 @@ import {
 	Dialog,
 	DialogActions,
 	DialogTitle,
-	IconButton,
+	IconButton
 } from "@mui/material";
-import { encode } from "base-64";
 import { useEffect, useState } from "react";
+import useStatesUpdates from "../api";
+
 const DisplayTicketInfoModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [issue, setIssue] = useState(undefined);
+	const { jiraGetIssue } = useStatesUpdates
+	console.log(issue);
 	useEffect(() => {
 		if (!open) {
 			return;
 		}
-		fetch(new URL(`/rest/api/3/issue/${props.ticketid}`, props.jiraurl).href, {
-			headers: {
-				Accept: "application/json",
-				Authorization: "Basic " + encode(props.email + ":" + props.jiratoken),
-			},
-			method: "GET",
-		})
-			.then((resp) => {
-				if (resp.status >= 300) {
-					throw Error("failed creation");
-				}
-				return resp.json();
-			})
+		jiraGetIssue(props.jiraurl, props.email, props.jiratoken, props.ticketid)
 			.then((resp) => {
 				setIssue(resp);
+
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [open, props.ticketid, props.jiraurl, props.jiratoken, props.email]);
+	}, [open, props.ticketid, props.jiraurl, props.jiratoken, props.email, jiraGetIssue]);
 
 	return (
 		<>

@@ -1,5 +1,6 @@
 import { ENDPOINT } from "../config";
 import { useToken } from "../store";
+import { encode } from "base-64";
 
 const useStatesUpdates = () => {
     const [token, setToken] = useToken();
@@ -116,13 +117,32 @@ const useStatesUpdates = () => {
                 return resp.json();
             })
     }
+
+
+    const jiraGetIssue = (jiraUrl, email, jiraToken, ticketId) => {
+        return fetch(new URL(`/rest/api/3/issue/${ticketId}`, jiraUrl).href, {
+            headers: {
+                Accept: "application/json",
+                Authorization: "Basic " + encode(email + ":" + jiraToken),
+            },
+            method: "GET",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+                return resp.json();
+            })
+    }
     return {
-        getRoom,
-        addTicket,
-        getUser,
-        addUserToRoom,
-        emailAuth,
         newRoom,
+        addTicket,
+        addUserToRoom,
+        getRoom,
+        getUser,
+        emailAuth,
+
+        jiraGetIssue,
     }
 }
 
