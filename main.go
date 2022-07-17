@@ -45,7 +45,7 @@ func main() {
 		dbClient,
 	)
 	crudHandler := handlers.NewCrudHandler(dbClient)
-
+	wsHandler := handlers.NewWebSockerHandler(dbClient)
 	e := echo.New()
 	e.Use(
 		middleware.Recover(),
@@ -75,7 +75,7 @@ func main() {
 	e.Any("*", func(c echo.Context) error {
 		return c.File("/app/public/index.html")
 	})
-
+	api.GET("/ws", wsHandler.WS)
 	api.GET("/user", crudHandler.GetUser, authClient.GetMiddleware())
 
 	auth := api.Group("/auth")
