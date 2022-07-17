@@ -1,6 +1,6 @@
-import ImportExportIcon from "@mui/icons-material/ImportExport";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import {
 	Button,
 	Dialog,
@@ -8,12 +8,12 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	TextField,
+	TextField
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import useStatesUpdates from "../api";
+import { currentRoomState } from "../store";
 
 const defautlImportValue = {
 	FilterId: 0,
@@ -22,9 +22,9 @@ const defautlImportValue = {
 const ImportTicketsModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [importBody, setImportBody] = useState(defautlImportValue);
-	const [token] = useToken();
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [progress, setProgress] = useState(false);
+	const { importTickets } = useStatesUpdates();
 	return (
 		<>
 			<Button
@@ -50,21 +50,7 @@ const ImportTicketsModal = (props) => {
 					onSubmit={(e) => {
 						setProgress(true);
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/import`, {
-							body: JSON.stringify(importBody),
-							cache: "no-cache",
-							headers: {
-								"content-type": "application/json",
-								authorization: `Bearer ${token}`,
-							},
-							method: "POST",
-							mode: "cors",
-						})
-							.then((resp) => {
-								if (resp.status >= 300) {
-									throw Error("failed creation");
-								}
-							})
+						importTickets(props.roomid, importBody)
 							.then(() => {
 								setImportBody(defautlImportValue);
 								resetRoom();
