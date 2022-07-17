@@ -1,18 +1,19 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Link, Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { ENDPOINT } from "../config.js";
-import { useNewRoomSetter, useToken } from "../store";
+import useStatesUpdates from "../api/index.js";
+import { useNewRoomSetter } from "../store";
 
 const NewRoom = () => {
 	const [newRoomID, setNewRoomID] = useState(undefined);
 	const setNewRoom = useNewRoomSetter();
-	const [roomName, setRoomName] = useState("");
-	const [jiraURL, setJiraURL] = useState("https://");
-	const [jiraToken, setJiraToken] = useState("");
-	const [token] = useToken();
-
+	const [room, setRoom] = useState({
+		Name: "",
+		JiraURL: "https://",
+		JiraToken: "",
+	})
+	const { newRoom } = useStatesUpdates();
 	if (newRoomID) {
 		return <Navigate to={`/rooms/${newRoomID}`} />;
 	}
@@ -37,26 +38,7 @@ const NewRoom = () => {
 				onSubmit={(e) => {
 					e.preventDefault();
 
-					fetch(ENDPOINT + "/api/v1/rooms", {
-						body: JSON.stringify({
-							Name: roomName,
-							JiraUrl: jiraURL,
-							JiraToken: jiraToken,
-						}),
-						cache: "no-cache",
-						headers: {
-							"content-type": "application/json",
-							authorization: `Bearer ${token}`,
-						},
-						method: "POST",
-						mode: "cors",
-					})
-						.then((resp) => {
-							if (resp.status >= 300) {
-								throw Error("failed creation");
-							}
-							return resp.json();
-						})
+					newRoom(room)
 						.then((resp) => {
 							setNewRoom(resp);
 							setNewRoomID(resp.ID);
@@ -72,8 +54,11 @@ const NewRoom = () => {
 						label="Name"
 						type="text"
 						fullWidth
-						value={roomName}
-						onChange={(e) => setRoomName(e.target.value)}
+						value={room.Name}
+						onChange={(e) => setRoom({
+							...room,
+							Name: e.target.value,
+						})}
 						required
 					/>
 				</Grid>
@@ -83,8 +68,11 @@ const NewRoom = () => {
 						label="Jira URL"
 						type="url"
 						fullWidth
-						value={jiraURL}
-						onChange={(e) => setJiraURL(e.target.value)}
+						value={room.JiraURL}
+						onChange={(e) => setRoom({
+							...room,
+							JiraURL: e.target.value,
+						})}
 					/>
 				</Grid>
 				<Grid item>
@@ -93,8 +81,11 @@ const NewRoom = () => {
 						label="Jira access token"
 						type="text"
 						fullWidth
-						value={jiraToken}
-						onChange={(e) => setJiraToken(e.target.value)}
+						value={room.JiraToken}
+						onChange={(e) => setRoom({
+							...room,
+							JiraToken: e.target.value,
+						})}
 					/>
 				</Grid>
 				<Grid item>

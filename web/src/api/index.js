@@ -98,12 +98,31 @@ const useStatesUpdates = () => {
             })
     }
 
+    const newRoom = (room) => {
+        return fetch(ENDPOINT + "/api/v1/rooms", {
+            body: JSON.stringify(room),
+            cache: "no-cache",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+            mode: "cors",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+                return resp.json();
+            })
+    }
     return {
         getRoom,
         addTicket,
         getUser,
         addUserToRoom,
         emailAuth,
+        newRoom,
     }
 }
 
