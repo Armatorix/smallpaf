@@ -1,18 +1,17 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Grid, FormControl, TextField } from "@mui/material";
+import { Button, FormControl, Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import useStatesUpdates from "../api";
+import { currentRoomState } from "../store";
 const AddUser = (props) => {
 	const [clicked, setClicked] = useState(false);
-	const [token] = useToken();
 	const [email, setEmail] = useState("");
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const { roomId } = useParams();
-
+	const { addUserToRoom } = useStatesUpdates();
 	if (!clicked) {
 		return (
 			<Button
@@ -33,23 +32,7 @@ const AddUser = (props) => {
 			component="form"
 			onSubmit={(e) => {
 				e.preventDefault();
-				fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/user`, {
-					body: JSON.stringify({
-						Email: email,
-					}),
-					cache: "no-cache",
-					headers: {
-						"content-type": "application/json",
-						authorization: `Bearer ${token}`,
-					},
-					method: "PUT",
-					mode: "cors",
-				})
-					.then((resp) => {
-						if (resp.status >= 300) {
-							throw Error("failed creation");
-						}
-					})
+				addUserToRoom(roomId, email)
 					.then(() => {
 						resetRoom();
 						setEmail("");

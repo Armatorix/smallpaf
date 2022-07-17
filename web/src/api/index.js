@@ -60,11 +60,31 @@ const useStatesUpdates = () => {
                 return resp.json();
             })
     }
+    const addUserToRoom = (roomId, email) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/user`, {
+            body: JSON.stringify({
+                Email: email,
+            }),
+            cache: "no-cache",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "PUT",
+            mode: "cors",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
 
     return {
         getRoom,
         addTicket,
         getUser,
+        addUserToRoom,
     }
 }
 
