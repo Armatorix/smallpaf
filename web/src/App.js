@@ -57,6 +57,9 @@ function App() {
 			})
 				.then((resp) => {
 					if (resp.status >= 300) {
+						if (resp.status === 401) {
+							setToken(null)
+						}
 						throw Error("failed to get user provfile");
 					}
 					return resp.json();

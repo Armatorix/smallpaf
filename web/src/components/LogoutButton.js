@@ -14,7 +14,7 @@ const LogoutButton = () => {
 		<IconButton
 			sx={{ ml: 1 }}
 			onClick={() => {
-				setToken("");
+				setToken(null);
 				setClicked(true);
 			}}
 			color="inherit"

@@ -5,6 +5,10 @@ const tokenLocalStorageKey = "token";
 export const useToken = () => {
 	const [token, set] = useRecoilState(tokenState);
 	const setToken = (newValue) => {
+		if (newValue === null) {
+			localStorage.removeItem(tokenLocalStorageKey);
+			return;
+		}
 		set(newValue);
 		localStorage.setItem(tokenLocalStorageKey, newValue);
 	};
