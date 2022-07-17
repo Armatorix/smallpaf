@@ -42,7 +42,7 @@ const RoomSettingsModal = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						updateJiraToken(jiraToken)
+						updateJiraToken(props.roomid, jiraToken)
 							.then(() => {
 								resetRoom();
 								setOpen(false);
