@@ -1,9 +1,8 @@
-import { useSetRecoilState } from "recoil";
 import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import { useToken } from "../store";
 
 const useStatesUpdates = () => {
-    const token = useToken()[0];
+    const [token, setToken] = useToken();
 
     const getRoom = (roomId) => {
         return fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
@@ -41,9 +40,31 @@ const useStatesUpdates = () => {
             });
     }
 
+    const getUser = () => {
+        return fetch(ENDPOINT + "/api/v1/user", {
+            cache: "no-cache",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "GET",
+            mode: "cors",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    if (resp.status === 401) {
+                        setToken(null)
+                    }
+                    throw Error("failed to get user provfile");
+                }
+                return resp.json();
+            })
+    }
+
     return {
         getRoom,
         addTicket,
+        getUser,
     }
 }
 

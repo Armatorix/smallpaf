@@ -5,23 +5,23 @@ import {
 	Grid,
 	Paper,
 	Toolbar,
-	Typography,
+	Typography
 } from "@mui/material";
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
+import useStatesUpdates from "./api";
+import LogoutButton from "./components/LogoutButton";
+import NewRoomButton from "./components/NewRoomButton";
 import RoomPicker from "./components/RoomPicker";
 import ThemeToggle from "./components/ThemeToggle";
-import NewRoomButton from "./components/NewRoomButton";
-import { ENDPOINT } from "./config";
+import Logout from "./routes/Logout";
 import NewRoom from "./routes/NewRoom";
 import NewUser from "./routes/NewUser.js";
 import NewUserOpenMail from "./routes/NewUserOpenMail.js";
 import Page404 from "./routes/Page404";
 import Room from "./routes/Room";
 import { styleState, userState, useToken } from "./store";
-import LogoutButton from "./components/LogoutButton";
-import Logout from "./routes/Logout";
 
 const redirectToRoom = () => {
 	return <Navigate to="/rooms" />;
@@ -35,6 +35,7 @@ function App() {
 	const theme = useRecoilValue(styleState);
 	const [token, setToken] = useToken();
 	const [searchParams, setSearchParams] = useSearchParams();
+	const { getUser } = useStatesUpdates();
 	const [user, setUser] = useRecoilState(userState);
 	useEffect(() => {
 		const queryToken = searchParams.get("token");
@@ -46,24 +47,7 @@ function App() {
 	const isAuthed = token !== "";
 	useEffect(() => {
 		if (token !== "" && user === undefined) {
-			fetch(ENDPOINT + "/api/v1/user", {
-				cache: "no-cache",
-				headers: {
-					"content-type": "application/json",
-					authorization: `Bearer ${token}`,
-				},
-				method: "GET",
-				mode: "cors",
-			})
-				.then((resp) => {
-					if (resp.status >= 300) {
-						if (resp.status === 401) {
-							setToken(null)
-						}
-						throw Error("failed to get user provfile");
-					}
-					return resp.json();
-				})
+			getUser()
 				.then((resp) => {
 					setUser(resp);
 				})
@@ -71,7 +55,7 @@ function App() {
 					console.log(err);
 				});
 		}
-	}, [token, setUser, user]);
+	}, [token, setUser, user, getUser]);
 
 	return (
 		<ThemeProvider theme={theme}>

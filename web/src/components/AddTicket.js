@@ -7,13 +7,12 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	TextField,
+	TextField
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
 import useStatesUpdates from "../api";
-import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import { currentRoomState } from "../store";
 
 const defautlTicketValue = {
 	Description: "",

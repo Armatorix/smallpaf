@@ -22,7 +22,7 @@ const Room = () => {
 				console.log(err)
 			})
 		}
-	}, [room, roomId]);
+	}, [room, roomId, setRoom, getRoom]);
 
 	if (room === undefined) {
 		return <CircularProgress />;
