@@ -4,10 +4,9 @@ import { currentRoomState, useToken } from "../store";
 
 const useStatesUpdates = () => {
     const token = useToken()[0];
-    const setRoom = useSetRecoilState(currentRoomState);
 
-    const updateRoomState = (roomId) => {
-        fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
+    const getRoom = (roomId) => {
+        return fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
             cache: "no-cache",
             headers: {
                 "content-type": "application/json",
@@ -21,17 +20,30 @@ const useStatesUpdates = () => {
                     throw Error("failed to get user provfile");
                 }
                 return resp.json();
-            })
+            });
+    }
+
+    const addTicket = (roomId, ticket) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets`, {
+            body: JSON.stringify(ticket),
+            cache: "no-cache",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+            mode: "cors",
+        })
             .then((resp) => {
-                setRoom(resp)
-            })
-            .catch((err) => {
-                console.log(err);
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
             });
     }
 
     return {
-        updateRoomState,
+        getRoom,
+        addTicket,
     }
 }
 

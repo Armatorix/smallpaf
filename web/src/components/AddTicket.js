@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
+import useStatesUpdates from "../api";
 import { ENDPOINT } from "../config";
 import { currentRoomState, useToken } from "../store";
 
@@ -21,8 +22,8 @@ const defautlTicketValue = {
 const AddTicket = (props) => {
 	const [open, setOpen] = useState(false);
 	const [ticket, setTicket] = useState(defautlTicketValue);
-	const [token] = useToken();
 	const resetRoom = useResetRecoilState(currentRoomState);
+	const { addTicket } = useStatesUpdates();
 
 	return (
 		<>
@@ -45,21 +46,7 @@ const AddTicket = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets`, {
-							body: JSON.stringify(ticket),
-							cache: "no-cache",
-							headers: {
-								"content-type": "application/json",
-								authorization: `Bearer ${token}`,
-							},
-							method: "POST",
-							mode: "cors",
-						})
-							.then((resp) => {
-								if (resp.status >= 300) {
-									throw Error("failed creation");
-								}
-							})
+						addTicket(props.roomid, ticket)
 							.then(() => {
 								setTicket(defautlTicketValue);
 								resetRoom();
