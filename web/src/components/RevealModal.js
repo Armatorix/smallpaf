@@ -40,8 +40,7 @@ const RevealModal = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						fetch(
-							`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/reveal`,
+						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/reveal`,
 							{
 								cache: "no-cache",
 								headers: {

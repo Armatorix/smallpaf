@@ -1,12 +1,12 @@
+import { encode } from "base-64";
 import { ENDPOINT } from "../config";
 import { useToken } from "../store";
-import { encode } from "base-64";
 
 const useStatesUpdates = () => {
     const [token, setToken] = useToken();
 
     const getRoom = (roomId) => {
-        return fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}`, {
             cache: "no-cache",
             headers: {
                 "content-type": "application/json",
@@ -42,7 +42,7 @@ const useStatesUpdates = () => {
     }
 
     const getUser = () => {
-        return fetch(ENDPOINT + "/api/v1/user", {
+        return fetch(`${ENDPOINT}/api/v1/user`, {
             cache: "no-cache",
             headers: {
                 "content-type": "application/json",
@@ -82,7 +82,7 @@ const useStatesUpdates = () => {
     }
 
     const emailAuth = (email) => {
-        return fetch(ENDPOINT + "/api/v1/auth/token", {
+        return fetch(`${ENDPOINT}/api/v1/auth/token`, {
             body: JSON.stringify({ Email: email }),
             cache: "no-cache",
             headers: {
@@ -100,7 +100,7 @@ const useStatesUpdates = () => {
     }
 
     const newRoom = (room) => {
-        return fetch(ENDPOINT + "/api/v1/rooms", {
+        return fetch(`${ENDPOINT}/api/v1/rooms`, {
             body: JSON.stringify(room),
             cache: "no-cache",
             headers: {
