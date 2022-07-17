@@ -210,6 +210,25 @@ const useAPI = () => {
             })
     }
 
+    const deleteTicket = (roomId, ticketId) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}`,
+            {
+                cache: "no-cache",
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: "DELETE",
+                mode: "cors",
+            }
+        )
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
+
     const resetTicket = (roomId, ticketId) => {
         return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/reset`,
             {
@@ -257,6 +276,7 @@ const useAPI = () => {
         addUserToRoom,
         getRoom,
         getUser,
+        deleteTicket,
         emailAuth,
         updateJiraToken,
         revealTicket,
