@@ -20,7 +20,7 @@ type V struct {
 	Validator *validator.Validate
 }
 
-func (cv *V) Validate(i interface{}) error {
+func (cv *V) Validate(i any) error {
 	return cv.Validator.Struct(i)
 }
 
