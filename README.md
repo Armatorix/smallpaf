@@ -8,12 +8,9 @@ created for asynchronous planning sessions
 
 ## Development
 
-Open 4 windows
-Run each command in the different one
+prepare your .env file with all needed values
 
 ```bash
-npm start
-export $(cat .env | grep -v "#"| xargs) && air
 docker-compose up
 ```
 
