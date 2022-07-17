@@ -1,43 +1,24 @@
 import { CircularProgress, Grid, Link, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import AddTicket from "../components/AddTicket";
 import ImportTicketsModal from "../components/ImportTicketsModal";
 import ListRoomTickets from "../components/ListRoomTickets";
 import ListRoomUsers from "../components/ListRoomUsers";
 import RoomSettingsModal from "../components/RoomSettingsModal";
-import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import { currentRoomState } from "../store";
+import useStatesUpdates from "../api"
+
 const Room = () => {
-	const [token] = useToken();
-	const [room, setRoom] = useRecoilState(currentRoomState);
 	const { roomId } = useParams();
+	const room = useRecoilValue(currentRoomState);
+	const { updateRoomState } = useStatesUpdates()
 	useEffect(() => {
-		if (token !== "" && room === undefined) {
-			fetch(ENDPOINT + `/api/v1/rooms/${roomId}`, {
-				cache: "no-cache",
-				headers: {
-					"content-type": "application/json",
-					authorization: `Bearer ${token}`,
-				},
-				method: "GET",
-				mode: "cors",
-			})
-				.then((resp) => {
-					if (resp.status >= 300) {
-						throw Error("failed to get user provfile");
-					}
-					return resp.json();
-				})
-				.then((resp) => {
-					setRoom(resp);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+		if (room === undefined) {
+			updateRoomState(roomId);
 		}
-	}, [token, room, setRoom, roomId]);
+	}, [room, roomId]);
 
 	if (room === undefined) {
 		return <CircularProgress />;
