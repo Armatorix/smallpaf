@@ -81,7 +81,7 @@ const useStatesUpdates = () => {
     }
 
     const emailAuth = (email) => {
-        fetch(ENDPOINT + "/api/v1/auth/token", {
+        return fetch(ENDPOINT + "/api/v1/auth/token", {
             body: JSON.stringify({ Email: email }),
             cache: "no-cache",
             headers: {

@@ -35,7 +35,7 @@ export default function NewUser() {
 				component="form"
 				onSubmit={(e) => {
 					e.preventDefault();
-					emailAuth()
+					emailAuth(email)
 						.then(() => {
 							setSubmitted(true);
 						})
