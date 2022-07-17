@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState } from "../store";
 
 const RoomSettingsModal = (props) => {
@@ -20,7 +20,7 @@ const RoomSettingsModal = (props) => {
 	const currentRoom = useRecoilValue(currentRoomState);
 	const [jiraToken, setJiraToken] = useState(currentRoom?.JiraToken);
 	const resetRoom = useResetRecoilState(currentRoomState);
-	const { updateJiraToken } = useStatesUpdates();
+	const { updateJiraToken } = useAPI();
 	return (
 		<>
 			<IconButton

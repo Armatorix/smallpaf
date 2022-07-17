@@ -11,12 +11,12 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState } from "../store";
 
 const RevealModal = (props) => {
 	const [open, setOpen] = useState(false);
-	const { revealTicket } = useStatesUpdates()
+	const { revealTicket } = useAPI()
 	const resetRoom = useResetRecoilState(currentRoomState);
 
 	return (

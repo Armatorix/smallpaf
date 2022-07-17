@@ -2,7 +2,7 @@ import { CircularProgress, Grid, Link, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import AddTicket from "../components/AddTicket";
 import ImportTicketsModal from "../components/ImportTicketsModal";
 import ListRoomTickets from "../components/ListRoomTickets";
@@ -13,7 +13,7 @@ import { currentRoomState } from "../store";
 const Room = () => {
 	const { roomId } = useParams();
 	const [room, setRoom] = useRecoilState(currentRoomState);
-	const { getRoom } = useStatesUpdates()
+	const { getRoom } = useAPI()
 	useEffect(() => {
 		if (room === undefined) {
 			getRoom(roomId).then((resp) => {

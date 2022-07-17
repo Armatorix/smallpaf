@@ -2,7 +2,7 @@ import { encode } from "base-64";
 import { ENDPOINT } from "../config";
 import { useToken } from "../store";
 
-const useStatesUpdates = () => {
+const useAPI = () => {
     const [token, setToken] = useToken();
 
     const getRoom = (roomId) => {
@@ -269,4 +269,4 @@ const useStatesUpdates = () => {
     }
 }
 
-export default useStatesUpdates;
+export default useAPI;

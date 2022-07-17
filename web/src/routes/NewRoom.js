@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import useStatesUpdates from "../api/index.js";
+import useAPI from "../api/index.js";
 import { useNewRoomSetter } from "../store";
 
 const NewRoom = () => {
@@ -13,7 +13,7 @@ const NewRoom = () => {
 		JiraURL: "https://",
 		JiraToken: "",
 	})
-	const { newRoom } = useStatesUpdates();
+	const { newRoom } = useAPI();
 	if (newRoomID) {
 		return <Navigate to={`/rooms/${newRoomID}`} />;
 	}

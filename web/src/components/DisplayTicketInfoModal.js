@@ -8,12 +8,12 @@ import {
 	IconButton
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 
 const DisplayTicketInfoModal = (props) => {
 	const [open, setOpen] = useState(false);
 	const [issue, setIssue] = useState(undefined);
-	const { jiraGetIssue } = useStatesUpdates
+	const { jiraGetIssue } = useAPI
 	console.log(issue);
 	useEffect(() => {
 		if (!open) {

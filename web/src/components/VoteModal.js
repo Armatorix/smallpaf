@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState, userState } from "../store";
 
 const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
@@ -11,7 +11,7 @@ const VoteModal = (props) => {
 	const currentRoom = useRecoilValue(currentRoomState);
 	const resetUser = useResetRecoilState(userState);
 	const resetRoom = useResetRecoilState(currentRoomState);
-	const { addVote } = useStatesUpdates()
+	const { addVote } = useAPI()
 	return (
 		<>
 			<Button

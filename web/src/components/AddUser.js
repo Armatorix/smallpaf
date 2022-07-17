@@ -4,14 +4,14 @@ import { Button, FormControl, Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState } from "../store";
 const AddUser = (props) => {
 	const [clicked, setClicked] = useState(false);
 	const [email, setEmail] = useState("");
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const { roomId } = useParams();
-	const { addUserToRoom } = useStatesUpdates();
+	const { addUserToRoom } = useAPI();
 	if (!clicked) {
 		return (
 			<Button

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState, userState } from "../store";
 
 const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
@@ -53,7 +53,7 @@ const closestPoint = (value) => {
 const VotedModal = (props) => {
 	const [min, max, avg, closest, votesGrouped] = stats(props.ticket.Votes);
 	const [open, setOpen] = useState(false);
-	const { applyJiraPoints, resetTicket } = useStatesUpdates()
+	const { applyJiraPoints, resetTicket } = useAPI()
 	const resetUser = useResetRecoilState(userState);
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [pickerValue, setPickerValue] = useState(closest);

@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import useStatesUpdates from "../api/index.js";
+import useAPI from "../api/index.js";
 export default function NewUser() {
 	const [submitted, setSubmitted] = useState(false);
 	const [email, setEmail] = useState("");
-	const { emailAuth } = useStatesUpdates();
+	const { emailAuth } = useAPI();
 
 	if (submitted) {
 		return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} />;

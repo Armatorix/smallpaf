@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState } from "../store";
 
 const defautlTicketValue = {
@@ -22,7 +22,7 @@ const AddTicket = (props) => {
 	const [open, setOpen] = useState(false);
 	const [ticket, setTicket] = useState(defautlTicketValue);
 	const resetRoom = useResetRecoilState(currentRoomState);
-	const { addTicket } = useStatesUpdates();
+	const { addTicket } = useAPI();
 
 	return (
 		<>

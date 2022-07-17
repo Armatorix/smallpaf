@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import useStatesUpdates from "../api";
+import useAPI from "../api";
 import { currentRoomState } from "../store";
 
 const defautlImportValue = {
@@ -24,7 +24,7 @@ const ImportTicketsModal = (props) => {
 	const [importBody, setImportBody] = useState(defautlImportValue);
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [progress, setProgress] = useState(false);
-	const { importTickets } = useStatesUpdates();
+	const { importTickets } = useAPI();
 	return (
 		<>
 			<Button

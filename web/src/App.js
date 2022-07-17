@@ -10,7 +10,7 @@ import {
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import useStatesUpdates from "./api";
+import useAPI from "./api";
 import LogoutButton from "./components/LogoutButton";
 import NewRoomButton from "./components/NewRoomButton";
 import RoomPicker from "./components/RoomPicker";
@@ -35,7 +35,7 @@ function App() {
 	const theme = useRecoilValue(styleState);
 	const [token, setToken] = useToken();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { getUser } = useStatesUpdates();
+	const { getUser } = useAPI();
 	const [user, setUser] = useRecoilState(userState);
 	useEffect(() => {
 		const queryToken = searchParams.get("token");
