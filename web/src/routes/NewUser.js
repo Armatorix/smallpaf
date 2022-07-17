@@ -1,17 +1,18 @@
+import SendIcon from "@mui/icons-material/Send";
 import {
 	Button,
 	FormControl,
 	Grid,
 	TextField,
-	Typography,
+	Typography
 } from "@mui/material";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { ENDPOINT } from "../config.js";
-import SendIcon from "@mui/icons-material/Send";
+import useStatesUpdates from "../api/index.js";
 export default function NewUser() {
 	const [submitted, setSubmitted] = useState(false);
 	const [email, setEmail] = useState("");
+	const { emailAuth } = useStatesUpdates();
 
 	if (submitted) {
 		return <Navigate to={`/new-user-redirect?domain=${email.split("@")[1]}`} />;
@@ -34,22 +35,7 @@ export default function NewUser() {
 				component="form"
 				onSubmit={(e) => {
 					e.preventDefault();
-
-					fetch(ENDPOINT + "/api/v1/auth/token", {
-						body: JSON.stringify({ Email: email }),
-						cache: "no-cache",
-						headers: {
-							"content-type": "application/json",
-						},
-						method: "POST",
-						mode: "cors",
-						redirect: "follow",
-					})
-						.then((resp) => {
-							if (resp.status >= 300) {
-								throw Error("failed creation");
-							}
-						})
+					emailAuth()
 						.then(() => {
 							setSubmitted(true);
 						})

@@ -80,11 +80,30 @@ const useStatesUpdates = () => {
             })
     }
 
+    const emailAuth = (email) => {
+        fetch(ENDPOINT + "/api/v1/auth/token", {
+            body: JSON.stringify({ Email: email }),
+            cache: "no-cache",
+            headers: {
+                "content-type": "application/json",
+            },
+            method: "POST",
+            mode: "cors",
+            redirect: "follow",
+        })
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
+
     return {
         getRoom,
         addTicket,
         getUser,
         addUserToRoom,
+        emailAuth,
     }
 }
 
