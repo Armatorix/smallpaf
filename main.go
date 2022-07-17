@@ -94,6 +94,7 @@ func main() {
 	tickets.POST("/import", crudHandler.ImportTickets)
 
 	ticket := tickets.Group("/:ticketId")
+	ticket.DELETE("", crudHandler.DeleteTicketInRoom)
 	ticket.PUT("/votes", crudHandler.AddVoteToTicket)
 	ticket.POST("/reveal", crudHandler.RevealTicket)
 	ticket.POST("/reset", crudHandler.ResetVoting)
