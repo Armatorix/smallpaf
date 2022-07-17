@@ -137,8 +137,7 @@ const useStatesUpdates = () => {
     }
 
     const applyJiraPoints = (roomId, ticketId, points) => {
-        return fetch(
-            `${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/jira-apply`,
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/jira-apply`,
             {
                 cache: "no-cache",
                 body: JSON.stringify({
@@ -212,8 +211,7 @@ const useStatesUpdates = () => {
     }
 
     const resetTicket = (roomId, ticketId) => {
-        return fetch(
-            `${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/reset`,
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/reset`,
             {
                 cache: "no-cache",
                 headers: {
@@ -221,6 +219,28 @@ const useStatesUpdates = () => {
                     authorization: `Bearer ${token}`,
                 },
                 method: "POST",
+                mode: "cors",
+            }
+        )
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
+
+    const addVote = (roomId, ticketId, point) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/votes`,
+            {
+                body: JSON.stringify({
+                    Points: point,
+                }),
+                cache: "no-cache",
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: "PUT",
                 mode: "cors",
             }
         )
@@ -243,6 +263,7 @@ const useStatesUpdates = () => {
         resetTicket,
         applyJiraPoints,
         importTickets,
+        addVote,
 
         jiraGetIssue,
     }

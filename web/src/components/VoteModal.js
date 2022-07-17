@@ -39,26 +39,7 @@ const VoteModal = (props) => {
 								minWidth: "2.5em",
 							}}
 							onClick={() => {
-								fetch(
-									`${ENDPOINT}/api/v1/rooms/${currentRoom.ID}/tickets/${props.ticketid}/votes`,
-									{
-										body: JSON.stringify({
-											Points: point,
-										}),
-										cache: "no-cache",
-										headers: {
-											"content-type": "application/json",
-											authorization: `Bearer ${token}`,
-										},
-										method: "PUT",
-										mode: "cors",
-									}
-								)
-									.then((resp) => {
-										if (resp.status >= 300) {
-											throw Error("failed creation");
-										}
-									})
+								addVote(currentRoom.ID, props.ticketid, point)
 									.then(() => {
 										resetUser();
 										resetRoom();
