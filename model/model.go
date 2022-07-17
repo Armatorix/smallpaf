@@ -32,8 +32,8 @@ type Ticket struct {
 	Description string
 	Revealed    bool
 	JiraPoints  int
-	TotalVoted  int `gorm:"-"`
-	Votes       []Vote
+	TotalVoted  int    `gorm:"-"`
+	Votes       []Vote `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {

@@ -55,6 +55,44 @@ func (ch *CrudHandler) CreateTicketInRoom(c echo.Context) error {
 	return c.JSON(http.StatusCreated, ticket)
 }
 
+type requestDeleteTicketInRoom struct {
+	TicketId uuid.UUID `param:"ticketId" validate:"required"`
+	RoomID   uuid.UUID `param:"roomId" validate:"required"`
+}
+
+func (ch *CrudHandler) DeleteTicketInRoom(c echo.Context) error {
+	var req requestDeleteTicketInRoom
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+
+	if err := c.Validate(req); err != nil {
+		return err
+	}
+
+	uid, err := getUID(c)
+	if err != nil {
+		return err
+	}
+
+	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	if err != nil {
+		return err
+	}
+	if !hasRights {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	err = ch.dbClient.Delete(&model.Ticket{
+		ID: req.TicketId,
+	}).Error
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusNoContent)
+}
+
 type requestImportTickets struct {
 	FilterId int       `json:"FilterId" validate:"required"`
 	RoomID   uuid.UUID `param:"roomId" validate:"required"`
