@@ -7,16 +7,16 @@ import {
 	DialogActions,
 	DialogTitle,
 	FormControl,
-	IconButton,
+	IconButton
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
-import { currentRoomState, useToken } from "../store";
+import useStatesUpdates from "../api";
+import { currentRoomState } from "../store";
 
 const RevealModal = (props) => {
 	const [open, setOpen] = useState(false);
-	const [token] = useToken();
+	const { revealTicket } = useStatesUpdates()
 	const resetRoom = useResetRecoilState(currentRoomState);
 
 	return (
@@ -40,22 +40,7 @@ const RevealModal = (props) => {
 					component="form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						fetch(`${ENDPOINT}/api/v1/rooms/${props.roomid}/tickets/${props.ticketid}/reveal`,
-							{
-								cache: "no-cache",
-								headers: {
-									"content-type": "application/json",
-									authorization: `Bearer ${token}`,
-								},
-								method: "POST",
-								mode: "cors",
-							}
-						)
-							.then((resp) => {
-								if (resp.status >= 300) {
-									throw Error("failed creation");
-								}
-							})
+						revealTicket(props.roomid, props.ticketid)
 							.then(() => {
 								resetRoom();
 								setOpen(false);

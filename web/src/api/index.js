@@ -169,6 +169,26 @@ const useStatesUpdates = () => {
                 }
             })
     }
+
+    const revealTicket = (roomId, ticketId) => {
+        return fetch(`${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/reveal`,
+            {
+                cache: "no-cache",
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: "POST",
+                mode: "cors",
+            }
+        )
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
+
     return {
         newRoom,
         addTicket,
@@ -177,6 +197,7 @@ const useStatesUpdates = () => {
         getUser,
         emailAuth,
         updateJiraToken,
+        revealTicket,
         importTickets,
 
         jiraGetIssue,
