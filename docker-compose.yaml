@@ -7,3 +7,22 @@ services:
     restart: always
     env_file: .env
     command: [ "postgres", "-c", "log_statement=all" ]
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./
+    env_file: .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./:/go/src/github.com/Armatorix/smallpaf"
+    depends_on:
+      - postgres
+  web:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./web
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./web:/web"
