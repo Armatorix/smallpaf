@@ -10,12 +10,12 @@ import {
 	DialogTitle,
 	Grid,
 	MenuItem,
-	Select,
+	Select
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
-import { ENDPOINT } from "../config";
-import { currentRoomState, userState, useToken } from "../store";
+import useStatesUpdates from "../api";
+import { currentRoomState, userState } from "../store";
 
 const POINTS = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
@@ -53,7 +53,7 @@ const closestPoint = (value) => {
 const VotedModal = (props) => {
 	const [min, max, avg, closest, votesGrouped] = stats(props.ticket.Votes);
 	const [open, setOpen] = useState(false);
-	const [token] = useToken();
+	const { applyJiraPoints, resetTicket } = useStatesUpdates()
 	const resetUser = useResetRecoilState(userState);
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [pickerValue, setPickerValue] = useState(closest);
@@ -68,8 +68,8 @@ const VotedModal = (props) => {
 					props.ticket.JiraPoints !== 0
 						? "secondary"
 						: Math.abs((avg - min) * (avg - max)) > 2
-						? "warning"
-						: "success"
+							? "warning"
+							: "success"
 				}
 			>
 				<Grid
@@ -116,26 +116,7 @@ const VotedModal = (props) => {
 								fullWidth
 								onClick={(e) => {
 									e.preventDefault();
-									fetch(
-										`${ENDPOINT}/api/v1/rooms/${props.ticket.RoomId}/tickets/${props.ticket.ID}/jira-apply`,
-										{
-											cache: "no-cache",
-											body: JSON.stringify({
-												Points: pickerValue,
-											}),
-											headers: {
-												"content-type": "application/json",
-												authorization: `Bearer ${token}`,
-											},
-											method: "POST",
-											mode: "cors",
-										}
-									)
-										.then((resp) => {
-											if (resp.status >= 300) {
-												throw Error("failed creation");
-											}
-										})
+									applyJiraPoints(props.ticket.RoomId, props.ticket.ID, pickerValue)
 										.then(() => {
 											resetRoom();
 											resetUser();
@@ -169,23 +150,7 @@ const VotedModal = (props) => {
 						fullWidth
 						onClick={(e) => {
 							e.preventDefault();
-							fetch(
-								`${ENDPOINT}/api/v1/rooms/${props.ticket.RoomId}/tickets/${props.ticket.ID}/reset`,
-								{
-									cache: "no-cache",
-									headers: {
-										"content-type": "application/json",
-										authorization: `Bearer ${token}`,
-									},
-									method: "POST",
-									mode: "cors",
-								}
-							)
-								.then((resp) => {
-									if (resp.status >= 300) {
-										throw Error("failed creation");
-									}
-								})
+							resetTicket(props.ticket.RoomId, props.ticket.ID)
 								.then(() => {
 									resetRoom();
 									resetUser();

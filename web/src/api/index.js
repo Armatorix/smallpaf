@@ -136,6 +136,28 @@ const useStatesUpdates = () => {
             })
     }
 
+    const applyJiraPoints = (roomId, ticketId, points) => {
+        return fetch(
+            `${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/jira-apply`,
+            {
+                cache: "no-cache",
+                body: JSON.stringify({
+                    Points: points,
+                }),
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: "POST",
+                mode: "cors",
+            }
+        )
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
     const jiraGetIssue = (jiraUrl, email, jiraToken, ticketId) => {
         return fetch(new URL(`/rest/api/3/issue/${ticketId}`, jiraUrl).href, {
             headers: {
@@ -189,6 +211,26 @@ const useStatesUpdates = () => {
             })
     }
 
+    const resetTicket = (roomId, ticketId) => {
+        return fetch(
+            `${ENDPOINT}/api/v1/rooms/${roomId}/tickets/${ticketId}/reset`,
+            {
+                cache: "no-cache",
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: "POST",
+                mode: "cors",
+            }
+        )
+            .then((resp) => {
+                if (resp.status >= 300) {
+                    throw Error("failed creation");
+                }
+            })
+    }
+
     return {
         newRoom,
         addTicket,
@@ -198,6 +240,8 @@ const useStatesUpdates = () => {
         emailAuth,
         updateJiraToken,
         revealTicket,
+        resetTicket,
+        applyJiraPoints,
         importTickets,
 
         jiraGetIssue,
