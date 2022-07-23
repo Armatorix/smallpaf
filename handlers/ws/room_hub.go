@@ -25,6 +25,7 @@ func (rh *RoomHub) GetRoom(roomId uuid.UUID) *Room {
 		rh.Lock()
 		defer rh.Unlock()
 		room = newRoom(roomId)
+		go room.run()
 		rh.rooms[roomId] = room
 	}
 	return room

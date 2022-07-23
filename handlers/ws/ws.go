@@ -81,14 +81,11 @@ func (wsh *WebSockerHandler) WS(c echo.Context) error {
 		return errMissingRoomRights
 	}
 
-	//get roomHub from the handler (or create if not exists)
+	room := wsh.roomHub.GetRoom(req.RoomID)
+	client := &Client{room: room, conn: conn, send: make(chan []byte, 256)}
+	room.register <- client
 
-	// client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
-	// client.hub.register <- client
-
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
-	// go client.writePump()
-	// go client.readPump()
+	go client.writePump()
+	go client.readPump()
 	return nil
 }
