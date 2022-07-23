@@ -2,13 +2,12 @@ package ws
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/db"
 	"github.com/Armatorix/smallpaf/handlers/ws/actions"
-	"github.com/gofrs/uuid"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 )
@@ -22,7 +21,8 @@ var (
 		},
 	}
 
-	errRequireAuth = errors.New("require auth")
+	errRequireAuth       = errors.New("require auth")
+	errMissingRoomRights = errors.New("missing room rights")
 )
 
 type WebSockerHandler struct {
@@ -66,12 +66,19 @@ func (wsh *WebSockerHandler) WS(c echo.Context) error {
 		return errRequireAuth
 	}
 	claims, err := wsh.authClient.ParseAndValidateJWT(authAction.Token)
-	fmt.Println(claims, err)
+	if err != nil {
+		return err
+	}
 
-	// validate user
-	// wsh.dbClient.HasRoomAdminRights()
+	hasRights, _, err := wsh.dbClient.HasRoomAdminRights(claims.Uid, req.RoomID)
+	if err != nil {
+		return err
+	}
 
-	// validate if user is from the room
+	if !hasRights {
+		return errMissingRoomRights
+	}
+
 	//get roomHub from the handler (or create if not exists)
 
 	// client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
