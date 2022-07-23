@@ -7,20 +7,23 @@ import AddTicket from "../components/AddTicket";
 import ImportTicketsModal from "../components/ImportTicketsModal";
 import ListRoomTickets from "../components/ListRoomTickets";
 import ListRoomUsers from "../components/ListRoomUsers";
+import { RoomChat } from "../components/RoomChat";
 import RoomSettingsModal from "../components/RoomSettingsModal";
 import { currentRoomState } from "../store";
 
 const Room = () => {
 	const { roomId } = useParams();
 	const [room, setRoom] = useRecoilState(currentRoomState);
-	const { getRoom } = useAPI()
+	const { getRoom } = useAPI();
 	useEffect(() => {
 		if (room === undefined) {
-			getRoom(roomId).then((resp) => {
-				setRoom(resp)
-			}).catch((err) => {
-				console.log(err)
-			})
+			getRoom(roomId)
+				.then((resp) => {
+					setRoom(resp);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
 	}, [room, roomId, setRoom, getRoom]);
 
@@ -56,6 +59,7 @@ const Room = () => {
 			</Grid>
 			<Grid container item direction="column" xs={12} md={4}>
 				<ListRoomUsers />
+				<RoomChat roomId={roomId} />
 			</Grid>
 		</Grid>
 	);

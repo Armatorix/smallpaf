@@ -3,4 +3,5 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 	ENDPOINT = "http://localhost:8080";
 }
 
-export { ENDPOINT };
+let WS_ENDPOINT = "ws://" + ENDPOINT.split("://")[1];
+export { ENDPOINT, WS_ENDPOINT };
