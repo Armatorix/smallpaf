@@ -28,12 +28,14 @@ var (
 type WebSockerHandler struct {
 	dbClient   *db.DB
 	authClient *auth.Authenticator
+	roomHub    *RoomHub
 }
 
 func NewWebSockerHandler(dbClient *db.DB, authClient *auth.Authenticator) *WebSockerHandler {
 	return &WebSockerHandler{
 		dbClient:   dbClient,
 		authClient: authClient,
+		roomHub:    newRoomHub(),
 	}
 }
 
