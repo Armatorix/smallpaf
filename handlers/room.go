@@ -28,7 +28,7 @@ func (ch *CrudHandler) GetRoom(c echo.Context) error {
 		return err
 	}
 
-	hasRights, usersRoom, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	hasRights, usersRoom, err := ch.dbClient.HasRoomAdminRights(uid, req.RoomID)
 	if err != nil {
 		return err
 	}
@@ -119,7 +119,7 @@ func (ch *CrudHandler) PutRoomJiraToken(c echo.Context) error {
 		return err
 	}
 
-	hasRights, _, err := ch.hasRoomAdminRights(uid, req.RoomID)
+	hasRights, _, err := ch.dbClient.HasRoomAdminRights(uid, req.RoomID)
 	if err != nil {
 		return err
 	}

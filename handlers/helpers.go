@@ -11,21 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func (ch *CrudHandler) hasRoomAdminRights(uid uuid.UUID, rid uuid.UUID) (bool, *model.UserRoom, error) {
-	ur := model.UserRoom{
-		UserID: uid,
-		RoomId: rid,
-	}
-	err := ch.dbClient.First(&ur, "user_id = ? AND room_id = ?", uid, rid).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil, nil
-		}
-		return false, nil, err
-	}
-	return true, &ur, nil
-}
-
 func (ch *CrudHandler) haveAccessToTheTicket(uid uuid.UUID, tid uuid.UUID) (bool, error) {
 	res := ch.dbClient.Raw("SELET * FROM user_rooms WHERE room_id = (SELECT room_id FROM tickets WHERE ticket_id = ?) AND user_id = ?", tid, uid)
 	if res.Error != nil {
