@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Armatorix/smallpaf/config"
@@ -48,6 +49,20 @@ func (a *Authenticator) GenerateJWT(user *model.User) (string, error) {
 
 	token := jwt.NewWithClaims(a.signingMethod, c)
 	return token.SignedString(a.secretKey)
+}
+
+func (a *Authenticator) ParseAndValidateJWT(jwtStr string) (*Claims, error) {
+	var claims Claims
+	_, err := jwt.ParseWithClaims(jwtStr, &claims, func(t *jwt.Token) (interface{}, error) {
+		if a.signingMethod.Alg() != t.Method.Alg() {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+		return a.secretKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &claims, nil
 }
 
 func (a *Authenticator) GetMiddleware() echo.MiddlewareFunc {

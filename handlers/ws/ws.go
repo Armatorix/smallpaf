@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Armatorix/smallpaf/auth"
 	"github.com/Armatorix/smallpaf/db"
 	"github.com/Armatorix/smallpaf/handlers/ws/actions"
 	"github.com/gofrs/uuid"
@@ -25,12 +26,14 @@ var (
 )
 
 type WebSockerHandler struct {
-	dbClient *db.DB
+	dbClient   *db.DB
+	authClient *auth.Authenticator
 }
 
-func NewWebSockerHandler(dbClient *db.DB) *WebSockerHandler {
+func NewWebSockerHandler(dbClient *db.DB, authClient *auth.Authenticator) *WebSockerHandler {
 	return &WebSockerHandler{
-		dbClient: dbClient,
+		dbClient:   dbClient,
+		authClient: authClient,
 	}
 }
 
@@ -62,7 +65,8 @@ func (wsh *WebSockerHandler) WS(c echo.Context) error {
 	if !ok {
 		return errRequireAuth
 	}
-	fmt.Println(authAction)
+	claims, err := wsh.authClient.ParseAndValidateJWT(authAction.Token)
+	fmt.Println(claims, err)
 
 	// validate user
 	// wsh.dbClient.HasRoomAdminRights()

@@ -46,7 +46,7 @@ func main() {
 		dbClient,
 	)
 	crudHandler := handlers.NewCrudHandler(dbClient)
-	wsHandler := ws.NewWebSockerHandler(dbClient)
+	wsHandler := ws.NewWebSockerHandler(dbClient, authClient)
 	e := echo.New()
 	e.Use(
 		middleware.Recover(),
