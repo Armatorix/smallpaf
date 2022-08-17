@@ -10,7 +10,7 @@ import {
 	DialogTitle,
 	Grid,
 	MenuItem,
-	Select
+	Select,
 } from "@mui/material";
 import { useState } from "react";
 import { useResetRecoilState } from "recoil";
@@ -53,7 +53,7 @@ const closestPoint = (value) => {
 const VotedModal = (props) => {
 	const [min, max, avg, closest, votesGrouped] = stats(props.ticket.Votes);
 	const [open, setOpen] = useState(false);
-	const { applyJiraPoints, resetTicket } = useAPI()
+	const { applyJiraPoints, resetTicket } = useAPI();
 	const resetUser = useResetRecoilState(userState);
 	const resetRoom = useResetRecoilState(currentRoomState);
 	const [pickerValue, setPickerValue] = useState(closest);
@@ -68,8 +68,8 @@ const VotedModal = (props) => {
 					props.ticket.JiraPoints !== 0
 						? "secondary"
 						: Math.abs((avg - min) * (avg - max)) > 2
-							? "warning"
-							: "success"
+						? "warning"
+						: "success"
 				}
 			>
 				<Grid
@@ -108,6 +108,14 @@ const VotedModal = (props) => {
 						</>
 					))}
 				</DialogContent>
+				<DialogContent>
+					{props.ticket.Votes.map((vote) => (
+						<>
+							<Button variant="contained">{vote.Points}</Button>
+							{vote.UserEmail}{" "}
+						</>
+					))}
+				</DialogContent>
 				<DialogActions>
 					{props.withjirasync && (
 						<>
@@ -116,7 +124,11 @@ const VotedModal = (props) => {
 								fullWidth
 								onClick={(e) => {
 									e.preventDefault();
-									applyJiraPoints(props.ticket.RoomId, props.ticket.ID, pickerValue)
+									applyJiraPoints(
+										props.ticket.RoomId,
+										props.ticket.ID,
+										pickerValue
+									)
 										.then(() => {
 											resetRoom();
 											resetUser();

@@ -43,17 +43,31 @@ func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
 		return err
 	}
 	if t.Revealed {
-		return tx.Find(&t.Votes, "ticket_id = ?", t.ID).Error
+		err = tx.Find(&t.Votes, "ticket_id = ?", t.ID).Error
+		if err != nil {
+			return err
+		}
+		for i, vote := range t.Votes {
+			user := User{
+				ID: vote.UserID,
+			}
+			err := tx.Find(&user).Error
+			if err != nil {
+				return err
+			}
+			t.Votes[i].UserEmail = user.Email
+		}
 	}
 	return nil
 }
 
 type Vote struct {
 	gorm.Model
-	ID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	UserID   uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
-	TicketID uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
-	Points   int
+	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	UserID    uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
+	TicketID  uuid.UUID `gorm:"index:idx_one_vote_per_ticket,unique"`
+	Points    int
+	UserEmail string `gorm:"-"`
 }
 
 type UserRoom struct {
