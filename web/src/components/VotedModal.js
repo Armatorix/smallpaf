@@ -112,7 +112,7 @@ const VotedModal = (props) => {
 					{props.ticket.Votes.map((vote) => (
 						<>
 							<Button variant="contained">{vote.Points}</Button>
-							{vote.UserEmail}{" "}
+							{vote.UserEmail} <br />
 						</>
 					))}
 				</DialogContent>
