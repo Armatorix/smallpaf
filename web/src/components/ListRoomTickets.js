@@ -185,9 +185,8 @@ export const ListRoomTickets = () => {
 
 								{!ticket.Revealed && (
 									<RevealModal
-										ticketid={ticket.ID}
+										ticket={ticket}
 										roomid={room.ID}
-										voted={ticket.Votes.length}
 										disabled={ticket.Votes.length === 0}
 									/>
 								)}
