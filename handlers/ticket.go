@@ -156,7 +156,6 @@ func (ch *CrudHandler) ImportTickets(c echo.Context) error {
 				Description: t.Fields.Summary,
 				Revealed:    false,
 				JiraPoints:  0,
-				TotalVoted:  0,
 			})
 		}
 	}

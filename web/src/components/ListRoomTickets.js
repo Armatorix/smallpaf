@@ -26,7 +26,7 @@ import DisplayTicketInfoModal from "./DisplayTicketInfoModal";
 import RevealModal from "./RevealModal";
 import VotedModal from "./VotedModal";
 import VoteModal from "./VoteModal";
-import DeleteTicketModal from "./DeleteTicketModal"
+import DeleteTicketModal from "./DeleteTicketModal";
 
 const isTicketSearched = (ticket, searchBy, andFilter) => {
 	if (searchBy === "") {
@@ -159,16 +159,14 @@ export const ListRoomTickets = () => {
 									edge="start"
 									aria-label="delete"
 									target="_blank"
-									href={`${new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href
-										}`}
+									href={`${
+										new URL(`/browse/${ticket.JiraID}`, room.JiraUrl).href
+									}`}
 								>
 									<LinkIcon />
 								</IconButton>
 
-								<DeleteTicketModal
-									edge="start"
-									ticket={ticket}
-								/>
+								<DeleteTicketModal edge="start" ticket={ticket} />
 
 								{false && room.JiraToken !== "" && (
 									<DisplayTicketInfoModal
@@ -189,8 +187,8 @@ export const ListRoomTickets = () => {
 									<RevealModal
 										ticketid={ticket.ID}
 										roomid={room.ID}
-										voted={ticket.TotalVoted}
-										disabled={ticket.TotalVoted === 0}
+										voted={ticket.Votes.length}
+										disabled={ticket.Votes.length === 0}
 									/>
 								)}
 								{!ticket.Revealed && (

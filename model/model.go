@@ -32,30 +32,27 @@ type Ticket struct {
 	Description string
 	Revealed    bool
 	JiraPoints  int
-	TotalVoted  int    `gorm:"-"`
 	Votes       []Vote `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func (t *Ticket) AfterFind(tx *gorm.DB) (err error) {
-	err = tx.Raw("SELECT COUNT(*) FROM votes WHERE ticket_id = ?", t.ID).
-		Scan(&t.TotalVoted).Error
+	err = tx.Find(&t.Votes, "ticket_id = ?", t.ID).Error
 	if err != nil {
 		return err
 	}
-	if t.Revealed {
-		err = tx.Find(&t.Votes, "ticket_id = ?", t.ID).Error
+	for i, vote := range t.Votes {
+		user := User{
+			ID: vote.UserID,
+		}
+		err := tx.Find(&user).Error
 		if err != nil {
 			return err
 		}
-		for i, vote := range t.Votes {
-			user := User{
-				ID: vote.UserID,
-			}
-			err := tx.Find(&user).Error
-			if err != nil {
-				return err
-			}
-			t.Votes[i].UserEmail = user.Email
+		t.Votes[i].UserEmail = user.Email
+	}
+	if !t.Revealed {
+		for i := range t.Votes {
+			t.Votes[i].Points = 0
 		}
 	}
 	return nil
