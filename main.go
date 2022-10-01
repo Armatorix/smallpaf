@@ -30,6 +30,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if cfg.Server.RedirectMode {
+		e := echo.New()
+		e.Any("*", func(c echo.Context) error {
+			return c.Redirect(http.StatusPermanentRedirect, "https://smallpaf.fly.dev")
+		})
+		log.Fatal(e.Start(cfg.Server.Address()))
+	}
+
 	dbClient, err := db.NewClient(cfg.DB)
 	if err != nil {
 		log.Fatal(err)

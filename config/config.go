@@ -19,7 +19,8 @@ func (s *Smtp) Address() string {
 }
 
 type Server struct {
-	Port int `env:"PORT" envDefault:"8080"`
+	Port         int  `env:"PORT" envDefault:"8080"`
+	RedirectMode bool `env:"REDIRECT_MODE" envDefault:"false"`
 }
 
 func (s *Server) Address() string {
