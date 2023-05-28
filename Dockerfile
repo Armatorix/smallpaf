@@ -13,7 +13,7 @@ WORKDIR /app/react
 COPY  ./web ./
 RUN npm i && npm run build
 
-FROM debian:stretch-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
