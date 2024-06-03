@@ -51,6 +51,7 @@ export default function NewUser() {
 					fullWidth
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
+					sx={{ marginTop: 2 }}
 					required
 				/>
 				<Button
@@ -58,6 +59,7 @@ export default function NewUser() {
 					variant="outlined"
 					fullWidth
 					startIcon={<SendIcon />}
+					sx={{ marginTop: 2 }}
 				>
 					Send auth email
 				</Button>

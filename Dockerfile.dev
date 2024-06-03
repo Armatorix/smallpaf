@@ -1,4 +1,4 @@
-FROM golang:1.20.4
+FROM golang:1.22.3
 
 WORKDIR /go/src/github.com/Armatorix/smallpaf
 RUN go install github.com/cosmtrek/air@latest

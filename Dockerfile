@@ -1,4 +1,4 @@
-FROM golang:1.20.4 AS go-build
+FROM golang:1.22.3 AS go-build
 
 
 WORKDIR /go/src/github.com/Armatorix/smallpaf
